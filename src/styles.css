@@ -1,0 +1,154 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+
+body {
+  /* font-family: 'Roboto Slab', serif; */
+  font-family: "Poppins", sans-serif;
+  letter-spacing: 0.1rem;
+}
+
+.ltsp-0 {
+  letter-spacing: 0rem;
+}
+
+.ltsp-1 {
+  letter-spacing: 0.1rem;
+}
+
+.ltsp-2 {
+  letter-spacing: 0.12rem;
+}
+
+.ltsp-3 {
+  letter-spacing: 0.13rem;
+}
+
+.ltsp-4 {
+  letter-spacing: 0.14rem;
+}
+
+.ltsp-5 {
+  letter-spacing: 0.15rem;
+}
+
+.fs-7 {
+  font-size: 0.9rem !important;
+}
+
+.fs-8 {
+  font-size: 0.8rem !important;
+}
+
+.fc-g {
+  color: rgb(65, 65, 65);
+}
+
+.bg-red {
+  background-color: maroon;
+}
+
+.grd-bg-maroon {
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+}
+
+.f-b {
+  font-weight: 700;
+}
+
+.login-header {
+  font-size: 2.5rem;
+}
+
+.form-control-lg:focus {
+  box-shadow: 0 0 0 0.05rem red;
+}
+
+.form-control {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+.form-control:focus {
+  box-shadow: 0 0 0 0.05rem red;
+}
+
+.btn-1 {
+  color: #fff;
+  background-color: maroon;
+  border-color: maroon;
+}
+.btn-1:hover {
+  color: #fff;
+  background-color: maroon;
+  border-color: maroon;
+}
+.btn-check:focus + .btn-1,
+.btn-1:focus {
+  color: #fff;
+  background-color: maroon;
+  border-color: maroon;
+  box-shadow: 0 0 0 0.25rem rgba(217, 164, 6, 0.5);
+}
+.btn-check:checked + .btn-1,
+.btn-check:active + .btn-1,
+.btn-1:active,
+.btn-1.active,
+.show > .btn-1.dropdown-toggle {
+  color: #fff;
+  background-color: maroon;
+  border-color: maroon;
+}
+.btn-check:checked + .btn-1:focus,
+.btn-check:active + .btn-1:focus,
+.btn-1:active:focus,
+.btn-1.active:focus,
+.show > .btn-1.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.25rem rgba(217, 164, 6, 0.5);
+}
+.btn-1:disabled,
+.btn-1.disabled {
+  color: #fff;
+  background-color: maroon;
+  border-color: maroon;
+}
+
+/* non globals */
+.login-wrapper {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(118, 116, 116, 0.3) 0px 30px 60px -30px;
+}
+
+.registration-wrapper {
+  max-height: calc(100vh - 140px);
+  overflow-y: scroll;
+
+  
+}
+
+.custom-scrollbar::-webkit-scrollbar{
+		width:12px;
+		background-color:#ffffff;
+}
+.custom-scrollbar::-webkit-scrollbar:horizontal{
+		height:12px;
+	}
+
+.custom-scrollbar::-webkit-scrollbar-track{
+		border:1px #ffffff solid;
+		border-radius:10px;
+		-webkit-box-shadow:0 0 6px #ffffff inset;
+	}
+
+.custom-scrollbar::-webkit-scrollbar-thumb{
+		background-color:maroon;
+		border:1px solid maroon;
+		border-radius:16px;
+	}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover{
+		background-color:maroon;
+		border:1px solid maroon;
+	}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active{
+		background-color:maroon;
+		border:1px solid maroon;
+	}
