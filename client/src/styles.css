@@ -7,6 +7,10 @@ body {
   letter-spacing: 0.1rem;
 }
 
+.hide{
+  display: none;
+}
+
 .ltsp-0 {
   letter-spacing: 0rem;
 }
