@@ -11,6 +11,10 @@ body {
   display: none;
 }
 
+.btn-link{
+  cursor: pointer;
+}
+
 .ltsp-0 {
   letter-spacing: 0rem;
 }
@@ -156,3 +160,4 @@ body {
 		background-color:maroon;
 		border:1px solid maroon;
 	}
+
