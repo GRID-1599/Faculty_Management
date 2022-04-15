@@ -2361,7 +2361,8 @@ progress {
 .dataTable-input:disabled,
 .form-control[readonly],
 [readonly].dataTable-input {
-  background-color: #e9ecef;
+  background-color: transparent;
+  border: none;
   opacity: 1;
 }
 
@@ -2886,6 +2887,8 @@ textarea.form-control-lg {
   border: 1px solid transparent;
   transform-origin: 0 0;
   transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+  font-size: .9rem;
+  color: rgba(0, 0, 0, 0.700);
 }
 
 @media (prefers-reduced-motion: reduce) {

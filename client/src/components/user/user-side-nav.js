@@ -24,12 +24,49 @@ function SideNav(params) {
   };
 
   const onClickAddress = () => {
-    navigate("../faculty/address");
+    navigate("../faculty/address/");
   };
 
   const onClickIssuedId = () => {
-    navigate("../faculty/issued-id");
+    navigate("../faculty/issued-id/");
   };
+
+  const onClickElementary = () => {
+    navigate("../faculty/elementary/");
+  };
+
+  const onClickJuniorHigh = () => {
+    navigate("../faculty/junior-high/");
+  };
+
+  const onClickSeniorHigh = () => {
+    navigate("../faculty/senior-high");
+  };
+
+  const onClickVocational = () => {
+    navigate("../faculty/vocational");
+  };
+
+  const onClickCollege = () => {
+    navigate("../faculty/college");
+  };
+
+  const onClickGraduate = () => {
+    navigate("../faculty/graduate-studies");
+  };
+
+  const onClickCivilServices = () => {
+    navigate("../faculty/civil-services");
+  };
+
+  const onClickWork = () => {
+    navigate("../faculty/work-experiences");
+  };
+
+  const onClickCertificates = () => {
+    navigate("../faculty/certificates");
+  };
+
   return (
     <div id="layoutSidenav_nav">
       <nav
@@ -58,55 +95,90 @@ function SideNav(params) {
               Issued IDs
             </div>
             <div className="sb-sidenav-menu-heading">Education</div>
+
             <a
               className="nav-link collapsed"
               href="#"
               data-bs-toggle="collapse"
-              data-bs-target="#collapseLayouts"
+              data-bs-target="#collapseEduc"
               aria-expanded="false"
-              aria-controls="collapseLayouts"
+              aria-controls="collapseEduc"
             >
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faGraduationCap} color="white" />
               </div>
               Educational Background
-              {/* <div className="sb-nav-link-icon">
+              <div className="sb-sidenav-collapse-arrow">
                 <FontAwesomeIcon icon={faAngleDown} color="white" />
-              </div> */}
+              </div>
             </a>
             <div
               className="collapse"
-              id="collapseLayouts"
-              aria-labelledby="headingOne"
+              id="collapseEduc"
+              aria-labelledby="headingTwo"
               data-bs-parent="#sidenavAccordion"
             >
-              <nav className="sb-sidenav-menu-nested nav">
-                <a className="nav-link" href="#">
+              <nav
+                className="sb-sidenav-menu-nested nav accordion"
+                id="sidenavAccordionPages"
+              >
+                <div className="nav-link btn-link" onClick={onClickElementary}>
                   Elementary
-                </a>
-                <a className="nav-link" href="#">
+                </div>
+                <a
+                  className="nav-link collapsed"
+                  href="#"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#educCollapseSecondary"
+                  aria-expanded="false"
+                  aria-controls="educCollapseSecondary"
+                >
                   Secondary
+                  <div className="sb-sidenav-collapse-arrow">
+                    <FontAwesomeIcon icon={faAngleDown} color="white" />
+                  </div>
                 </a>
-                <a className="nav-link" href="#">
+                <div
+                  className="collapse"
+                  id="educCollapseSecondary"
+                  aria-labelledby="headingOne"
+                  data-bs-parent="#sidenavAccordionPages"
+                >
+                  <nav className="sb-sidenav-menu-nested nav">
+                    <div
+                      className="nav-link btn-link"
+                      onClick={onClickJuniorHigh}
+                    >
+                      Junior HighSchool
+                    </div>
+                    <div
+                      className="nav-link btn-link"
+                      onClick={onClickSeniorHigh}
+                    >
+                      Senior HighSchool
+                    </div>
+                  </nav>
+                </div>
+                <div className="nav-link btn-link " onClick={onClickVocational}>
                   Vocational / Trade Course
-                </a>
-                <a className="nav-link" href="#">
+                </div>
+                <div className="nav-link btn-link " onClick={onClickCollege}>
                   College
-                </a>
-                <a className="nav-link" href="#">
+                </div>
+                <div className="nav-link btn-link " onClick={onClickGraduate}>
                   Graduate Studies
-                </a>
+                </div>
               </nav>
             </div>
 
             <div className="sb-sidenav-menu-heading">Sample Title</div>
-            <div className="nav-link btn-link">
+            <div className="nav-link btn-link" onClick={onClickCivilServices}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faPeopleCarryBox} color="white" />
               </div>
               Civil Service Eligibility
             </div>
-            <div className="nav-link btn-link">
+            <div className="nav-link btn-link" onClick={onClickWork}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faBriefcase} color="white" />
               </div>
@@ -114,7 +186,7 @@ function SideNav(params) {
             </div>
 
             <div className="sb-sidenav-menu-heading">Sample Title</div>
-            <div className="nav-link btn-link">
+            <div className="nav-link btn-link" onClick={onClickCertificates}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faCertificate} color="white" />
               </div>

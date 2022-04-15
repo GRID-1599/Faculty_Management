@@ -205,3 +205,8 @@ body {
   background-color: white;
   border: 1px solid maroon;
 }
+
+.image {
+  height: 15em;
+  width: 15em;
+}
