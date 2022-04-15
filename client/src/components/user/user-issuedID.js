@@ -2,7 +2,7 @@ import React from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
 
-function UserHome(params) {
+function UserIsssuedId(params) {
   return (
     <div className="user-home-main sb-nav-fixed">
       <TopNav />
@@ -14,7 +14,7 @@ function UserHome(params) {
             <div className="container-xl px-4 float-start">
               <h1 className="mt-4">Faculty Profile </h1>
               <ol className="breadcrumb mb-4">
-                <li className="breadcrumb-item active">Personal Information</li>
+                <li className="breadcrumb-item active">Issued Ids</li>
               </ol>
               <div className="row"></div>
             </div>
@@ -32,4 +32,4 @@ function UserHome(params) {
   );
 }
 
-export default UserHome;
+export default UserIsssuedId;

@@ -16,7 +16,13 @@ import UserLogin from "./components/login/user-login.js";
 import UserRegistration from "./components/user/user-register.js";
 
 import HeaderTab from "./components/header.js";
+
+// user
 import UserHome from "./components/user/user-home.js";
+import UserAddress from "./components/user/user-address.js";
+import UserIssuedId from "./components/user/user-issuedID";
+
+// admin
 import AdminHome from "./components/admin/admin-home.js";
 
 function App() {
@@ -34,7 +40,12 @@ function App() {
         <Route path="/faculty/registration" element={<UserRegistration />} />
 
         {/* pages */}
+        {/* faculty pages */}
         <Route path="/faculty" element={<UserHome />} />
+        <Route path="/faculty/address" element={<UserAddress />} />
+        <Route path="/faculty/issued-id" element={<UserIssuedId />} />
+
+        {/* admin pages */}
         <Route path="/admin" element={<AdminHome />} />
       </Routes>
     </div>

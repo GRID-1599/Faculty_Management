@@ -9,7 +9,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 function TopNav(params) {
   return (
-    <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark row">
+    <nav className="sb-topnav navbar navbar-expand navbar-dark bg-maroon row">
       <div className="col-auto">
         <a className="navbar-brand ps-3" href="index.html">
           Faculty Management
