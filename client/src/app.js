@@ -20,6 +20,7 @@ import HeaderTab from "./components/header.js";
 // user
 import UserMain from "./components/user/user-main";
 import UserHome from "./components/user/user-home.js";
+import UserContact from "./components/user/user-contact";
 import UserAddress from "./components/user/user-address.js";
 import UserIssuedId from "./components/user/user-issuedID";
 import UserElementary from "./components/user/user-elementary";
@@ -53,6 +54,7 @@ function App() {
         {/* faculty pages */}
         <Route path="/faculty" element={<UserHome />} />
         <Route path="/faculty/address" element={<UserAddress />} />
+        <Route path="/faculty/contact" element={<UserContact />} />
         <Route path="/faculty/issued-id" element={<UserIssuedId />} />
         <Route path="/faculty/elementary" element={<UserElementary />} />
         <Route path="/faculty/junior-high" element={<UserJuniorHigh />} />

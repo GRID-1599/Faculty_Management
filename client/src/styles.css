@@ -17,6 +17,12 @@ body {
 
 .btn-link {
   cursor: pointer;
+  box-shadow: none;
+}
+
+.btn-link:focus {
+  box-shadow: none;
+
 }
 
 .ltsp-0 {
@@ -95,6 +101,7 @@ body {
   color: #fff;
   background-color: maroon;
   border-color: maroon;
+  box-shadow: none;
 }
 
 .btn-check:focus+.btn-1,
@@ -128,6 +135,10 @@ body {
   color: #fff;
   background-color: maroon;
   border-color: maroon;
+}
+
+.border-styled {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 /* non globals */
@@ -209,4 +220,14 @@ body {
 .image {
   height: 15em;
   width: 15em;
+}
+
+.image img {
+  height: inherit;
+  width: inherit;
+}
+
+.btn-hovered:hover {
+  /* border: 1px solid white; */
+  background-color: rgb(150, 5, 5);
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 {
@@ -17,25 +17,25 @@ function TopNav(params) {
       </div>
       <div className="col-auto">
         <button
-          className="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 mx-5"
+          className="btn btn-link  btn-sm order-1 order-lg-0 me-4 me-lg-0 mx-5 btn-hovered"
           id="sidebarToggle"
         >
           <FontAwesomeIcon icon={faBars} color="white" />
         </button>
       </div>
 
-      <div className="col-auto align-self-end offset-md-7">
-        <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4 ">
+      <div className="col-auto align-self-end  ">
+        <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4 btn-circle w-auto">
           <li className="nav-item dropdown">
             <a
-              className="nav-link dropdown-toggle"
+              className="nav-link "
               id="navbarDropdown"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <i className="fas fa-user fa-fw"></i>
+              <FontAwesomeIcon icon={faCaretDown} color="white" />
             </a>
             <ul
               className="dropdown-menu dropdown-menu-end"

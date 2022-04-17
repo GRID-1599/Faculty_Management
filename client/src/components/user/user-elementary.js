@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
 
 function UserElementary(params) {
+  const [name, setName] = useState("San Vicente Elementary School");
+  const [education, setEducation] = useState("");
+  const [periodFrom, setPeriodFrom] = useState("2005");
+  const [periodTo, setPeriodTo] = useState("2012");
+  const [highest, setHighest] = useState("");
+  const [yearGraduate, setYearGraduate] = useState("2012");
+  const [honors, setHonors] = useState("");
+
+  const [disable, setDisable] = useState(true);
+
+  const [btnEditHide, setBtnEditHide] = useState(true);
+  const [btnsaveHide, setBtnSaveHide] = useState(false);
+
+  const onEditInfo = () => {
+    setDisable(false);
+    setBtnEditHide(false);
+    setBtnSaveHide(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setDisable(true);
+    setBtnEditHide(true);
+    setBtnSaveHide(false);
+  };
+
   return (
     <div className="user-home-main sb-nav-fixed">
       <TopNav />
@@ -16,7 +42,160 @@ function UserElementary(params) {
               <ol className="breadcrumb mb-4">
                 <li className="breadcrumb-item active">Elementary</li>
               </ol>
-              <div className="row"></div>
+
+              <form className="row gy-2" onSubmit={handleSubmit}>
+                <div className="col-md-10">
+                  <div className="form-floating">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="txtName"
+                      placeholder="Name of School"
+                      value={name}
+                      disabled={disable}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="txtName">Name of School</label>
+                  </div>
+                </div>
+                <div className="col-md-10">
+                  <div className="form-floating">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="txtEduc"
+                      placeholder="Basic Education/Degree"
+                      value={education}
+                      disabled={disable}
+                      onChange={(e) => {
+                        setEducation(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="txtEduc">Basic Education/Degree</label>
+                  </div>
+                </div>
+                <div className="col-md-10">
+                  <label>Period of Attendance</label>
+                </div>
+                <div className="col-md-5">
+                  <div className="form-floating">
+                    <input
+                      type="number"
+                      min="1900"
+                      max="2099"
+                      step="1"
+                      className="form-control"
+                      id="txtPeriodTo"
+                      placeholder="From"
+                      value={periodFrom}
+                      disabled={disable}
+                      onChange={(e) => {
+                        setPeriodFrom(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="txtPeriodTo">From</label>
+                  </div>
+                </div>
+                <div className="col-md-5">
+                  <div className="form-floating">
+                    <input
+                      type="number"
+                      min="1900"
+                      max="2099"
+                      step="1"
+                      className="form-control"
+                      id="txtTo"
+                      placeholder="To"
+                      value={periodTo}
+                      disabled={disable}
+                      onChange={(e) => {
+                        setPeriodTo(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="txtTo">To</label>
+                  </div>
+                </div>
+                <div className="col-md-10">
+                  <div className="form-floating">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="txthighest"
+                      placeholder="Highest Level ( if not graduated)"
+                      value={highest}
+                      disabled={disable}
+                      onChange={(e) => {
+                        setHighest(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="txthighest">
+                      Highest Level ( if not graduated)
+                    </label>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-floating">
+                    <input
+                      type="number"
+                      min="1900"
+                      max="2099"
+                      step="1"
+                      className="form-control"
+                      id="txtGraduateYear"
+                      placeholder="Year Graduate"
+                      value={yearGraduate}
+                      disabled={disable}
+                      onChange={(e) => {
+                        setYearGraduate(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="txtGraduateYear">Year Graduate</label>
+                  </div>
+                </div>
+                <div className="col-md-10">
+                  <div className="form-floating">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="txtHonors"
+                      placeholder="Scholarship/Academic Honors Recieved"
+                      value={honors}
+                      disabled={disable}
+                      onChange={(e) => {
+                        setHonors(e.target.value);
+                      }}
+                    />
+                    <label htmlFor="txtHonors">
+                      Scholarship/Academic Honors Recieved
+                    </label>
+                  </div>
+                </div>
+                <div className="row mt-3 ">
+                  <div className="col-md-3 mb-3 offset-md-7 ">
+                    {btnsaveHide ? (
+                      <button className="btn btn-1 btn-sm w-100">
+                        Save Changes
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              </form>
+              <div className="row">
+                <div className="col-md-10 mb-3 ">
+                  {btnEditHide ? (
+                    <button
+                      className="btn btn-1 btn-sm w-100"
+                      onClick={() => {
+                        onEditInfo();
+                      }}
+                    >
+                      Edit Elementary Education Information
+                    </button>
+                  ) : null}
+                </div>
+              </div>
             </div>
           </main>
           <footer className="py-4 bg-light mt-auto">

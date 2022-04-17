@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faAddressBook } from "@fortawesome/free-solid-svg-icons";
 import { faIdCard } from "@fortawesome/free-solid-svg-icons";
@@ -29,6 +29,10 @@ function SideNav(params) {
 
   const onClickIssuedId = () => {
     navigate("../faculty/issued-id/");
+  };
+
+  const onClickContact = () => {
+    navigate("../faculty/contact/");
   };
 
   const onClickElementary = () => {
@@ -82,9 +86,15 @@ function SideNav(params) {
               </div>
               Profile
             </div>
-            <div className="nav-link btn-link" onClick={onClickAddress}>
+            <div className="nav-link btn-link" onClick={onClickContact}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faAddressBook} color="white" />
+              </div>
+              Contact
+            </div>
+            <div className="nav-link btn-link" onClick={onClickAddress}>
+              <div className="sb-nav-link-icon">
+                <FontAwesomeIcon icon={faMapLocationDot} color="white" />
               </div>
               Address
             </div>
