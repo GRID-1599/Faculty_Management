@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -36,50 +37,61 @@ import UserCertificates from "./components/user/user-certificates";
 // admin
 import AdminHome from "./components/admin/admin-home.js";
 
-function App() {
-  return (
-    <div className="app-main">
-      {/* <HeaderTab/> */}
-      <Routes>
-        {/* <Route path="/login" element={<LoginHome/>} /> */}
-        <Route path="" element={<Homepage />} />
+class App extends Component {
+  componentDidMount() {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "";
+    document.body.appendChild(script);
+  }
+  render() {
+    return (
+      <div className="app-main">
+        {/* <HeaderTab/> */}
+        <Routes>
+          {/* <Route path="/login" element={<LoginHome/>} /> */}
+          <Route path="" element={<Homepage />} />
 
-        {/* log in */}
+          {/* log in */}
 
-        <Route path="/faculty/login" element={<UserLogin />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/faculty/registration" element={<UserRegistration />} />
+          <Route path="/faculty/login" element={<UserLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/faculty/registration" element={<UserRegistration />} />
 
-        {/* pages */}
-        {/* faculty pages */}
-        <Route path="/faculty" element={<UserHome />} />
-        <Route path="/faculty/address" element={<UserAddress />} />
-        <Route path="/faculty/contact" element={<UserContact />} />
-        <Route path="/faculty/issued-id" element={<UserIssuedId />} />
-        <Route path="/faculty/elementary" element={<UserElementary />} />
-        <Route path="/faculty/junior-high" element={<UserJuniorHigh />} />
-        <Route path="/faculty/senior-high" element={<UserSeniorHigh />} />
-        <Route path="/faculty/vocational" element={<UserVocational />} />
-        <Route path="/faculty/college" element={<UserCollege />} />
+          {/* pages */}
+          {/* faculty pages */}
+          <Route path="/faculty" element={<UserHome />} />
+          <Route path="/faculty/address" element={<UserAddress />} />
+          <Route path="/faculty/contact" element={<UserContact />} />
+          <Route path="/faculty/issued-id" element={<UserIssuedId />} />
+          <Route path="/faculty/elementary" element={<UserElementary />} />
+          <Route path="/faculty/junior-high" element={<UserJuniorHigh />} />
+          <Route path="/faculty/senior-high" element={<UserSeniorHigh />} />
+          <Route path="/faculty/vocational" element={<UserVocational />} />
+          <Route path="/faculty/college" element={<UserCollege />} />
 
-        <Route
-          path="/faculty/graduate-studies"
-          element={<UserGraduateStudies />}
-        />
-        <Route
-          path="/faculty/graduate-studies"
-          element={<UserGraduateStudies />}
-        />
+          <Route
+            path="/faculty/graduate-studies"
+            element={<UserGraduateStudies />}
+          />
+          <Route
+            path="/faculty/graduate-studies"
+            element={<UserGraduateStudies />}
+          />
 
-        <Route path="/faculty/civil-services" element={<UserCivilServices />} />
-        <Route path="/faculty/work-experiences" element={<UserWorkExp />} />
-        <Route path="/faculty/certificates" element={<UserCertificates />} />
+          <Route
+            path="/faculty/civil-services"
+            element={<UserCivilServices />}
+          />
+          <Route path="/faculty/work-experiences" element={<UserWorkExp />} />
+          <Route path="/faculty/certificates" element={<UserCertificates />} />
 
-        {/* admin pages */}
-        <Route path="/admin" element={<AdminHome />} />
-      </Routes>
-    </div>
-  );
+          {/* admin pages */}
+          <Route path="/admin" element={<AdminHome />} />
+        </Routes>
+      </div>
+    );
+  }
 }
 
 export default App;

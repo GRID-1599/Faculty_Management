@@ -231,3 +231,41 @@ body {
   /* border: 1px solid white; */
   background-color: rgb(150, 5, 5);
 }
+
+
+.txt-header-bold {
+  font-weight: 600;
+  color: white;
+  font-size: 4rem;
+}
+
+.btn-homepage {
+  font-weight: 600;
+  background-color: white;
+  color: maroon;
+  width: 18rem;
+  height: 4rem;
+  font-size: 2rem;
+  border-radius: 5px;
+  border: none;
+  letter-spacing: .20rem;
+}
+
+
+.bg_image {
+  height: 100vh;
+  content: '';
+  /* /*  E:\xampp\htdocs\Dental Clinic\admin\resources\images\bg-image.png  */
+  /* E:\react_app\faculty-manager-app\client\src\resources\users-profile\uni.jpg */
+  background-image: url("./resources/users-profile/uni.jpg");
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-position: 0px center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgba(128, 0, 0, 0.500);
+  /* background-blend-mode: soft-light; */
+  z-index: 10;
+}

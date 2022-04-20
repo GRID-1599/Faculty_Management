@@ -72,8 +72,8 @@ function UserAddress(params) {
               <ol className="breadcrumb mb-4">
                 <li className="breadcrumb-item active">Address</li>
               </ol>
-              <div className="row g-3">
-                <div className="col-lg-10 border-styled">
+              <div className="row px-5 g-5">
+                <div className="col-xl-5  border-styled">
                   <p className="h5 mt-4">Resident Address</p>
                   <form onSubmit={handleSubmit} className="row gy-2">
                     <div className="col-md-6">
@@ -188,8 +188,8 @@ function UserAddress(params) {
                         <label htmlFor="txtZip">Zip Code</label>
                       </div>
                     </div>
-                    <div className="row justify-content-end">
-                      <div className="col-md-3 mb-3 ">
+                    <div className="row p-0 justify-content-end">
+                      <div className="col-md-6 mb-3 ">
                         {btnsaveHide ? (
                           <button className="btn btn-1 btn-sm w-100">
                             Save Changes
@@ -199,7 +199,7 @@ function UserAddress(params) {
                     </div>
                   </form>
                   <div className="row">
-                    <div className="col-md-6 mb-3 ">
+                    <div className="col-md-7 mb-3 ">
                       {btnEditHide ? (
                         <button
                           className="btn btn-1 btn-sm w-100"
@@ -207,13 +207,14 @@ function UserAddress(params) {
                             onEditInfo();
                           }}
                         >
-                          {btnEditName}
+                          Edit Resident Address
                         </button>
                       ) : null}
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-10  border-styled">
+                <div className="col-xl-1"></div>
+                <div className="col-xl-5 border-styled">
                   <p className="h5 mt-4">Permanent Address</p>
                   <form onSubmit={handlePermSubmit} className="row gy-2">
                     <div className="col-md-6">
@@ -328,8 +329,8 @@ function UserAddress(params) {
                         <label htmlFor="txtpZip">Zip Code</label>
                       </div>
                     </div>
-                    <div className="row justify-content-end">
-                      <div className="col-md-3 mb-3 ">
+                    <div className="row p-0 justify-content-end">
+                      <div className="col-md-6 mb-3 ">
                         {btnPermsaveHide ? (
                           <button className="btn btn-1 btn-sm w-100">
                             Save Changes
@@ -339,7 +340,7 @@ function UserAddress(params) {
                     </div>
                   </form>
                   <div className="row">
-                    <div className="col-md-6 mb-3 ">
+                    <div className="col-md-7 mb-3 ">
                       {btnPermEditHide ? (
                         <button
                           className="btn btn-1 btn-sm w-100"
