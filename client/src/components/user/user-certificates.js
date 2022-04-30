@@ -17,69 +17,46 @@ function UserCertificates(params) {
   const handleShow = () => setShow(true);
 
   return (
-    <div className="user-home-main sb-nav-fixed">
-      <TopNav />
-      <div id="layoutSidenav">
-        <SideNav />
-        {/* CONTAINer */}
-        <div id="layoutSidenav_content">
-          <main>
-            <div className="container-xl px-4 float-start">
-              <h1 className="mt-4">Certificates </h1>
-              <ol className="breadcrumb mb-4">
-                <li className="breadcrumb-item active">
-                  Learning and Development (LD) Intervention / Training Programs
-                  Attended Certificates{" "}
-                </li>
-              </ol>
+    <main>
+      <div className="container-xl px-4 float-start">
+        <h1 className="mt-4">Certificates </h1>
+        <ol className="breadcrumb mb-4">
+          <li className="breadcrumb-item active">
+            Learning and Development (LD) Intervention / Training Programs
+            Attended Certificates{" "}
+          </li>
+        </ol>
 
-              <div className="row ">
-                <div className="col-md-2 offset-md-8 mb-3 ">
-                  <button
-                    className="btn btn-1 btn-sm w-100"
-                    onClick={handleShow}
-                  >
-                    Add New
-                    <FontAwesomeIcon
-                      icon={faPlus}
-                      color="white"
-                      className="ms-2"
-                    />
-                  </button>
-                </div>
-              </div>
-              <div className="row gy-3">
-                <CertificateData />
+        <div className="row ">
+          <div className="col-md-2 offset-md-8 mb-3 ">
+            <button className="btn btn-1 btn-sm w-100" onClick={handleShow}>
+              Add New
+              <FontAwesomeIcon icon={faPlus} color="white" className="ms-2" />
+            </button>
+          </div>
+        </div>
+        <div className="row gy-3">
+          <CertificateData />
 
-                <CertificateData />
-              </div>
-            </div>
-            <Modal
-              size="lg"
-              show={show}
-              onHide={handleClose}
-              backdrop="static"
-              keyboard={false}
-              centered
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Adding Certificate</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <CertificateDataAdd />
-              </Modal.Body>
-            </Modal>
-          </main>
-          <footer className="py-4 bg-light mt-auto">
-            <div className="container-fluid px-4">
-              <div className="d-flex align-items-center justify-content-between small">
-                <div className="text-muted">Sample Footer</div>
-              </div>
-            </div>
-          </footer>
+          <CertificateData />
         </div>
       </div>
-    </div>
+      <Modal
+        size="lg"
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Adding Certificate</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CertificateDataAdd />
+        </Modal.Body>
+      </Modal>
+    </main>
   );
 }
 

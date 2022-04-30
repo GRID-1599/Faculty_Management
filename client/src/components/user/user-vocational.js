@@ -16,72 +16,47 @@ function UserVocational(params) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
-    <div className="user-home-main sb-nav-fixed">
-      <TopNav />
-      <div id="layoutSidenav">
-        <SideNav />
-        {/* CONTAINer */}
-        <div id="layoutSidenav_content">
-          <main>
-            <div className="container-xxl px-4 float-start">
-              <h1 className="mt-4">Educational Background </h1>
-              <ol className="breadcrumb mb-4">
-                <li className="breadcrumb-item active">
-                  Vocational / Trade Course
-                </li>
-              </ol>
-              <div className="row ">
-                <div className="col-md-2 offset-md-8 mb-3 ">
-                  <button
-                    className="btn btn-1 btn-sm w-100"
-                    onClick={handleShow}
-                  >
-                    Add New
-                    <FontAwesomeIcon
-                      icon={faPlus}
-                      color="white"
-                      className="ms-2"
-                    />
-                  </button>
-                </div>
-              </div>
-              <div className="row gy-3">
-                <VocationalData />
-                <VocationalData />
-                <VocationalData />
-                <VocationalData />
-                <VocationalData />
-                <VocationalData />
-                <VocationalData />
-              </div>
-
-              <Modal
-                size="lg"
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                keyboard={false}
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Adding Vocational / Trade Course </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <VocationalDataAdd />
-                </Modal.Body>
-              </Modal>
-            </div>
-          </main>
-          <footer className="py-4 bg-light mt-auto">
-            <div className="container-fluid px-4">
-              <div className="d-flex align-items-center justify-content-between small">
-                <div className="text-muted">Sample Footer</div>
-              </div>
-            </div>
-          </footer>
+    <main>
+      <div className="container-xxl px-4 float-start">
+        <h1 className="mt-4">Educational Background </h1>
+        <ol className="breadcrumb mb-4">
+          <li className="breadcrumb-item active">Vocational / Trade Course</li>
+        </ol>
+        <div className="row ">
+          <div className="col-md-2 offset-md-8 mb-3 ">
+            <button className="btn btn-1 btn-sm w-100" onClick={handleShow}>
+              Add New
+              <FontAwesomeIcon icon={faPlus} color="white" className="ms-2" />
+            </button>
+          </div>
         </div>
+        <div className="row gy-3">
+          <VocationalData />
+          <VocationalData />
+          <VocationalData />
+          <VocationalData />
+          <VocationalData />
+          <VocationalData />
+          <VocationalData />
+        </div>
+
+        <Modal
+          size="lg"
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Adding Vocational / Trade Course </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <VocationalDataAdd />
+          </Modal.Body>
+        </Modal>
       </div>
-    </div>
+    </main>
   );
 }
 

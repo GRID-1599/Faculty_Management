@@ -17,84 +17,61 @@ function UserGraduateStudies(params) {
   const handleShow = () => setShow(true);
 
   return (
-    <div className="user-home-main sb-nav-fixed">
-      <TopNav />
-      <div id="layoutSidenav">
-        <SideNav />
-        {/* CONTAINer */}
-        <div id="layoutSidenav_content">
-          <main>
-            <div className="container-xl px-4 float-start">
-              <h1 className="mt-4">Educational Background </h1>
-              <ol className="breadcrumb mb-4">
-                <li className="breadcrumb-item active">Gradute Studies</li>
-              </ol>
-              <div className="row  ">
-                <div className="col-md-2 offset-md-8 mb-3 ">
-                  <button
-                    className="btn btn-1 btn-sm w-100"
-                    onClick={handleShow}
-                  >
-                    Add New
-                    <FontAwesomeIcon
-                      icon={faPlus}
-                      color="white"
-                      className="ms-2"
-                    />
-                  </button>
-                </div>
-              </div>
-              <div className="row gy-3">
-                <CollegeData
-                  colId="123"
-                  name="Bulacan State University"
-                  course="Bachelor of Science in Information Technology"
-                  periodFrom="2018"
-                  periodTo=""
-                  highest=""
-                  yearGraduate=""
-                  honors=""
-                />
+    <main>
+      <div className="container-xl px-4 float-start">
+        <h1 className="mt-4">Educational Background </h1>
+        <ol className="breadcrumb mb-4">
+          <li className="breadcrumb-item active">Gradute Studies</li>
+        </ol>
+        <div className="row  ">
+          <div className="col-md-2 offset-md-8 mb-3 ">
+            <button className="btn btn-1 btn-sm w-100" onClick={handleShow}>
+              Add New
+              <FontAwesomeIcon icon={faPlus} color="white" className="ms-2" />
+            </button>
+          </div>
+        </div>
+        <div className="row gy-3">
+          <CollegeData
+            colId="123"
+            name="Bulacan State University"
+            course="Bachelor of Science in Information Technology"
+            periodFrom="2018"
+            periodTo=""
+            highest=""
+            yearGraduate=""
+            honors=""
+          />
 
-                <CollegeData
-                  colId="123"
-                  name="Bulacan State University"
-                  course="Bachelor of Science in Information Technology"
-                  periodFrom="2018"
-                  periodTo=""
-                  highest=""
-                  yearGraduate=""
-                  honors=""
-                />
-              </div>
-            </div>
-
-            <Modal
-              size="lg"
-              show={show}
-              onHide={handleClose}
-              backdrop="static"
-              keyboard={false}
-              centered
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Adding Graduate Studies</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <CollegeDataAdd />
-              </Modal.Body>
-            </Modal>
-          </main>
-          <footer className="py-4 bg-light mt-auto">
-            <div className="container-fluid px-4">
-              <div className="d-flex align-items-center justify-content-between small">
-                <div className="text-muted">Sample Footer</div>
-              </div>
-            </div>
-          </footer>
+          <CollegeData
+            colId="123"
+            name="Bulacan State University"
+            course="Bachelor of Science in Information Technology"
+            periodFrom="2018"
+            periodTo=""
+            highest=""
+            yearGraduate=""
+            honors=""
+          />
         </div>
       </div>
-    </div>
+
+      <Modal
+        size="lg"
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Adding Graduate Studies</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CollegeDataAdd />
+        </Modal.Body>
+      </Modal>
+    </main>
   );
 }
 
