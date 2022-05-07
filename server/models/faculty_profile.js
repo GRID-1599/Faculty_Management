@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
 
 const faculty_profile_Schema = new mongoose.Schema({
-  employee_number: {
+  employee_id: {
     type: String,
     required: true,
   },
   email: {
+    type: String,
+    required: true,
+  },
+  mobile_number: {
     type: String,
     required: true,
   },
@@ -30,7 +34,7 @@ const faculty_profile_Schema = new mongoose.Schema({
     required: true,
   },
   birth_date: {
-    type: String,
+    type: Date,
     required: true,
   },
   birth_place: {
@@ -45,6 +49,11 @@ const faculty_profile_Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  height: String,
+  weight: String,
+  blood_type: String,
+  alternative_emaill: String,
+  telephone_numer: String,
 });
 
 const faculty_profile_Model = mongoose.model(
