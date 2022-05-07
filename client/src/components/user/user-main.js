@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import SideNav from "./user-side-nav copy";
 import TopNav from "./user-top-nav";
@@ -17,7 +17,21 @@ import UserCivilServices from "./user-civil-services";
 import UserWorkExp from "./user-work-experience";
 import UserCertificates from "./user-certificates";
 
+import Axios from "axios";
+
 function UserMain(params) {
+  const [listFaculty, setListFaculty] = useState([]);
+  const [objFaculty, setObjFaculty] = useState();
+  const employeeId = "2018107987";
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/getFacultyById/${employeeId}`, {}).then(
+      (response) => {
+        setObjFaculty(response.data);
+      }
+    );
+  }, []);
+
   return (
     <div className="user-home-main sb-nav-fixed">
       <TopNav />
@@ -26,11 +40,27 @@ function UserMain(params) {
         {/* CONTAINer */}
         <div id="layoutSidenav_content">
           <Routes>
-            <Route path="" element={<UserHome />} exact />
-            <Route path="profile" element={<UserHome />} />
-            <Route path="contact" element={<UserContact />} />
-            <Route path="address" element={<UserAddress />} />
-            <Route path="issued-id" element={<UserIssuedId />} />
+            <Route
+              path=""
+              element={<UserHome employeeId={employeeId} />}
+              exact
+            />
+            <Route
+              path="profile"
+              element={<UserHome employeeId={employeeId} />}
+            />
+            <Route
+              path="contact"
+              element={<UserContact employeeId={employeeId} />}
+            />
+            <Route
+              path="address"
+              element={<UserAddress employeeId={employeeId} />}
+            />
+            <Route
+              path="issued-id"
+              element={<UserIssuedId employeeId={employeeId} />}
+            />
             {/* <Route path="issued-id"></Route> */}
             <Route path="elementary" element={<UserElementary />} />
             <Route path="junior-high" element={<UserJuniorHigh />} />

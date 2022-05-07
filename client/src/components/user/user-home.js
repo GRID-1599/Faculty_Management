@@ -1,25 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
+import ImageUpload from "./image_upload";
 
 import default_user_image from "../../resources/users-profile/user-default-profile.png";
 
-function UserHome(params) {
-  const [empNo, setEmpNo] = useState("2018107987");
-  const [email, setEmail] = useState("catudiochristianjude@gmail.com");
-  const [mobileNo, setMobileNo] = useState("09973356903");
-  const [fname, setFname] = useState("Christian Jude");
-  const [mname, setMname] = useState("J");
-  const [lname, setLname] = useState("Catudio");
+import Axios from "axios";
+
+const UserHome = (props) => {
+  const [empNo, setEmpNo] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [fname, setFname] = useState("");
+  const [mname, setMname] = useState("");
+  const [lname, setLname] = useState("");
   const [sname, setSname] = useState("");
-  const [bday, setBday] = useState("1999-10-15");
-  const [age, setAge] = useState("22");
-  const [pBday, setPBday] = useState("Parada, Sta Maria");
-  const [sex, setSex] = useState("Male");
-  const [civil, setCivil] = useState("Single");
+  const [bday, setBday] = useState("");
+  const [age, setAge] = useState("");
+  const [pBday, setPBday] = useState("");
+  const [sex, setSex] = useState("");
+  const [civil, setCivil] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [bloodType, setBloodType] = useState("");
+
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/getFacultyById/${employeeId}`, {}).then(
+      (response) => {
+        console.log(response.data);
+        const faculty = response.data;
+        setFname(faculty.first_name);
+        setMname(faculty.middle_name);
+        setLname(faculty.last_name);
+        setSname(faculty.name_extension);
+        setMname(faculty.middle_name);
+        setBday(dateFormater(faculty.birth_date));
+        setPBday(faculty.birth_place);
+        setSex(faculty.sex);
+        setAge(faculty.age);
+        setCivil(faculty.civil_status);
+        setBloodType(faculty.blood_type)  
+        setHeight(faculty.height)
+        setWeight(faculty.weight)
+      }
+    );
+  }, []);
 
   const [btnEditName, setEditName] = useState("Edit Information");
 
@@ -41,6 +68,20 @@ function UserHome(params) {
     setBtnSaveHide(false);
   };
 
+  const dateFormater = (dateToBeFormat) => {
+    let theDate = new Date(dateToBeFormat);
+    // console.log("x " + theDate.getDate().toString().length);
+    let formatted_date =
+      theDate.getFullYear() +
+      "-" +
+      (theDate.getMonth() + 1) +
+      "-" +
+      (theDate.getDate().toString().length <= 1
+        ? "0" + theDate.getDate()
+        : theDate.getDate());
+    return formatted_date;
+  };
+
   return (
     <main>
       <div className="container-xxl px-4 float-start">
@@ -50,22 +91,8 @@ function UserHome(params) {
         </ol>
         <div className="row pe-4">
           <div className="col-xl-3 mb-4 order-xl-1 border-styled py-4">
-            <div className="row mb-4">
-              <div className="image-wrapper d-flex justify-content-center  ">
-                <div className="image border">
-                  <img
-                    // src="{default_user_image}"
-                    src="https://th.bing.com/th/id/OIP.hhqab-_voCR-IcizNa1MKwHaG8?pid=ImgDet&rs=1"
-                    alt="user-profile-image"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row justify-content-center">
-              <button className="btn btn-1" style={{ maxWidth: "15rem" }}>
-                Upload Image
-              </button>
-            </div>
+            <ImageUpload/>
+            
           </div>
           <div className="col-xl-9 ">
             <div className="row">
@@ -298,6 +325,6 @@ function UserHome(params) {
       </div>
     </main>
   );
-}
+};
 
 export default UserHome;

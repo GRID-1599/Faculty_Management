@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
 
@@ -7,10 +7,12 @@ import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 
-function UserContact(params) {
-  const [email, setEmail] = useState("catudiochristianjude@gmail.com");
+import Axios from "axios";
+
+function UserContact(props) {
+  const [email, setEmail] = useState("");
   const [altEmail, setAltEmail] = useState("");
-  const [mobileNo, setMobileNo] = useState("09973356903");
+  const [mobileNo, setMobileNo] = useState("");
   const [telNo, setTelNo] = useState("");
 
   const [btnAltEmailAddHide, setBtnAltEmailAddHide] = useState(false);
@@ -33,6 +35,20 @@ function UserContact(params) {
     // setBtnTelNoAddHide(mobileNo === "" ? true : false);
     // setBtnTelNoEditHide(mobileNo !== "" ? true : false);
   };
+
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/getFacultyById/${employeeId}`, {}).then(
+      (response) => {
+        const faculty = response.data;
+        setEmail(faculty.email);
+        setMobileNo(faculty.mobile_number);
+        setTelNo(faculty.telephone_number)
+        setAltEmail(faculty.alternative_email)
+      }
+    );
+  }, []);
 
   return (
     <main>

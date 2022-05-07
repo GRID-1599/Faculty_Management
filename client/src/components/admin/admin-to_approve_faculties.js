@@ -11,23 +11,25 @@ import { dateFormatStringSet } from "../functions/dateFunction";
 
 import Axios from "axios";
 
-const AdminHome = () => {
+const ToApproveFaculties = () => {
   const [listFaculty, setListFaculty] = useState([]);
   const [objFaculty, setObjFaculty] = useState();
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/getFaculty").then((response) => {
-      setListFaculty(response.data);
-      // console.log(response.data);
-    });
+    Axios.get("http://localhost:3001/getToApproveFaculties").then(
+      (response) => {
+        setListFaculty(response.data);
+        // console.log(response.data);
+      }
+    );
   }, []);
 
   return (
     <main>
       <div className="container-xxl px-4 float-start ">
-        <h1 className="mt-4">Faculty List </h1>
+        <h1 className="mt-4">To be Approve Faculties </h1>
         <ol className="breadcrumb mb-4">
-          <li className="breadcrumb-item active">List of all Faculty</li>
+          {/* <li className="breadcrumb-item active">Address</li> */}
         </ol>
         <div className="row px-5 g-5 justify-content-between">
           {listFaculty.map((faculty) => {
@@ -49,6 +51,8 @@ const FacultyCard = (props) => {
   const [showView, setShowView] = useState(false);
   const handleCloseView = () => setShowView(false);
   const handleShowView = () => setShowView(true);
+
+  const imgSrc = props.facultyData.image
 
   const handleDelete = () => {
     console.log("delete");
@@ -81,9 +85,8 @@ const FacultyCard = (props) => {
               </button>
               <ul className="dropdown-menu dropdown-menu-end">
                 <li>
-                  <a className="dropdown-item btn-link">Print</a>
                   <a className="dropdown-item btn-link" onClick={handleShow}>
-                    Archive
+                    Delete
                   </a>
                 </li>
               </ul>
@@ -93,18 +96,18 @@ const FacultyCard = (props) => {
         <div className="row g-0">
           <div className="col-md-4 px-3">
             <img
-              // src="{default_user_image}"
+              src={`/facultyImages/${imgSrc}`}
               className="  border"
-              src="https://th.bing.com/th/id/OIP.hhqab-_voCR-IcizNa1MKwHaG8?pid=ImgDet&rs=1"
-              alt="user-profile-image"
-              style={{ width: "100%" }}
+              // src="https://th.bing.com/th/id/OIP.hhqab-_voCR-IcizNa1MKwHaG8?pid=ImgDet&rs=1"
+              alt={imgSrc}
+              style={{ width: "100%" , height:"auto" }}
             />
           </div>
           <div className="col-md-8">
             <div className="card-body">
               <h5 className="card-title">
                 <span className="text-muted">Employee No :</span>
-                {props.facultyData.employee_id}
+                {props.facultyData.employee_id} 
               </h5>
               <p className="card-text">
                 <span>
@@ -117,9 +120,13 @@ const FacultyCard = (props) => {
                 <span>Number: {props.facultyData.mobile_number}</span>
                 <br />
                 <br />
+                <small className="text-muted">
+                  Date created -{" "}
+                  {dateFormatStringSet(props.facultyData.date_created)}
+                </small>
               </p>
               <button className="btn btn-1 float-end " onClick={handleShowView}>
-                View Infornations
+                View More
               </button>
             </div>
           </div>
@@ -221,4 +228,4 @@ const FacultyCard = (props) => {
   );
 };
 
-export default AdminHome;
+export default ToApproveFaculties;

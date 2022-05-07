@@ -227,6 +227,10 @@ body {
   width: inherit;
 }
 
+.image-input-holder input[type="file"]{
+  display: none;
+}
+
 .btn-hovered:hover {
   /* border: 1px solid white; */
   background-color: rgb(150, 5, 5);

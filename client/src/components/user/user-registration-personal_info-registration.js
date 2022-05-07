@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+
+import ImageUpload from "./image_upload";
+
+import Axios from "axios";
 
 // import default_user_profile from ".././users-profile.png";
 
@@ -21,6 +25,12 @@ function RegistrationPersonalInfo(params) {
   const [pBday, setPBday] = useState("");
   const [sex, setSex] = useState("");
   const [civil, setCivil] = useState("");
+  const [fileName, setFileName] = useState("")
+
+  const imageSrcHandler = e =>{
+    setFileName(e.target.files[0])
+    console.log(e.target.files[0]);
+  }
 
   var datee = {
     curDT: new Date().toLocaleString(),
@@ -44,13 +54,54 @@ function RegistrationPersonalInfo(params) {
     }
   };
 
+  
+
+  const addingFacultyToBeApprove = () => {
+
+
+    const formData = new FormData()
+
+    formData.append("employee_id", empNo)
+    formData.append("email", email)
+    formData.append("mobile_number", mobileNo)
+    formData.append("first_name", fname)
+    formData.append("middle_name", mname)
+    formData.append("name_extension", sname)
+    formData.append("last_name", lname)
+    formData.append("age", age)
+    formData.append("birth_date", bday)
+    formData.append("birth_place", pBday)
+    formData.append("sex", sex)
+    formData.append("civil_status", civil)
+    formData.append("date_created" ,new Date())
+    formData.append("image", fileName)
+
+    console.log(formData);
+
+    try {
+      Axios.post(`http://localhost:3001/createToApproveFaculty`, formData).then((response) => {
+        setVisible(true);
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   const onClickFinish = () => {
     navigate("/");
   };
 
   const handleSubmit = (e) => {
+    
+
     e.preventDefault();
-    setVisible(true);
+    addingFacultyToBeApprove();
+    // setVisible(true);
+  };
+
+  const handleSubmitForm = (e) => {
+    // console.log("submit click");
+    // addingFacultyToBeApprove();
   };
 
   return (
@@ -58,6 +109,7 @@ function RegistrationPersonalInfo(params) {
       <p className="text-uppercase  mt-lg-3 ms-4">Adding New Faculty</p>
       <form
         onSubmit={handleSubmit}
+        encType="multipart/form-data"
         className="px-5 pb-3 registration-wrapper custom-scrollbar"
       >
         <div className="row mb-3">
@@ -95,6 +147,21 @@ function RegistrationPersonalInfo(params) {
                 setMobileNo(e.target.value);
               }}
             />
+          </div>
+          <div className="col-sm-8 mb-4">
+            {/* <label className="form-label"> Image * </label>
+            <input
+              type="file"
+              filename = "image"
+              accept="image/*"
+              className="form-control"
+              required
+              onChange={imageSrcHandler}
+                // setFileName(e.target.files[0])
+                // console.log(e.target.files[0]);
+              
+            /> */}
+            <ImageUpload imageScrHandler = {imageSrcHandler} imageFileName = "image"  />
           </div>
         </div>
 
@@ -218,7 +285,9 @@ function RegistrationPersonalInfo(params) {
 
         <div className="row mt-5 g-1 ">
           <div className="col-md-3 offset-md-9 ">
-            <button className="btn btn-1 w-100">Next</button>
+            <button className="btn btn-1 w-100" onClick={handleSubmitForm}>
+              Next
+            </button>
           </div>
         </div>
       </form>
