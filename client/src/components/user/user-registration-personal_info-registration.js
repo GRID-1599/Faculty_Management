@@ -92,12 +92,7 @@ function RegistrationPersonalInfo(params) {
   const handleSubmit = (e) => {
     e.preventDefault();
     addingFacultyToBeApprove();
-    // setVisible(true);
-  };
-
-  const handleSubmitForm = (e) => {
-    // console.log("submit click");
-    // addingFacultyToBeApprove();
+    setVisible(true);
   };
 
   return (
@@ -280,9 +275,7 @@ function RegistrationPersonalInfo(params) {
 
         <div className="row mt-5 g-1 ">
           <div className="col-md-3 offset-md-9 ">
-            <button className="btn btn-1 w-100" onClick={handleSubmitForm}>
-              Submit
-            </button>
+            <button className="btn btn-1 w-100">Submit</button>
           </div>
         </div>
       </form>
