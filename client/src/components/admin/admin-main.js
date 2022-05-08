@@ -28,7 +28,6 @@ function AdminMain(params) {
         <SideNav />
         {/* CONTAINer */}
         <div id="layoutSidenav_content">
-          {console.log(new Date())}
           <Routes>
             <Route path="" element={<AdminFaculties />} />
             <Route path="faculties" element={<AdminFaculties />} />

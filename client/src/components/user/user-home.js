@@ -23,14 +23,23 @@ const UserHome = (props) => {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [bloodType, setBloodType] = useState("");
+  const [imageSrc, setImageSrc] = useState("");
+  const [fileName, setFileName] = useState("");
+
+  const imageSrcHandler = (e) => {
+    setFileName(e.target.files[0]);
+    console.log(e.target.files[0]);
+  };
 
   const employeeId = props.employeeId;
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/getFacultyById/${employeeId}`, {}).then(
       (response) => {
-        console.log(response.data);
+        // console.log(response.data);
         const faculty = response.data;
+        // console.log(dateFormater(faculty.birth_date));
+
         setFname(faculty.first_name);
         setMname(faculty.middle_name);
         setLname(faculty.last_name);
@@ -41,9 +50,10 @@ const UserHome = (props) => {
         setSex(faculty.sex);
         setAge(faculty.age);
         setCivil(faculty.civil_status);
-        setBloodType(faculty.blood_type)  
-        setHeight(faculty.height)
-        setWeight(faculty.weight)
+        setBloodType(faculty.blood_type);
+        setHeight(faculty.height);
+        setWeight(faculty.weight);
+        setImageSrc(faculty.image);
       }
     );
   }, []);
@@ -74,13 +84,24 @@ const UserHome = (props) => {
     let formatted_date =
       theDate.getFullYear() +
       "-" +
-      (theDate.getMonth() + 1) +
+      ((theDate.getMonth() + 1).toString().length <= 1
+        ? "0" + (theDate.getMonth() + 1)
+        : theDate.getMonth() + 1) +
       "-" +
       (theDate.getDate().toString().length <= 1
         ? "0" + theDate.getDate()
         : theDate.getDate());
     return formatted_date;
   };
+
+  const imageComp = (
+    <ImageUpload
+      imageScrHandler={imageSrcHandler}
+      imageFileName="image"
+      isSetSrc="true"
+      setImgSrc={imageSrc}
+    />
+  );
 
   return (
     <main>
@@ -91,8 +112,7 @@ const UserHome = (props) => {
         </ol>
         <div className="row pe-4">
           <div className="col-xl-3 mb-4 order-xl-1 border-styled py-4">
-            <ImageUpload/>
-            
+            {imageSrc !== "" && imageComp}
           </div>
           <div className="col-xl-9 ">
             <div className="row">

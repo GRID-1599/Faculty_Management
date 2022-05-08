@@ -25,12 +25,12 @@ function RegistrationPersonalInfo(params) {
   const [pBday, setPBday] = useState("");
   const [sex, setSex] = useState("");
   const [civil, setCivil] = useState("");
-  const [fileName, setFileName] = useState("")
+  const [fileName, setFileName] = useState("");
 
-  const imageSrcHandler = e =>{
-    setFileName(e.target.files[0])
+  const imageSrcHandler = (e) => {
+    setFileName(e.target.files[0]);
     console.log(e.target.files[0]);
-  }
+  };
 
   var datee = {
     curDT: new Date().toLocaleString(),
@@ -54,34 +54,32 @@ function RegistrationPersonalInfo(params) {
     }
   };
 
-  
-
   const addingFacultyToBeApprove = () => {
+    const formData = new FormData();
 
-
-    const formData = new FormData()
-
-    formData.append("employee_id", empNo)
-    formData.append("email", email)
-    formData.append("mobile_number", mobileNo)
-    formData.append("first_name", fname)
-    formData.append("middle_name", mname)
-    formData.append("name_extension", sname)
-    formData.append("last_name", lname)
-    formData.append("age", age)
-    formData.append("birth_date", bday)
-    formData.append("birth_place", pBday)
-    formData.append("sex", sex)
-    formData.append("civil_status", civil)
-    formData.append("date_created" ,new Date())
-    formData.append("image", fileName)
+    formData.append("employee_id", empNo);
+    formData.append("email", email);
+    formData.append("mobile_number", mobileNo);
+    formData.append("first_name", fname);
+    formData.append("middle_name", mname);
+    formData.append("name_extension", sname);
+    formData.append("last_name", lname);
+    formData.append("age", age);
+    formData.append("birth_date", bday);
+    formData.append("birth_place", pBday);
+    formData.append("sex", sex);
+    formData.append("civil_status", civil);
+    formData.append("date_created", new Date());
+    formData.append("image", fileName);
 
     console.log(formData);
 
     try {
-      Axios.post(`http://localhost:3001/createToApproveFaculty`, formData).then((response) => {
-        setVisible(true);
-      });
+      Axios.post(`http://localhost:3001/createToApproveFaculty`, formData).then(
+        (response) => {
+          setVisible(true);
+        }
+      );
     } catch (ex) {
       console.log(ex);
     }
@@ -92,8 +90,6 @@ function RegistrationPersonalInfo(params) {
   };
 
   const handleSubmit = (e) => {
-    
-
     e.preventDefault();
     addingFacultyToBeApprove();
     // setVisible(true);
@@ -113,55 +109,54 @@ function RegistrationPersonalInfo(params) {
         className="px-5 pb-3 registration-wrapper custom-scrollbar"
       >
         <div className="row mb-3">
-          <div className="col-sm-8 mb-3">
-            <label className="form-label"> Employee Number * </label>
-            <input
-              type="text"
-              className="form-control"
-              required
-              onChange={(e) => {
-                setEmpNo(e.target.value);
-              }}
-            />
+          <div className="col-md-5">
+            <div className="row">
+              <div className="col-sm-12 mb-4">
+                <ImageUpload
+                  imageScrHandler={imageSrcHandler}
+                  imageFileName="image"
+                />
+              </div>
+            </div>
           </div>
+          <div className="col-md-7">
+            <div className="row pt-5">
+              <div className="col-sm-12 mb-3">
+                <label className="form-label"> Employee Number * </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  required
+                  onChange={(e) => {
+                    setEmpNo(e.target.value);
+                  }}
+                />
+              </div>
 
-          <div className="col-sm-8 mb-4">
-            <label className="form-label"> Email * </label>
-            <input
-              type="email"
-              className="form-control"
-              required
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-          </div>
+              <div className="col-sm-12 mb-4">
+                <label className="form-label"> Email * </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  required
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </div>
 
-          <div className="col-sm-8 mb-4">
-            <label className="form-label"> Mobile No. * </label>
-            <input
-              type="text"
-              className="form-control"
-              required
-              onChange={(e) => {
-                setMobileNo(e.target.value);
-              }}
-            />
-          </div>
-          <div className="col-sm-8 mb-4">
-            {/* <label className="form-label"> Image * </label>
-            <input
-              type="file"
-              filename = "image"
-              accept="image/*"
-              className="form-control"
-              required
-              onChange={imageSrcHandler}
-                // setFileName(e.target.files[0])
-                // console.log(e.target.files[0]);
-              
-            /> */}
-            <ImageUpload imageScrHandler = {imageSrcHandler} imageFileName = "image"  />
+              <div className="col-sm-12 mb-4">
+                <label className="form-label"> Mobile No. * </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  required
+                  onChange={(e) => {
+                    setMobileNo(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -286,7 +281,7 @@ function RegistrationPersonalInfo(params) {
         <div className="row mt-5 g-1 ">
           <div className="col-md-3 offset-md-9 ">
             <button className="btn btn-1 w-100" onClick={handleSubmitForm}>
-              Next
+              Submit
             </button>
           </div>
         </div>

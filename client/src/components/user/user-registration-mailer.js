@@ -14,11 +14,12 @@ function RegistrationMailer(params) {
     e.preventDefault();
     console.log(emailTo);
 
-    var toSendParams = {
-      code: code,
-      emailTo: emailTo,
-    };
-    // for sending email
+    // var toSendParams = {
+    //   temporaryPassword: temporaryPassword,
+    //   name: facultyName,
+    //   emailTo: emailTo,
+    // };
+    // // for sending email
     // emailjs
     //   .send(
     //     "service_bgel1lm",

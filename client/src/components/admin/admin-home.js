@@ -31,9 +31,7 @@ const AdminHome = () => {
         </ol>
         <div className="row px-5 g-5 justify-content-between">
           {listFaculty.map((faculty) => {
-            return (
-              <FacultyCard facultyData={faculty} key={faculty.employee_id} />
-            );
+            return <FacultyCard facultyData={faculty} key={faculty._id} />;
           })}
         </div>
       </div>
@@ -54,6 +52,8 @@ const FacultyCard = (props) => {
     console.log("delete");
     setShow(false);
   };
+
+  const imgSrc = props.facultyData.image;
 
   const handleApprove = () => {
     console.log("Approve");
@@ -93,11 +93,11 @@ const FacultyCard = (props) => {
         <div className="row g-0">
           <div className="col-md-4 px-3">
             <img
-              // src="{default_user_image}"
+              src={`/facultyImages/${imgSrc}`}
               className="  border"
-              src="https://th.bing.com/th/id/OIP.hhqab-_voCR-IcizNa1MKwHaG8?pid=ImgDet&rs=1"
-              alt="user-profile-image"
-              style={{ width: "100%" }}
+              // src="https://th.bing.com/th/id/OIP.hhqab-_voCR-IcizNa1MKwHaG8?pid=ImgDet&rs=1"
+              alt={imgSrc}
+              style={{ width: "100%", height: "auto" }}
             />
           </div>
           <div className="col-md-8">
