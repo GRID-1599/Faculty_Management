@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+
+import Axios from "axios";
+import { saveAs } from "file-saver";
 import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -72,6 +75,32 @@ function SideNav(params) {
     navigate("../faculty/certificates");
   };
 
+  const [loadingPrinting, setLoadingPrinting] = useState(false);
+
+  const handlePrint = () => {
+    console.log("printing..");
+    setLoadingPrinting(true);
+    Axios.post("http://localhost:3001/pdf/create")
+      .then(() =>
+        Axios.get("http://localhost:3001/pdf/fetch", {
+          responseType: "blob",
+        })
+      )
+      .then((res) => {
+        const pdfBlob = new Blob([res.data], { type: "application/pdf" });
+        saveAs(pdfBlob, `${new Date()}.pdf`);
+
+        console.log("printing done");
+        setLoadingPrinting(false);
+      });
+  };
+
+  const loader = (
+    <div className="spinner-border text-info mx-3" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  );
+
   return (
     <div id="layoutSidenav_nav">
       <nav
@@ -80,15 +109,12 @@ function SideNav(params) {
       >
         <div className="sb-sidenav-menu custom-scrollbar1">
           <div className="nav">
-            {/* <div className="nav-link btn-link ">
-              <form className=" w-100">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search"
-                />
-              </form>
-            </div> */}
+            <div className="nav-link btn-link ">
+              <button className="btn btn-1" onClick={handlePrint}>
+                Print Data
+              </button>
+              {loadingPrinting && loader}
+            </div>
             <div className="sb-sidenav-menu-heading">Personal Info</div>
             <div className="nav-link btn-link" onClick={onClickProfile}>
               <div className="sb-nav-link-icon">

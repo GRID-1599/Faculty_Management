@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 import SideNav from "./user-side-nav";
@@ -11,10 +11,43 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
-function UserVocational(params) {
+import Axios from "axios";
+
+function UserVocational(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [loaderShow, setLoaderShow] = useState(true);
+  const [nullShow, setNullShow] = useState(false);
+
+  const [vocationaList, setVocationaList] = useState([]);
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/educ-vocational/${employeeId}`).then(
+      (response) => {
+        setVocationaList(response.data);
+        setLoaderShow(false);
+
+        // console.log(response.data);
+      }
+    );
+  });
+
+  const nullMessage = (
+    <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
+  );
+
+  const loadingMessage = (
+    <div className="wrapper">
+      <div className="spinner-border text-danger me-3" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="h3 text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
+
   return (
     <main>
       <div className="container-xxl px-4 float-start">
@@ -31,13 +64,16 @@ function UserVocational(params) {
           </div>
         </div>
         <div className="row gy-3">
-          <VocationalData />
-          <VocationalData />
-          <VocationalData />
-          <VocationalData />
-          <VocationalData />
-          <VocationalData />
-          <VocationalData />
+          {loaderShow && loadingMessage}
+          {vocationaList &&
+            vocationaList.map((vocationalIfo) => {
+              return (
+                <VocationalData
+                  vocationalData={vocationalIfo}
+                  key={vocationalIfo._id}
+                />
+              );
+            })}
         </div>
 
         <Modal
@@ -52,7 +88,10 @@ function UserVocational(params) {
             <Modal.Title>Adding Vocational / Trade Course </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <VocationalDataAdd />
+            <VocationalDataAdd
+              handleModalClose={handleClose}
+              employeeId={employeeId}
+            />
           </Modal.Body>
         </Modal>
       </div>
@@ -61,13 +100,17 @@ function UserVocational(params) {
 }
 
 const VocationalData = (props) => {
-  const [name, setName] = useState("");
-  const [education, setEducation] = useState("");
-  const [periodFrom, setPeriodFrom] = useState("");
-  const [periodTo, setPeriodTo] = useState("");
-  const [highest, setHighest] = useState("");
-  const [yearGraduate, setYearGraduate] = useState("");
-  const [honors, setHonors] = useState("");
+  const [name, setName] = useState(props.vocationalData.school_name);
+  const [education, setEducation] = useState(props.vocationalData.course);
+  const [periodFrom, setPeriodFrom] = useState(
+    props.vocationalData.period_from
+  );
+  const [periodTo, setPeriodTo] = useState(props.vocationalData.period_to);
+  const [units, setUnits] = useState(props.vocationalData.units_earned);
+  const [yearGraduate, setYearGraduate] = useState(
+    props.vocationalData.year_graduate
+  );
+  const [honors, setHonors] = useState(props.vocationalData.honor_recieved);
 
   const [disable, setDisable] = useState(true);
 
@@ -92,7 +135,13 @@ const VocationalData = (props) => {
   const handleShow = () => setShow(true);
 
   const handleDelete = () => {
-    console.log("delete");
+    console.log("deleting");
+    Axios.delete(
+      `http://localhost:3001/educ-vocational/delete/${props.vocationalData._id}`
+    ).then((response) => {
+      console.log("deleted");
+      console.log(response);
+    });
     setShow(false);
   };
 
@@ -220,10 +269,10 @@ const VocationalData = (props) => {
               className="form-control"
               id="txthighest"
               placeholder="Highest Level ( if not graduated)"
-              value={highest}
+              value={units}
               disabled={disable}
               onChange={(e) => {
-                setHighest(e.target.value);
+                setUnits(e.target.value);
               }}
             />
             <label htmlFor="txthighest">
@@ -306,7 +355,7 @@ const VocationalDataAdd = (props) => {
   const [education, setEducation] = useState("");
   const [periodFrom, setPeriodFrom] = useState("");
   const [periodTo, setPeriodTo] = useState("");
-  const [highest, setHighest] = useState("");
+  const [units, setUnits] = useState("");
   const [yearGraduate, setYearGraduate] = useState("");
   const [honors, setHonors] = useState("");
 
@@ -314,8 +363,34 @@ const VocationalDataAdd = (props) => {
 
   const [btnsaveHide, setBtnSaveHide] = useState(true);
 
+  const handleAdding = () => {
+    const vocationalDatas = {
+      employee_id: props.employeeId,
+      school_name: name,
+      course: education,
+      period_from: periodFrom,
+      period_to: periodTo,
+      units_earned: units,
+      year_graduate: yearGraduate,
+      honor_recieved: honors,
+    };
+    try {
+      Axios.post(
+        `http://localhost:3001/educ-vocational/create`,
+        vocationalDatas
+      ).then((response) => {
+        props.handleModalClose();
+        console.log("submited");
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+    console.log("submitting ...");
+    handleAdding();
     // setDisable(true);
     // setBtnEditHide(true);
     // setBtnSaveHide(false);
@@ -329,14 +404,16 @@ const VocationalDataAdd = (props) => {
               type="text"
               className="form-control"
               id="txtName"
-              placeholder="Name of College (write in full)"
+              placeholder="Name of Vocational / Trade Course (write in full)"
               value={name}
               disabled={disable}
               onChange={(e) => {
                 setName(e.target.value);
               }}
             />
-            <label htmlFor="txtName">Name of College (write in full)</label>
+            <label htmlFor="txtName">
+              Name of Vocational / Trade Course (write in full)
+            </label>
           </div>
         </div>
         <div className="col-md-12">
@@ -403,10 +480,10 @@ const VocationalDataAdd = (props) => {
               className="form-control"
               id="txthighest"
               placeholder="Highest Level ( if not graduated)"
-              value={highest}
+              value={units}
               disabled={disable}
               onChange={(e) => {
-                setHighest(e.target.value);
+                setUnits(e.target.value);
               }}
             />
             <label htmlFor="txthighest">

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-
+import React, { useState, useEffect } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
+import { Modal, Button } from "react-bootstrap";
+
+import { dateFormater } from "../functions/dateFunction";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,10 +12,44 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
-function UserCivilServices(params) {
+import Axios from "axios";
+
+function UserWorkExperience(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [loaderShow, setLoaderShow] = useState(true);
+  const [nullShow, setNullShow] = useState(false);
+
+  const [workExpList, setWorkExpList] = useState([]);
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/work-experience/${employeeId}`).then(
+      (response) => {
+        setWorkExpList(response.data);
+        setLoaderShow(false);
+
+        // console.log(response.data);
+      }
+    );
+    console.log("x");
+  });
+
+  const nullMessage = (
+    <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
+  );
+
+  const loadingMessage = (
+    <div className="wrapper">
+      <div className="spinner-border text-danger me-3" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="h3 text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
+
   return (
     <main>
       <div className="container-xl px-4 float-start">
@@ -32,9 +67,18 @@ function UserCivilServices(params) {
           </div>
         </div>
         <div className="row gy-3">
-          <WorkExperienceData />
+          {loaderShow && loadingMessage}
+          {workExpList &&
+            workExpList.map((userWorkExpInfo) => {
+              return (
+                <WorkExperienceData
+                  workExpData={userWorkExpInfo}
+                  key={userWorkExpInfo._id}
+                />
+              );
+            })}
 
-          <WorkExperienceData />
+          {nullShow && nullMessage}
         </div>
       </div>
       <Modal
@@ -49,7 +93,10 @@ function UserCivilServices(params) {
           <Modal.Title>Adding Work Experience</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <WorkExperienceDataAdd />
+          <WorkExperienceDataAdd
+            handleModalClose={handleClose}
+            employeeId={employeeId}
+          />
         </Modal.Body>
       </Modal>
     </main>
@@ -57,14 +104,24 @@ function UserCivilServices(params) {
 }
 
 const WorkExperienceData = (props) => {
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
-  const [position, setPosition] = useState("");
-  const [workFrom, setWorkFrom] = useState("");
-  const [monthlySalary, setMonthlySalary] = useState("");
-  const [salaryGrade, setSalaryGrade] = useState("");
-  const [statusOfAppointment, setStatusOfAppointment] = useState("");
-  const [ifGovService, setIfGovService] = useState("");
+  const [dateFrom, setDateFrom] = useState(
+    dateFormater(props.workExpData.period_from)
+  );
+  const [dateTo, setDateTo] = useState(
+    dateFormater(props.workExpData.period_to)
+  );
+  const [position, setPosition] = useState(props.workExpData.position);
+  const [workFrom, setWorkFrom] = useState(props.workExpData.company_name);
+  const [monthlySalary, setMonthlySalary] = useState(
+    props.workExpData.monthly_salary
+  );
+  const [salaryGrade, setSalaryGrade] = useState(props.workExpData.pay_grade);
+  const [statusOfAppointment, setStatusOfAppointment] = useState(
+    props.workExpData.appointment_status
+  );
+  const [ifGovService, setIfGovService] = useState(
+    props.workExpData.isGov_service
+  );
 
   const [disable, setDisable] = useState(true);
 
@@ -89,7 +146,13 @@ const WorkExperienceData = (props) => {
   const handleShow = () => setShow(true);
 
   const handleDelete = () => {
-    console.log("delete");
+    console.log("deleting");
+    Axios.delete(
+      `http://localhost:3001/work-experience/delete/${props.workExpData._id}`
+    ).then((response) => {
+      console.log("deleted");
+      console.log(response);
+    });
     setShow(false);
   };
 
@@ -269,6 +332,7 @@ const WorkExperienceData = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault1"
               disabled={disable}
+              checked={ifGovService}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault1">
               Yes
@@ -281,6 +345,7 @@ const WorkExperienceData = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault2"
               disabled={disable}
+              checked={!ifGovService}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault2">
               No
@@ -329,14 +394,44 @@ const WorkExperienceDataAdd = (props) => {
   const [monthlySalary, setMonthlySalary] = useState("");
   const [salaryGrade, setSalaryGrade] = useState("");
   const [statusOfAppointment, setStatusOfAppointment] = useState("");
-  const [ifGovService, setIfGovService] = useState("");
+  const [ifGovService, setIfGovService] = useState(false);
+
+  const setGovServiceFalse = () => setIfGovService(false);
+  const setGovServiceTrue = () => setIfGovService(true);
 
   const [disable, setDisable] = useState(false);
 
   const [btnsaveHide, setBtnSaveHide] = useState(true);
 
+  const handleAdding = () => {
+    const vocationalDatas = {
+      employee_id: props.employeeId,
+      position: position,
+      company_name: workFrom,
+      monthly_salary: monthlySalary,
+      pay_grade: salaryGrade,
+      appointment_status: statusOfAppointment,
+      period_from: dateFrom,
+      period_to: dateTo,
+      isGov_service: ifGovService,
+    };
+    try {
+      Axios.post(
+        `http://localhost:3001/work-experience/create`,
+        vocationalDatas
+      ).then((response) => {
+        props.handleModalClose();
+        console.log("submited");
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+    console.log("submitting ...");
+    handleAdding();
     // setDisable(true);
     // setBtnEditHide(true);
     // setBtnSaveHide(false);
@@ -476,6 +571,7 @@ const WorkExperienceDataAdd = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault1"
               disabled={disable}
+              onClick={setGovServiceTrue}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault1">
               Yes
@@ -488,6 +584,7 @@ const WorkExperienceDataAdd = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault2"
               disabled={disable}
+              onClick={setGovServiceFalse}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault2">
               No
@@ -507,4 +604,4 @@ const WorkExperienceDataAdd = (props) => {
   );
 };
 
-export default UserCivilServices;
+export default UserWorkExperience;

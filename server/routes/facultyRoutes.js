@@ -61,6 +61,7 @@ router.post("/createFaculty", async (req, res) => {
       telephone_number: req.body.telephone_number,
       image: req.body.image,
       password: req.body.password,
+      is_newUser: 1,
     };
     const newFaculty = new faculty_profile_Model(faculty);
 

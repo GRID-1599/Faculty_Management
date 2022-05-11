@@ -22,7 +22,7 @@ import Axios from "axios";
 function UserMain(params) {
   const [listFaculty, setListFaculty] = useState([]);
   const [objFaculty, setObjFaculty] = useState();
-  const employeeId = "15991599915";
+  const employeeId = "2018107987";
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/getFacultyById/${employeeId}`, {}).then(
@@ -62,19 +62,52 @@ function UserMain(params) {
               element={<UserIssuedId employeeId={employeeId} />}
             />
             {/* <Route path="issued-id"></Route> */}
-            <Route path="elementary" element={<UserElementary />} />
-            <Route path="junior-high" element={<UserJuniorHigh />} />
-            <Route path="senior-high" element={<UserSeniorHigh />} />
-            <Route path="vocational" element={<UserVocational />} />
-            <Route path="college" element={<UserCollege />} />
-            <Route path="graduate-studies" element={<UserGraduateStudies />} />
+            <Route
+              path="elementary"
+              element={<UserElementary employeeId={employeeId} />}
+            />
+            <Route
+              path="junior-high"
+              element={<UserJuniorHigh employeeId={employeeId} />}
+            />
+            <Route
+              path="senior-high"
+              element={<UserSeniorHigh employeeId={employeeId} />}
+            />
+            <Route
+              path="vocational"
+              element={<UserVocational employeeId={employeeId} />}
+            />
+            <Route
+              path="college"
+              element={<UserCollege employeeId={employeeId} />}
+            />
+            <Route
+              path="graduate-studies"
+              element={<UserGraduateStudies employeeId={employeeId} />}
+            />
 
-            <Route path="graduate-studies" element={<UserGraduateStudies />} />
-            <Route path="graduate-studies" element={<UserGraduateStudies />} />
+            <Route
+              path="graduate-studies"
+              element={<UserGraduateStudies employeeId={employeeId} />}
+            />
+            <Route
+              path="graduate-studies"
+              element={<UserGraduateStudies employeeId={employeeId} />}
+            />
 
-            <Route path="civil-services" element={<UserCivilServices />} />
-            <Route path="work-experiences" element={<UserWorkExp />} />
-            <Route path="certificates" element={<UserCertificates />} />
+            <Route
+              path="civil-services"
+              element={<UserCivilServices employeeId={employeeId} />}
+            />
+            <Route
+              path="work-experiences"
+              element={<UserWorkExp employeeId={employeeId} />}
+            />
+            <Route
+              path="certificates"
+              element={<UserCertificates employeeId={employeeId} />}
+            />
           </Routes>
           <footer className="py-4 bg-light mt-auto">
             <div className="container-fluid px-4">

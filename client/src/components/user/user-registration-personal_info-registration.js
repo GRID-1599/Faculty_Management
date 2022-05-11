@@ -92,7 +92,6 @@ function RegistrationPersonalInfo(params) {
   const handleSubmit = (e) => {
     e.preventDefault();
     addingFacultyToBeApprove();
-    setVisible(true);
   };
 
   return (

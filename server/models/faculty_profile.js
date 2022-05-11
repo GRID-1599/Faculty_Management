@@ -63,6 +63,7 @@ const faculty_profile_Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  is_newUser: Boolean,
 });
 
 faculty_profile_Schema.pre("save", async function (next) {

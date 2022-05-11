@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
+
+import { dateFormater } from "../functions/dateFunction";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,10 +13,45 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
-function UserCertificates(params) {
+import Axios from "axios";
+
+import PDFViewer from "../pdfViewer";
+
+function UserCertificates(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [loaderShow, setLoaderShow] = useState(true);
+  const [nullShow, setNullShow] = useState(false);
+
+  const [certificateList, setCertificateList] = useState([]);
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/certificate/${employeeId}`).then(
+      (response) => {
+        setCertificateList(response.data);
+        setLoaderShow(false);
+
+        // console.log(response.data);
+      }
+    );
+    console.log("x");
+  });
+
+  const nullMessage = (
+    <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
+  );
+
+  const loadingMessage = (
+    <div className="wrapper">
+      <div className="spinner-border text-danger me-3" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="h3 text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
 
   return (
     <main>
@@ -36,9 +73,19 @@ function UserCertificates(params) {
           </div>
         </div>
         <div className="row gy-3">
-          <CertificateData />
+          {loaderShow && loadingMessage}
+          {certificateList &&
+            certificateList.map((certificateInfo) => {
+              return (
+                <CertificateData
+                  certificateData={certificateInfo}
+                  key={certificateInfo._id}
+                />
+              );
+            })}
 
-          <CertificateData />
+          {nullShow && nullMessage}
+          {/* <PDFViewer /> */}
         </div>
       </div>
       <Modal
@@ -53,7 +100,10 @@ function UserCertificates(params) {
           <Modal.Title>Adding Certificate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CertificateDataAdd />
+          <CertificateDataAdd
+            handleModalClose={handleClose}
+            employeeId={employeeId}
+          />
         </Modal.Body>
       </Modal>
     </main>
@@ -61,15 +111,23 @@ function UserCertificates(params) {
 }
 
 const CertificateData = (props) => {
-  const [colId, setColId] = useState(props.colId);
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("");
-  const [hoursNo, setHoursNo] = useState("");
-  const [LD_type, setLD_type] = useState("");
-  const [conductedBy, setConductedBy] = useState("");
-  const [certificateSrc, setCertificateSrc] = useState("");
+  // const [colId, setColId] = useState(props.colId);
+  const [dateFrom, setDateFrom] = useState(
+    dateFormater(props.certificateData.period_from)
+  );
+  const [dateTo, setDateTo] = useState(
+    dateFormater(props.certificateData.period_to)
+  );
+  const [title, setTitle] = useState(props.certificateData.certificate_name);
+  const [type, setType] = useState(props.certificateData.type);
+  const [hoursNo, setHoursNo] = useState(props.certificateData.total_hours);
+  const [LD_type, setLD_type] = useState(props.certificateData.type);
+  const [conductedBy, setConductedBy] = useState(
+    props.certificateData.conducted_by
+  );
+  const [certificateSrc, setCertificateSrc] = useState(
+    props.certificateData.certificate_src
+  );
 
   const [disable, setDisable] = useState(true);
 
@@ -94,7 +152,13 @@ const CertificateData = (props) => {
   const handleShow = () => setShow(true);
 
   const handleDelete = () => {
-    console.log("delete");
+    console.log("deleting");
+    Axios.delete(
+      `http://localhost:3001/certificate/delete/${props.certificateData._id}`
+    ).then((response) => {
+      console.log("deleted");
+      console.log(response);
+    });
     setShow(false);
   };
 
@@ -151,6 +215,7 @@ const CertificateData = (props) => {
               placeholder="Certificate Title"
               value={title}
               disabled={disable}
+              required
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
@@ -170,6 +235,7 @@ const CertificateData = (props) => {
               placeholder="Type"
               value={type}
               disabled={disable}
+              required
               onChange={(e) => {
                 setType(e.target.value);
               }}
@@ -190,6 +256,7 @@ const CertificateData = (props) => {
               placeholder="Start From"
               value={dateFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateFrom(e.target.value);
               }}
@@ -206,6 +273,7 @@ const CertificateData = (props) => {
               placeholder="End To"
               value={dateTo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateTo(e.target.value);
               }}
@@ -223,6 +291,7 @@ const CertificateData = (props) => {
               placeholder="Number of Hours"
               value={hoursNo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setHoursNo(e.target.value);
               }}
@@ -239,6 +308,7 @@ const CertificateData = (props) => {
               placeholder="Type of Learning and Development"
               value={LD_type}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLD_type(e.target.value);
               }}
@@ -259,6 +329,7 @@ const CertificateData = (props) => {
               placeholder="Conducted / Sponsored by"
               value={conductedBy}
               disabled={disable}
+              required
               onChange={(e) => {
                 setConductedBy(e.target.value);
               }}
@@ -275,7 +346,7 @@ const CertificateData = (props) => {
                       id="txtsponsor"
                       placeholder="Certificate"
                       value={conductedBy}
-                      disabled={disable}
+                      disabled={disable} required
                       onChange={(e) => {
                         setConductedBy(e.target.value);
                       }}
@@ -329,19 +400,58 @@ const CertificateDataAdd = (props) => {
   const [conductedBy, setConductedBy] = useState("");
   const [certificateSrc, setCertificateSrc] = useState("");
 
+  const [fileName, setFileName] = useState("");
+
+  const certificateSrcHandler = (e) => {
+    setFileName(e.target.files[0]);
+    console.log(e.target.files[0]);
+  };
+
   const [disable, setDisable] = useState(false);
 
   const [btnsaveHide, setBtnSaveHide] = useState(true);
 
+  const handleAdding = () => {
+    const formData = new FormData();
+
+    formData.append("employee_id", props.employeeId);
+    formData.append("certificate_name", title);
+    formData.append("type", type);
+    formData.append("period_from", dateFrom);
+    formData.append("period_to", dateTo);
+    formData.append("total_hours", hoursNo);
+    formData.append("conducted_by", conductedBy);
+    formData.append("certificate_src", fileName);
+
+    console.log(formData);
+
+    try {
+      Axios.post(`http://localhost:3001/certificate/create`, formData).then(
+        (response) => {
+          props.handleModalClose();
+          console.log("submited");
+        }
+      );
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+    console.log("submitting ...");
+    handleAdding();
     // setDisable(true);
     // setBtnEditHide(true);
     // setBtnSaveHide(false);
   };
   return (
     <>
-      <form className="row gy-2" onSubmit={handleSubmit}>
+      <form
+        className="row gy-2"
+        encType="multipart/form-data"
+        onSubmit={handleSubmit}
+      >
         <div className="col-md-12">
           <div className="form-floating">
             <input
@@ -351,6 +461,7 @@ const CertificateDataAdd = (props) => {
               placeholder="Certificate Title"
               value={title}
               disabled={disable}
+              required
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
@@ -370,6 +481,7 @@ const CertificateDataAdd = (props) => {
               placeholder="Type"
               value={type}
               disabled={disable}
+              required
               onChange={(e) => {
                 setType(e.target.value);
               }}
@@ -390,6 +502,7 @@ const CertificateDataAdd = (props) => {
               placeholder="Start From"
               value={dateFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateFrom(e.target.value);
               }}
@@ -406,6 +519,7 @@ const CertificateDataAdd = (props) => {
               placeholder="End To"
               value={dateTo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateTo(e.target.value);
               }}
@@ -417,12 +531,13 @@ const CertificateDataAdd = (props) => {
         <div className="col-md-7">
           <div className="form-floating">
             <input
-              type="txt"
+              type="number"
               className="form-control"
               id="txtHoursNum"
               placeholder="Number of Hours"
               value={hoursNo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setHoursNo(e.target.value);
               }}
@@ -439,6 +554,7 @@ const CertificateDataAdd = (props) => {
               placeholder="Type of Learning and Development"
               value={LD_type}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLD_type(e.target.value);
               }}
@@ -459,6 +575,7 @@ const CertificateDataAdd = (props) => {
               placeholder="Conducted / Sponsored by"
               value={conductedBy}
               disabled={disable}
+              required
               onChange={(e) => {
                 setConductedBy(e.target.value);
               }}
@@ -467,24 +584,27 @@ const CertificateDataAdd = (props) => {
           </div>
         </div>
 
-        {/* <div className="col-md-12">
-                  <div className="form-floating">
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="txtsponsor"
-                      placeholder="Certificate"
-                      value={conductedBy}
-                      disabled={disable}
-                      onChange={(e) => {
-                        setConductedBy(e.target.value);
-                      }}
-                    />
-                    <label htmlFor="txtsponsor">
-                      Certificate
-                    </label>
-                  </div> 
-                </div>*/}
+        <div className="col-md-12">
+          <div className="">
+            <input
+              type="file"
+              className="form-control visually-hidden"
+              id="inputFile"
+              filename="certificate_src"
+              placeholder="Certificate"
+              accept="image/jpeg, image/png, application/pdf "
+              disabled={disable}
+              required
+              onChange={certificateSrcHandler}
+            />
+            <label htmlFor="inputFile" className="btn btn-1">
+              Upload Certificate
+            </label>
+            <span className="text-muted ms-5">
+              File name : {fileName.name}{" "}
+            </span>
+          </div>
+        </div>
 
         <div className="row mt-3 ">
           <div className="col-md-4 mb-3 offset-md-8 ">

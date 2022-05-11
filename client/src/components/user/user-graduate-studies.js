@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
+
+import Axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,10 +13,40 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
-function UserGraduateStudies(params) {
+function UserGraduateStudies(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [loaderShow, setLoaderShow] = useState(true);
+  const [nullShow, setNullShow] = useState(false);
+
+  const [collegeList, setCollegeList] = useState([]);
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/educ-graduate-studies/${employeeId}`).then(
+      (response) => {
+        setCollegeList(response.data);
+        setLoaderShow(false);
+
+        // console.log(response.data);
+      }
+    );
+  });
+
+  const nullMessage = (
+    <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
+  );
+
+  const loadingMessage = (
+    <div className="wrapper">
+      <div className="spinner-border text-danger me-3" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="h3 text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
 
   return (
     <main>
@@ -32,27 +64,15 @@ function UserGraduateStudies(params) {
           </div>
         </div>
         <div className="row gy-3">
-          <CollegeData
-            colId="123"
-            name="Bulacan State University"
-            course="Bachelor of Science in Information Technology"
-            periodFrom="2018"
-            periodTo=""
-            highest=""
-            yearGraduate=""
-            honors=""
-          />
+          {loaderShow && loadingMessage}
+          {collegeList &&
+            collegeList.map((collegeInfo) => {
+              return (
+                <CollegeData collegeData={collegeInfo} key={collegeInfo._id} />
+              );
+            })}
 
-          <CollegeData
-            colId="123"
-            name="Bulacan State University"
-            course="Bachelor of Science in Information Technology"
-            periodFrom="2018"
-            periodTo=""
-            highest=""
-            yearGraduate=""
-            honors=""
-          />
+          {nullShow && nullMessage}
         </div>
       </div>
 
@@ -68,7 +88,10 @@ function UserGraduateStudies(params) {
           <Modal.Title>Adding Graduate Studies</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CollegeDataAdd />
+          <CollegeDataAdd
+            handleModalClose={handleClose}
+            employeeId={employeeId}
+          />
         </Modal.Body>
       </Modal>
     </main>
@@ -76,14 +99,16 @@ function UserGraduateStudies(params) {
 }
 
 const CollegeData = (props) => {
-  const [colId, setColId] = useState(props.colId);
-  const [name, setName] = useState(props.name);
-  const [education, setEducation] = useState(props.course);
-  const [periodFrom, setPeriodFrom] = useState(props.periodFrom);
-  const [periodTo, setPeriodTo] = useState(props.periodTo);
-  const [highest, setHighest] = useState(props.highest);
-  const [yearGraduate, setYearGraduate] = useState(props.yearGraduate);
-  const [honors, setHonors] = useState(props.honors);
+  // const [colId, setColId] = useState(props.collegeData.);
+  const [name, setName] = useState(props.collegeData.school_name);
+  const [education, setEducation] = useState(props.collegeData.course);
+  const [periodFrom, setPeriodFrom] = useState(props.collegeData.period_from);
+  const [periodTo, setPeriodTo] = useState(props.collegeData.period_to);
+  const [units, setUnits] = useState(props.collegeData.units_earned);
+  const [yearGraduate, setYearGraduate] = useState(
+    props.collegeData.year_graduate
+  );
+  const [honors, setHonors] = useState(props.collegeData.honor_recieved);
 
   const [disable, setDisable] = useState(true);
 
@@ -108,7 +133,13 @@ const CollegeData = (props) => {
   const handleShow = () => setShow(true);
 
   const handleDelete = () => {
-    console.log("delete");
+    console.log("deleting");
+    Axios.delete(
+      `http://localhost:3001/educ-graduate-studies/delete/${props.collegeData._id}`
+    ).then((response) => {
+      console.log("deleted");
+      console.log(response);
+    });
     setShow(false);
   };
 
@@ -120,7 +151,7 @@ const CollegeData = (props) => {
     <div className="card col-xxl-5 col-lg-11 col-sm-11 mx-2 p-4 ">
       <div className="row justify-content-between">
         <div className="col-auto">
-          <p className="card-title h5">Graduate Studies Course</p>
+          <p className="card-title h5">Graduate Studies</p>
         </div>
         <div className="col-auto">
           <div className="dropdown">
@@ -234,17 +265,15 @@ const CollegeData = (props) => {
             <input
               type="text"
               className="form-control"
-              id="txthighest"
+              id="txtunits"
               placeholder="Highest Level ( if not graduated)"
-              value={highest}
+              value={units}
               disabled={disable}
               onChange={(e) => {
-                setHighest(e.target.value);
+                setUnits(e.target.value);
               }}
             />
-            <label htmlFor="txthighest">
-              Highest Level ( if not graduated)
-            </label>
+            <label htmlFor="txtunits">Highest Level ( if not graduated)</label>
           </div>
         </div>
         <div className="col-md-8">
@@ -301,7 +330,7 @@ const CollegeData = (props) => {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Graduate Studies Course Delete</Modal.Title>
+          <Modal.Title>Graduate Studies Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are your sure to delete</Modal.Body>
         <Modal.Footer>
@@ -322,7 +351,7 @@ const CollegeDataAdd = (props) => {
   const [education, setEducation] = useState("");
   const [periodFrom, setPeriodFrom] = useState("");
   const [periodTo, setPeriodTo] = useState("");
-  const [highest, setHighest] = useState("");
+  const [units, setUnits] = useState("");
   const [yearGraduate, setYearGraduate] = useState("");
   const [honors, setHonors] = useState("");
 
@@ -330,8 +359,34 @@ const CollegeDataAdd = (props) => {
 
   const [btnsaveHide, setBtnSaveHide] = useState(true);
 
+  const handleAdding = () => {
+    const vocationalDatas = {
+      employee_id: props.employeeId,
+      school_name: name,
+      course: education,
+      period_from: periodFrom,
+      period_to: periodTo,
+      units_earned: units,
+      year_graduate: yearGraduate,
+      honor_recieved: honors,
+    };
+    try {
+      Axios.post(
+        `http://localhost:3001/educ-graduate-studies/create`,
+        vocationalDatas
+      ).then((response) => {
+        props.handleModalClose();
+        console.log("submited");
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+    console.log("submitting ...");
+    handleAdding();
     // setDisable(true);
     // setBtnEditHide(true);
     // setBtnSaveHide(false);
@@ -345,16 +400,14 @@ const CollegeDataAdd = (props) => {
               type="text"
               className="form-control"
               id="txtName"
-              placeholder="Name of Graduate Studies (write in full)"
+              placeholder="Name of College (write in full)"
               value={name}
               disabled={disable}
               onChange={(e) => {
                 setName(e.target.value);
               }}
             />
-            <label htmlFor="txtName">
-              Name of Graduate Studies (write in full)
-            </label>
+            <label htmlFor="txtName">Name of College (write in full)</label>
           </div>
         </div>
         <div className="col-md-12">
@@ -421,17 +474,15 @@ const CollegeDataAdd = (props) => {
             <input
               type="text"
               className="form-control"
-              id="txthighest"
+              id="txtunits"
               placeholder="Highest Level ( if not graduated)"
-              value={highest}
+              value={units}
               disabled={disable}
               onChange={(e) => {
-                setHighest(e.target.value);
+                setUnits(e.target.value);
               }}
             />
-            <label htmlFor="txthighest">
-              Highest Level ( if not graduated)
-            </label>
+            <label htmlFor="txtunits">Highest Level ( if not graduated)</label>
           </div>
         </div>
         <div className="col-md-8">

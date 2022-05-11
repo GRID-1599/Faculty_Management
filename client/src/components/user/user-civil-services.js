@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
 import { Modal, Button } from "react-bootstrap";
+
+import { dateFormater } from "../functions/dateFunction";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,10 +12,44 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
-function UserCivilServices(params) {
+import Axios from "axios";
+
+function UserCivilServices(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [loaderShow, setLoaderShow] = useState(true);
+  const [nullShow, setNullShow] = useState(false);
+
+  const [civilList, setCivilList] = useState([]);
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/civil-service/${employeeId}`).then(
+      (response) => {
+        setCivilList(response.data);
+        setLoaderShow(false);
+
+        // console.log(response.data);
+      }
+    );
+    console.log("x");
+  });
+
+  const nullMessage = (
+    <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
+  );
+
+  const loadingMessage = (
+    <div className="wrapper">
+      <div className="spinner-border text-danger me-3" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="h3 text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
+
   return (
     <main>
       <div className="container-xl px-4 float-start">
@@ -32,9 +68,13 @@ function UserCivilServices(params) {
         </div>
 
         <div className="row gy-3">
-          <CivilData />
-          <CivilData />
-          <CivilData />
+          {loaderShow && loadingMessage}
+          {civilList &&
+            civilList.map((civilInfo) => {
+              return <CivilData civilData={civilInfo} key={civilInfo._id} />;
+            })}
+
+          {nullShow && nullMessage}
         </div>
       </div>
       <Modal
@@ -49,7 +89,10 @@ function UserCivilServices(params) {
           <Modal.Title>Adding Civil Service Eligibility</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CivilDataAdd />
+          <CivilDataAdd
+            handleModalClose={handleClose}
+            employeeId={employeeId}
+          />
         </Modal.Body>
       </Modal>
     </main>
@@ -57,13 +100,19 @@ function UserCivilServices(params) {
 }
 
 const CivilData = (props) => {
-  const [colId, setColId] = useState(props.colId);
-  const [license, setLicense] = useState("");
-  const [rating, setRating] = useState("");
-  const [examDate, setExamDate] = useState("");
-  const [examPlace, setExamPlace] = useState("");
-  const [licenseNumber, setLicenseNumber] = useState("");
-  const [licenseDateValidity, setLicenseDateValidity] = useState("");
+  // const [colId, setColId] = useState(props.civilData.);
+  const [license, setLicense] = useState(props.civilData.license_name);
+  const [rating, setRating] = useState(props.civilData.rating);
+  const [examDate, setExamDate] = useState(
+    dateFormater(props.civilData.exam_date)
+  );
+  const [examPlace, setExamPlace] = useState(props.civilData.exam_place);
+  const [licenseNumber, setLicenseNumber] = useState(
+    props.civilData.license_number
+  );
+  const [licenseDateValidity, setLicenseDateValidity] = useState(
+    dateFormater(props.civilData.license_validity_date)
+  );
 
   const [disable, setDisable] = useState(true);
 
@@ -88,7 +137,13 @@ const CivilData = (props) => {
   const handleShow = () => setShow(true);
 
   const handleDelete = () => {
-    console.log("delete");
+    console.log("deleting");
+    Axios.delete(
+      `http://localhost:3001/civil-service/delete/${props.civilData._id}`
+    ).then((response) => {
+      console.log("deleted");
+      console.log(response);
+    });
     setShow(false);
   };
 
@@ -280,7 +335,7 @@ const CivilData = (props) => {
 };
 
 const CivilDataAdd = (props) => {
-  const [colId, setColId] = useState(props.colId);
+  // const [colId, setColId] = useState(props.colId);
   const [license, setLicense] = useState("");
   const [rating, setRating] = useState("");
   const [examDate, setExamDate] = useState("");
@@ -292,9 +347,35 @@ const CivilDataAdd = (props) => {
 
   const [btnsaveHide, setBtnSaveHide] = useState(true);
 
+  const handleAdding = () => {
+    const vocationalDatas = {
+      employee_id: props.employeeId,
+      license_name: license,
+      rating: rating,
+      exam_date: examDate,
+      exam_place: examPlace,
+      license_number: licenseNumber,
+      license_validity_date: licenseDateValidity,
+    };
+    try {
+      Axios.post(
+        `http://localhost:3001/civil-service/create`,
+        vocationalDatas
+      ).then((response) => {
+        props.handleModalClose();
+        console.log("submited");
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+    console.log("submitting ...");
+    handleAdding();
     // setDisable(true);
+    // setBtnEditHide(true);
     // setBtnSaveHide(false);
   };
 

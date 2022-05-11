@@ -4,7 +4,9 @@ export function dateFormater(dateToBeFormat) {
   let formatted_date =
     theDate.getFullYear() +
     "-" +
-    (theDate.getMonth() + 1) +
+    ((theDate.getMonth() + 1).toString().length <= 1
+      ? "0" + (theDate.getMonth() + 1)
+      : theDate.getMonth() + 1) +
     "-" +
     (theDate.getDate().toString().length <= 1
       ? "0" + theDate.getDate()

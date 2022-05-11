@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
 
-function UserIsssuedId(params) {
+import Axios from "axios";
+
+function UserIsssuedId(props) {
   const [GSIS, setGSIS] = useState("");
   const [PAGIBIG, setPAGIBIG] = useState("");
-  const [PHILHEALTH, setPHILHEALTH] = useState("03-251130423-6");
+  const [PHILHEALTH, setPHILHEALTH] = useState("");
   const [TIN, setTIN] = useState("");
   const [SSS, setSSS] = useState("");
 
@@ -28,6 +30,24 @@ function UserIsssuedId(params) {
     setBtnEditHide(true);
     setBtnSaveHide(false);
   };
+
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/issued-id/${employeeId}`, {}).then(
+      (response) => {
+        // console.log(response.data);
+        const faculty = response.data;
+        // console.log(dateFormater(faculty.birth_date));
+
+        setGSIS(faculty.GSIS_num);
+        setPAGIBIG(faculty.PAGIBIG_num);
+        setPHILHEALTH(faculty.PHILHEALTH_num);
+        setSSS(faculty.SSS_num);
+        setTIN(faculty.TIN_num);
+      }
+    );
+  }, []);
 
   return (
     <main>

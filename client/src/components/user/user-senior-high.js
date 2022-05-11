@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
 
-function UserJuniorHigh(params) {
-  const [name, setName] = useState("Immaculate Concepcion Polytechnic");
+import Axios from "axios";
+
+function UserJuniorHigh(props) {
+  const [name, setName] = useState("");
   const [education, setEducation] = useState("");
-  const [periodFrom, setPeriodFrom] = useState("2016");
-  const [periodTo, setPeriodTo] = useState("2018");
+  const [periodFrom, setPeriodFrom] = useState("");
+  const [periodTo, setPeriodTo] = useState("");
   const [highest, setHighest] = useState("");
-  const [yearGraduate, setYearGraduate] = useState("2018");
+  const [yearGraduate, setYearGraduate] = useState("");
   const [honors, setHonors] = useState("");
 
   const [disable, setDisable] = useState(true);
@@ -28,6 +30,24 @@ function UserJuniorHigh(params) {
     setBtnEditHide(true);
     setBtnSaveHide(false);
   };
+
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(
+      `http://localhost:3001/educ-senior-highschool/${employeeId}`,
+      {}
+    ).then((response) => {
+      const faculty = response.data;
+      setName(faculty.school_name);
+      setEducation(faculty.basic_education);
+      setPeriodFrom(faculty.period_from);
+      setPeriodTo(faculty.period_to);
+      setHighest(faculty.highest_level);
+      setYearGraduate(faculty.year_graduate);
+      setHonors(faculty.honor_recieved);
+    });
+  }, []);
 
   return (
     <main>

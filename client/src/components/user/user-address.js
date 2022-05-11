@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideNav from "./user-side-nav";
 import TopNav from "./user-top-nav";
 
-function UserAddress(params) {
-  const [email, setEmail] = useState("");
-  const [no, setNo] = useState("624");
-  const [street, setStreet] = useState("Kaypalong");
+import Axios from "axios";
+
+function UserAddress(props) {
+  const [no, setNo] = useState("");
+  const [street, setStreet] = useState("");
   const [subdivision, setSubdivision] = useState("");
-  const [barangay, setBarangay] = useState("San Vicente");
-  const [city, setCity] = useState("Sta Maria");
-  const [province, setProvince] = useState("Bulacan");
-  const [zipCode, setZipCode] = useState("2022");
+  const [barangay, setBarangay] = useState("");
+  const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
+  const [zipCode, setZipCode] = useState("");
 
   const [btnEditName, setEditName] = useState("Edit Resident Address");
 
@@ -19,13 +20,13 @@ function UserAddress(params) {
   const [btnEditHide, setBtnEditHide] = useState(true);
   const [btnsaveHide, setBtnSaveHide] = useState(false);
 
-  const [perm_no, setPerm_No] = useState("624");
-  const [perm_street, setPerm_Street] = useState("Kaypalong");
+  const [perm_no, setPerm_No] = useState("");
+  const [perm_street, setPerm_Street] = useState("");
   const [perm_subdivision, setPerm_Subdivision] = useState("");
-  const [perm_barangay, setPerm_Barangay] = useState("San Vicente");
-  const [perm_city, setPerm_City] = useState("Sta Maria");
-  const [perm_province, setPerm_Province] = useState("Bulacan");
-  const [perm_zipCode, setPerm_ZipCode] = useState("2022");
+  const [perm_barangay, setPerm_Barangay] = useState("");
+  const [perm_city, setPerm_City] = useState("");
+  const [perm_province, setPerm_Province] = useState("");
+  const [perm_zipCode, setPerm_ZipCode] = useState("");
 
   const [disablePerm, setPermDisable] = useState(true);
 
@@ -58,6 +59,34 @@ function UserAddress(params) {
     setBtnPermEditHide(true);
     setBtnPermSaveHide(false);
   };
+
+  const employeeId = props.employeeId;
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/address/${employeeId}`, {}).then(
+      (response) => {
+        // console.log(response.data);
+        const faculty = response.data;
+        // console.log(dateFormater(faculty.birth_date));
+
+        setNo(faculty.resident_address.lot_number);
+        setStreet(faculty.resident_address.street);
+        setSubdivision(faculty.resident_address.subdivision);
+        setBarangay(faculty.resident_address.barangay);
+        setCity(faculty.resident_address.city);
+        setProvince(faculty.resident_address.province);
+        setZipCode(faculty.resident_address.zip_code);
+
+        setPerm_No(faculty.permanent_address.lot_number);
+        setPerm_Street(faculty.permanent_address.street);
+        setPerm_Subdivision(faculty.permanent_address.subdivision);
+        setPerm_Barangay(faculty.permanent_address.barangay);
+        setPerm_City(faculty.permanent_address.city);
+        setPerm_Province(faculty.permanent_address.province);
+        setPerm_ZipCode(faculty.permanent_address.zip_code);
+      }
+    );
+  }, []);
 
   return (
     <main>

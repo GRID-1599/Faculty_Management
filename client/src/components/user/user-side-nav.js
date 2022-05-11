@@ -80,15 +80,15 @@ function SideNav(params) {
       >
         <div className="sb-sidenav-menu custom-scrollbar1">
           <div className="nav">
-            {/* <div className="nav-link btn-link ">
-              <form className=" w-100">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search"
-                />
-              </form>
-            </div> */}
+            <div className="nav-link btn-link ">
+              <button className="btn btn-info">Print Data</button>
+            </div>
+            <div className="nav-link btn-link" onClick={onClickProfile}>
+              <div className="sb-nav-link-icon">
+                <FontAwesomeIcon icon={faUser} color="white" />
+              </div>
+              Profile
+            </div>
             <div className="sb-sidenav-menu-heading">Personal Info</div>
             <div className="nav-link btn-link" onClick={onClickProfile}>
               <div className="sb-nav-link-icon">
