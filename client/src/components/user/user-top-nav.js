@@ -31,9 +31,9 @@ function TopNav(params) {
       <div className="col">
         <div className="row  justify-content-between">
           <div className="col-auto d-flex justify-content-end">
-            <button className="btn btn-1 float-end">
+            {/* <button className="btn btn-1 float-end">
               <FontAwesomeIcon icon={faPrint} color="white" /> Print Details
-            </button>
+            </button> */}
           </div>
           <div className="col-auto">
             <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4 btn-circle w-auto">

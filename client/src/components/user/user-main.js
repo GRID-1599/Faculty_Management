@@ -36,7 +36,7 @@ function UserMain(params) {
     <div className="user-home-main sb-nav-fixed">
       <TopNav />
       <div id="layoutSidenav">
-        <SideNav />
+        <SideNav employeeId={employeeId} />
         {/* CONTAINer */}
         <div id="layoutSidenav_content">
           <Routes>

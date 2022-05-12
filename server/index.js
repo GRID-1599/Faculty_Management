@@ -53,21 +53,66 @@ app.use("/work-experience", workExperienceRoutes);
 const certificateRoutes = require("./routes/certificateRoute");
 app.use("/certificate", certificateRoutes);
 
+const allFacultyRoutes = require("./routes/allFacultyDataRoute");
+app.use("/faculty", allFacultyRoutes);
+
 // const pdfRoutes = require("./routes/pdfPrintingRoute");
 // app.use("/pdf", pdfRoutes);
 const pdf = require("html-pdf");
 const pdfTemplate = require("./templates/sample");
+var path = require("path");
+// var image = path.join("file://", __dirname, "/2x2.jpg");
+var image = "file://" + __dirname + "/2x2.jpg";
+image = path.normalize(image);
+
+console.log(image);
+// image = path.normalize(image);
+const headerStyle = `
+<table>
+  <tr>
+    <td>
+      <img src="https://th.bing.com/th/id/R.dd7381ba27cbae048846cdc104a23f2f?rik=opqdGThAJsCraQ&riu=http%3a%2f%2fphotos.wikimapia.org%2fp%2f00%2f01%2f19%2f25%2f45_big.jpg&ehk=fOdbkRvLMvjQ%2fS7Jn%2bZI01%2fIRSG%2bZHSP3TvH7mbxSRI%3d&risl=&pid=ImgRaw&r=0" alt="" srcset=""  style="width:.5in ; height: .5in "/>
+    </td>
+    <td style="padding-left: 15px; vertical-align: center"><h2 style="">Faculty Management</h2></td>
+  </tr>
+</table>
+`;
+const footeerStyle = `
+  <table style='width: 100%;'>
+    <tr>
+      <td>
+        <p style="color: #444;">${dateFormatStringSet(new Date())}</p>
+      </td>
+      <td>
+        <p style="color: #444; text-align: end;" >Page {{page}} of {{pages}}</p>
+      </td>
+    </tr>
+  </table>
+`;
+
 var options = {
   format: "Legal",
   border: {
-    top: ".5in", // default is 0, units: mm, cm, in, px
+    top: "0in", // default is 0, units: mm, cm, in, px
     right: ".5in",
     bottom: ".5in",
     left: ".5in",
   },
+  paginationOffset: 1, // Override the initial pagination number
+  header: {
+    height: "1in",
+    contents: `${headerStyle}`,
+  },
+  footer: {
+    height: "1in",
+    contents: {
+      default: `${footeerStyle}`, // fallback value
+    },
+  },
 };
+
 app.post("/pdf/create", (req, res) => {
-  pdf.create(pdfTemplate(), options).toFile("sample.pdf", (err) => {
+  pdf.create(pdfTemplate(req.body), options).toFile("sample.pdf", (err) => {
     if (err) {
       res.send(
         Promise.reject().catch((error) => {
@@ -93,3 +138,37 @@ const { restart } = require("nodemon");
 app.listen(3001, () => {
   console.log("SERVER RUNNING");
 });
+
+function dateFormatStringSet(dateToBeFormat) {
+  const month = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  let theDate = new Date(dateToBeFormat);
+  // console.log("x " + theDate.getDate().toString().length);
+  let formatted_date =
+    month[theDate.getMonth()] +
+    ". " +
+    (theDate.getDate().toString().length <= 1
+      ? "0" + theDate.getDate()
+      : theDate.getDate()) +
+    ", " +
+    theDate.getFullYear() +
+    " " +
+    theDate.getHours() +
+    ":" +
+    theDate.getMinutes() +
+    ":" +
+    theDate.getSeconds();
+  return formatted_date;
+}
