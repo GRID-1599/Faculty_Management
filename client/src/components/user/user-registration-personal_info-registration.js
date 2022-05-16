@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from "react";
+import { Modal, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import ImageUpload from "./image_upload";
@@ -26,6 +26,9 @@ function RegistrationPersonalInfo(params) {
   const [sex, setSex] = useState("");
   const [civil, setCivil] = useState("");
   const [fileName, setFileName] = useState("");
+  const [college, setCollege] = useState("");
+  const [rank, setRank] = useState("");
+  const [appoinmentStatus, setAppoinmentStatus] = useState("");
 
   const imageSrcHandler = (e) => {
     setFileName(e.target.files[0]);
@@ -35,6 +38,66 @@ function RegistrationPersonalInfo(params) {
   var datee = {
     curDT: new Date().toLocaleString(),
   };
+
+  const rankList = [
+    "Intructor I",
+    "Intructor II",
+    "Intructor III",
+    "Assistant Professor I",
+    "Assistant Professor II",
+    "Assistant Professor III",
+    "Assistant Professor IV",
+    "Assiociate Professor I",
+    "Assiociate Professor II",
+    "Assiociate Professor III",
+    "Assiociate Professor IV",
+    "Assiociate Professor V",
+    "Professor I",
+    "Professor II",
+    "Professor III",
+    "Professor IV",
+    "Professor V",
+    "Professor VI",
+    "College/University Proffessor",
+  ];
+
+  const collegeList = [
+    "College of Architecture and Fine Arts (CAFA)",
+    "College of Arts and Letters (CAL)",
+    "College of Business Administration (CBA)",
+    "College of Criminal Justice Education (CCJE)",
+    "College of Hospitality and Tourism Management (CHTM)",
+    "College of Information and Communications Technology (CICT)",
+    "College of Industrial Technology (CIT)",
+    "College of Law (CLaw)",
+    "College of Nursing (CN)",
+    "College of Engineering (COE)",
+    "College of Education (COED)",
+    "College of Science (CS)",
+    "College of Sports, Exercise and Recreation (CSER)",
+    "College of Social Sciences and Philosophy (CSSP)",
+    "College of School (GS)",
+  ];
+
+  const appointmentStatusList = [
+    "Permanent",
+    "Temporary",
+    "Coterminous",
+    "Contractual",
+    "Substitute",
+    "Provisional",
+  ];
+
+  const sexList = ["Male", "Female"];
+
+  const civilStatusList = [
+    "Single",
+    "Married",
+    "Engaged",
+    "Widowed",
+    "Seperated",
+    "Divorced",
+  ];
 
   // console.log(datee.curDT);
 
@@ -54,11 +117,14 @@ function RegistrationPersonalInfo(params) {
     }
   };
 
-  const addingFacultyToBeApprove = () => {
+  const addingFacultyToBeApprove = (e) => {
     const formData = new FormData();
 
     formData.append("employee_id", empNo);
     formData.append("email", email);
+    formData.append("college", college);
+    formData.append("rank", rank);
+    formData.append("appointment_status", appoinmentStatus);
     formData.append("mobile_number", mobileNo);
     formData.append("first_name", fname);
     formData.append("middle_name", mname);
@@ -72,11 +138,13 @@ function RegistrationPersonalInfo(params) {
     formData.append("date_created", new Date());
     formData.append("image", fileName);
 
-    console.log(formData);
+    // console.log(formData);
 
     try {
       Axios.post(`http://localhost:3001/createToApproveFaculty`, formData).then(
         (response) => {
+          console.log(response);
+          e.preventDefault();
           setVisible(true);
         }
       );
@@ -89,9 +157,67 @@ function RegistrationPersonalInfo(params) {
     navigate("/");
   };
 
+  const [isEmpNumberDuplicated, setIsEmpNumberDuplicated] = useState(false);
+  const [isEmailDuplicated, setIsEmailDuplicated] = useState(false);
+  const [isNoImage, setIsNoImage] = useState(false);
+
+  const setImageFile = () => setIsNoImage(false);
+  // for emp number
+  useEffect(() => {
+    if (email !== "") {
+      setTimeout(() => {
+        Axios.get(`http://localhost:3001/faculty/find/email/${email}`).then(
+          (response) => {
+            setIsEmailDuplicated(response.data.isDuplicated);
+
+            // console.log(response.data);
+          }
+        );
+      }, 500);
+    }
+  }, [email]);
+
+  // for emp email
+  useEffect(() => {
+    if (empNo !== "") {
+      setTimeout(() => {
+        Axios.get(
+          `http://localhost:3001/faculty/find/employee-number/${empNo}`
+        ).then((response) => {
+          setIsEmpNumberDuplicated(response.data.isDuplicated);
+
+          // console.log(response.data);
+        });
+      }, 500);
+    }
+  }, [empNo]);
+
+  const imageRef = useRef(null);
+  const numberRef = useRef(null);
+  const emailRef = useRef(null);
+
+  const validator = () => {
+    if (!isEmpNumberDuplicated && !isEmailDuplicated && !isNoImage) {
+      return true;
+    } else {
+      if (isEmpNumberDuplicated) {
+        numberRef.current.scrollIntoView();
+      } else if (isEmailDuplicated) {
+        emailRef.current.scrollIntoView();
+      } else if (isNoImage) {
+        imageRef.current.scrollIntoView();
+      }
+      console.log(12);
+      return false;
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    addingFacultyToBeApprove();
+    if (validator()) {
+      addingFacultyToBeApprove(e);
+      console.log("sending");
+    }
   };
 
   return (
@@ -102,13 +228,15 @@ function RegistrationPersonalInfo(params) {
         encType="multipart/form-data"
         className="px-5 pb-3 registration-wrapper custom-scrollbar"
       >
-        <div className="row mb-3">
+        <div className="row">
           <div className="col-md-5">
             <div className="row">
-              <div className="col-sm-12 mb-4">
+              <div className="col-sm-12 mb-4" ref={imageRef}>
                 <ImageUpload
                   imageScrHandler={imageSrcHandler}
                   imageFileName="image"
+                  isNoImage={isNoImage}
+                  setImage={setImageFile}
                 />
               </div>
             </div>
@@ -119,38 +247,118 @@ function RegistrationPersonalInfo(params) {
                 <label className="form-label"> Employee Number * </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={
+                    isEmpNumberDuplicated
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
                   required
                   onChange={(e) => {
                     setEmpNo(e.target.value);
                   }}
+                  ref={numberRef}
                 />
+                <div className="invalid-feedback">
+                  Duplicate Employee Number found
+                </div>
               </div>
 
               <div className="col-sm-12 mb-4">
-                <label className="form-label"> Email * </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  required
+                <label className="form-label"> College of * </label>
+                <select
+                  className="form-select"
+                  aria-label="College"
+                  defaultValue={""}
                   onChange={(e) => {
-                    setEmail(e.target.value);
+                    setCollege(e.target.value);
                   }}
-                />
+                  required
+                >
+                  <option value="" disabled></option>
+                  {collegeList.map((rank) => {
+                    return (
+                      <option value={rank} key={rank}>
+                        {rank}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
 
               <div className="col-sm-12 mb-4">
-                <label className="form-label"> Mobile No. * </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  required
+                <label className="form-label"> Rank </label>
+                <select
+                  className="form-select"
+                  aria-label="Rank"
+                  defaultValue={""}
                   onChange={(e) => {
-                    setMobileNo(e.target.value);
+                    setRank(e.target.value);
                   }}
-                />
+                  required
+                >
+                  <option value="" disabled></option>
+                  {rankList.map((rank) => {
+                    return (
+                      <option value={rank} key={rank}>
+                        {rank}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div className="col-sm-12 mb-4">
+                <label className="form-label"> Appointment Status </label>
+                <select
+                  className="form-select"
+                  aria-label="Rank"
+                  defaultValue={""}
+                  onChange={(e) => {
+                    setAppoinmentStatus(e.target.value);
+                  }}
+                  required
+                >
+                  <option value="" disabled></option>
+                  {appointmentStatusList.map((rank) => {
+                    return (
+                      <option value={rank} key={rank}>
+                        {rank}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-7 mb-4">
+            <label className="form-label"> Email * </label>
+            <input
+              type="email"
+              className={
+                isEmailDuplicated ? "form-control is-invalid" : "form-control"
+              }
+              required
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              ref={emailRef}
+            />
+            <div className="invalid-feedback">Duplicate Email found</div>
+          </div>
+
+          <div className="col-sm-5 mb-4">
+            <label className="form-label"> Mobile No. * </label>
+            <input
+              type="text"
+              className="form-control"
+              required
+              onChange={(e) => {
+                setMobileNo(e.target.value);
+              }}
+            />
           </div>
         </div>
 
@@ -248,33 +456,82 @@ function RegistrationPersonalInfo(params) {
 
           <div className="col-sm-6 ">
             <label className="form-label">Sex * </label>
-            <input
-              type="text"
-              name=""
-              className="form-control"
+            <select
+              className="form-select"
+              aria-label="Sex"
+              defaultValue={""}
               onChange={(e) => {
                 setSex(e.target.value);
               }}
               required
-            />
+            >
+              <option value="" disabled></option>
+              {sexList.map((rank) => {
+                return (
+                  <option value={rank} key={rank}>
+                    {rank}
+                  </option>
+                );
+              })}
+            </select>
           </div>
           <div className="col-sm-6 ">
             <label className="form-label">Civil Status * </label>
-            <input
-              type="text"
-              name=""
-              className="form-control"
+            <select
+              className="form-select"
+              aria-label="Civil Status"
+              defaultValue={""}
               onChange={(e) => {
                 setCivil(e.target.value);
+                console.log(e.target.value);
               }}
               required
+            >
+              <option value="" disabled></option>
+              {civilStatusList.map((rank) => {
+                return (
+                  <option value={rank} key={rank}>
+                    {rank}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </div>
+
+        <div className="row mt-4 ms-1">
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              value=""
+              id="invalidCheck"
+              required
             />
+            <label className="form-check-label" htmlFor="invalidCheck">
+              I hereby certify that the above details are true and accurate to
+              the best of my knowledge
+            </label>
+            <div className="invalid-feedback">
+              You must agree before submitting.
+            </div>
           </div>
         </div>
 
         <div className="row mt-5 g-1 ">
           <div className="col-md-3 offset-md-9 ">
-            <button className="btn btn-1 w-100">Submit</button>
+            <button
+              className="btn btn-1 w-100"
+              onClick={() => {
+                setIsNoImage(fileName === "");
+                if (fileName === "") {
+                  imageRef.current.scrollIntoView();
+                  // alert("No uploaded Image");
+                }
+              }}
+            >
+              Submit
+            </button>
           </div>
         </div>
       </form>

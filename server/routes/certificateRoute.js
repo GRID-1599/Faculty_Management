@@ -63,11 +63,40 @@ router.delete("/delete/:ObjId", (req, res) => {
     .catch((err) => next(err));
 });
 
+// updated
+router.post(
+  "/update/:id",
+  uploadCertificate.single("certificate_src"),
+  (req, res) => {
+    const newData = {
+      certificate_name: req.body.certificate_name,
+      type: req.body.type,
+      period_from: req.body.period_from,
+      period_to: req.body.period_to,
+      total_hours: req.body.total_hours,
+      conducted_by: req.body.conducted_by,
+      certificate_src: req.file.originalname,
+    };
+    graduateStudiesModel.findByIdAndUpdate(
+      req.params.id,
+      newData,
+      { new: true },
+      (err, result) => {
+        if (err) {
+          res.json(err);
+        } else {
+          res.json(result);
+        }
+      }
+    );
+  }
+);
+
 router.post(
   "/create",
 
   uploadCertificate.single("certificate_src"),
-  async (req, res) => {
+  (req, res) => {
     try {
       const certificate = {
         employee_id: req.body.employee_id,
@@ -81,7 +110,7 @@ router.post(
       };
       const newcertificate = new certificateModel(certificate);
 
-      await newcertificate.save();
+      newcertificate.save();
 
       res.json(certificate);
     } catch (ex) {

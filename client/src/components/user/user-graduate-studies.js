@@ -11,6 +11,7 @@ import {
   faEdit,
   faPlus,
   faEllipsisVertical,
+  faGlasses,
 } from "@fortawesome/free-solid-svg-icons";
 
 function UserGraduateStudies(props) {
@@ -18,22 +19,38 @@ function UserGraduateStudies(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [loaderShow, setLoaderShow] = useState(true);
+  const [loaderShow, setLoaderShow] = useState(faGlasses);
   const [nullShow, setNullShow] = useState(false);
 
   const [collegeList, setCollegeList] = useState([]);
   const employeeId = props.employeeId;
 
+  var [updatedPointer, setUpdatedPointer] = useState(true);
+
+  const makeUpdate = () => {
+    setUpdatedPointer(!updatedPointer);
+    console.log(updatedPointer);
+  };
+
   useEffect(() => {
+    setLoaderShow(true);
     Axios.get(`http://localhost:3001/educ-graduate-studies/${employeeId}`).then(
       (response) => {
-        setCollegeList(response.data);
-        setLoaderShow(false);
+        // console.log(response.data.length);
+        if (response.data.length !== 0) {
+          setCollegeList(response.data);
+          setLoaderShow(false);
+          setNullShow(false);
+        } else {
+          setCollegeList([]);
+          setNullShow(true);
+          setLoaderShow(false);
+        }
 
         // console.log(response.data);
       }
     );
-  });
+  }, [updatedPointer]);
 
   const nullMessage = (
     <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
@@ -65,14 +82,16 @@ function UserGraduateStudies(props) {
         </div>
         <div className="row gy-3">
           {loaderShow && loadingMessage}
-          {collegeList &&
-            collegeList.map((collegeInfo) => {
-              return (
-                <CollegeData collegeData={collegeInfo} key={collegeInfo._id} />
-              );
-            })}
-
           {nullShow && nullMessage}
+          {collegeList.map((collegeInfo) => {
+            return (
+              <CollegeData
+                collegeData={collegeInfo}
+                key={collegeInfo._id}
+                makeUpdate={makeUpdate}
+              />
+            );
+          })}
         </div>
       </div>
 
@@ -91,6 +110,7 @@ function UserGraduateStudies(props) {
           <CollegeDataAdd
             handleModalClose={handleClose}
             employeeId={employeeId}
+            makeUpdate={makeUpdate}
           />
         </Modal.Body>
       </Modal>
@@ -114,18 +134,37 @@ const CollegeData = (props) => {
 
   const [btnEditHide, setBtnEditHide] = useState(true);
   const [btnsaveHide, setBtnSaveHide] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const onEditInfo = () => {
     setDisable(false);
     setBtnEditHide(false);
     setBtnSaveHide(true);
+    setIsEditing(true);
   };
 
   const handleSubmit = (e) => {
+    const newData = {
+      school_name: name,
+      course: education,
+      period_from: periodFrom,
+      period_to: periodTo,
+      units_earned: units,
+      year_graduate: yearGraduate,
+      honor_recieved: honors,
+    };
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+
+    Axios.post(
+      `http://localhost:3001/educ-graduate-studies/update/${props.collegeData._id}`,
+      newData
+    ).then((response) => {
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+      setIsEditing(false);
+      props.makeUpdate();
+    });
   };
 
   const [show, setShow] = useState(false);
@@ -139,12 +178,9 @@ const CollegeData = (props) => {
     ).then((response) => {
       console.log("deleted");
       console.log(response);
+      props.makeUpdate();
     });
     setShow(false);
-  };
-
-  const handlePrint = () => {
-    console.log("print");
   };
 
   return (
@@ -175,9 +211,6 @@ const CollegeData = (props) => {
                 </a>
               </li>
               <li>
-                <a className="dropdown-item btn-link">Print</a>
-              </li>
-              <li>
                 <a className="dropdown-item btn-link" onClick={handleShow}>
                   Delete
                 </a>
@@ -186,6 +219,7 @@ const CollegeData = (props) => {
           </div>
         </div>
       </div>
+      {isEditing && <small>Write "none" or "n/a" if none</small>}
       <form className="row gy-2" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <div className="form-floating">
@@ -196,6 +230,7 @@ const CollegeData = (props) => {
               placeholder="Name of School"
               value={name}
               disabled={disable}
+              required
               onChange={(e) => {
                 setName(e.target.value);
               }}
@@ -212,6 +247,7 @@ const CollegeData = (props) => {
               placeholder="Basic Education/Degree/Course "
               value={education}
               disabled={disable}
+              required
               onChange={(e) => {
                 setEducation(e.target.value);
               }}
@@ -234,6 +270,7 @@ const CollegeData = (props) => {
               placeholder="From"
               value={periodFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setPeriodFrom(e.target.value);
               }}
@@ -253,6 +290,7 @@ const CollegeData = (props) => {
               placeholder="To"
               value={periodTo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setPeriodTo(e.target.value);
               }}
@@ -269,6 +307,7 @@ const CollegeData = (props) => {
               placeholder="Highest Level ( if not graduated)"
               value={units}
               disabled={disable}
+              required
               onChange={(e) => {
                 setUnits(e.target.value);
               }}
@@ -288,6 +327,7 @@ const CollegeData = (props) => {
               placeholder="Year Graduate"
               value={yearGraduate}
               disabled={disable}
+              required
               onChange={(e) => {
                 setYearGraduate(e.target.value);
               }}
@@ -304,6 +344,7 @@ const CollegeData = (props) => {
               placeholder="Scholarship/Academic Honors Recieved"
               value={honors}
               disabled={disable}
+              required
               onChange={(e) => {
                 setHonors(e.target.value);
               }}
@@ -377,6 +418,7 @@ const CollegeDataAdd = (props) => {
       ).then((response) => {
         props.handleModalClose();
         console.log("submited");
+        props.makeUpdate();
       });
     } catch (ex) {
       console.log(ex);
@@ -393,6 +435,7 @@ const CollegeDataAdd = (props) => {
   };
   return (
     <>
+      <small>Write "none" or "n/a" if none</small>
       <form className="row gy-2" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <div className="form-floating">
@@ -403,6 +446,7 @@ const CollegeDataAdd = (props) => {
               placeholder="Name of College (write in full)"
               value={name}
               disabled={disable}
+              required
               onChange={(e) => {
                 setName(e.target.value);
               }}
@@ -419,6 +463,7 @@ const CollegeDataAdd = (props) => {
               placeholder="Basic Education/Degree/Course (write in full)"
               value={education}
               disabled={disable}
+              required
               onChange={(e) => {
                 setEducation(e.target.value);
               }}
@@ -443,6 +488,7 @@ const CollegeDataAdd = (props) => {
               placeholder="From"
               value={periodFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setPeriodFrom(e.target.value);
               }}
@@ -462,6 +508,7 @@ const CollegeDataAdd = (props) => {
               placeholder="To"
               value={periodTo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setPeriodTo(e.target.value);
               }}
@@ -478,6 +525,7 @@ const CollegeDataAdd = (props) => {
               placeholder="Highest Level ( if not graduated)"
               value={units}
               disabled={disable}
+              required
               onChange={(e) => {
                 setUnits(e.target.value);
               }}
@@ -497,6 +545,7 @@ const CollegeDataAdd = (props) => {
               placeholder="Year Graduate"
               value={yearGraduate}
               disabled={disable}
+              required
               onChange={(e) => {
                 setYearGraduate(e.target.value);
               }}
@@ -513,6 +562,7 @@ const CollegeDataAdd = (props) => {
               placeholder="Scholarship/Academic Honors Recieved"
               value={honors}
               disabled={disable}
+              required
               onChange={(e) => {
                 setHonors(e.target.value);
               }}

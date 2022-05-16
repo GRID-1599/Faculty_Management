@@ -51,6 +51,30 @@ router.delete("/delete/:ObjId", (req, res) => {
     .catch((err) => next(err));
 });
 
+// updated
+router.post("/update/:id", async (req, res) => {
+  const newData = {
+    license_name: req.body.license_name,
+    rating: req.body.rating,
+    exam_date: req.body.exam_date,
+    exam_place: req.body.exam_place,
+    license_number: req.body.license_number,
+    license_validity_date: req.body.license_validity_date,
+  };
+  civilServiceModel.findByIdAndUpdate(
+    req.params.id,
+    newData,
+    { new: true },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 router.post("/create", async (req, res) => {
   try {
     const civilService = {

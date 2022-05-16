@@ -44,8 +44,8 @@ function UserContact(props) {
         const faculty = response.data;
         setEmail(faculty.email);
         setMobileNo(faculty.mobile_number);
-        setTelNo(faculty.telephone_number)
-        setAltEmail(faculty.alternative_email)
+        setTelNo(faculty.telephone_number);
+        setAltEmail(faculty.alternative_email);
       }
     );
   }, []);
@@ -118,9 +118,23 @@ function UserContact(props) {
               <button
                 className="float-end btn btn-1 ms-2 me-0 h-75 my-2 "
                 onClick={() => {
-                  setBtnAltEmailEditHide(true);
-                  setBtnAltEmailSaveHide(false);
-                  setDisAltEmail(true);
+                  const newData = {
+                    alternative_email: altEmail,
+                  };
+
+                  console.log(newData);
+                  Axios.post(
+                    `http://localhost:3001/updateFacultyAltEmail/${employeeId}`,
+                    newData
+                  ).then((response) => {
+                    console.log(response.data);
+                    const faculty = response.data;
+                    setAltEmail(faculty.alternative_email);
+
+                    setBtnAltEmailEditHide(true);
+                    setBtnAltEmailSaveHide(false);
+                    setDisAltEmail(true);
+                  });
                 }}
               >
                 <FontAwesomeIcon icon={faFloppyDisk} color="white" />
@@ -171,9 +185,23 @@ function UserContact(props) {
               <button
                 className="float-end btn btn-1 ms-2 me-0 h-75 my-2 "
                 onClick={() => {
-                  setBtnMobileNoEditHide(true);
-                  setBtnMobileNoSaveHide(false);
-                  setDisMobileNo(true);
+                  const newData = {
+                    mobile_number: mobileNo,
+                  };
+
+                  console.log(newData);
+                  Axios.post(
+                    `http://localhost:3001/updateFacultyMobileNumber/${employeeId}`,
+                    newData
+                  ).then((response) => {
+                    console.log(response.data);
+                    const faculty = response.data;
+                    setMobileNo(faculty.mobile_number);
+
+                    setBtnMobileNoEditHide(true);
+                    setBtnMobileNoSaveHide(false);
+                    setDisMobileNo(true);
+                  });
                 }}
               >
                 <FontAwesomeIcon icon={faFloppyDisk} color="white" />
@@ -224,9 +252,23 @@ function UserContact(props) {
               <button
                 className="float-end btn btn-1 ms-2 me-0 h-75 my-2 "
                 onClick={() => {
-                  setBtnTelNoEditHide(true);
-                  setBtnTelNoSaveHide(false);
-                  setDisTelNo(true);
+                  const newData = {
+                    telephone_number: telNo,
+                  };
+
+                  console.log(newData);
+                  Axios.post(
+                    `http://localhost:3001/updateFacultyTelNumber/${employeeId}`,
+                    newData
+                  ).then((response) => {
+                    console.log(response.data);
+                    const faculty = response.data;
+                    setTelNo(faculty.telephone_number);
+
+                    setBtnTelNoEditHide(true);
+                    setBtnTelNoSaveHide(false);
+                    setDisTelNo(true);
+                  });
                 }}
               >
                 <FontAwesomeIcon icon={faFloppyDisk} color="white" />

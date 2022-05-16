@@ -73,9 +73,52 @@ const UserHome = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+    updateData();
+  };
+
+  const updateData = () => {
+    const newData = {
+      first_name: fname,
+      middle_name: mname,
+      name_extension: sname,
+      last_name: lname,
+      age: age,
+      birth_date: bday,
+      birth_place: pBday,
+      sex: sex,
+      civil_status: civil,
+      height: height,
+      weight: weight,
+      blood_type: bloodType,
+    };
+
+    console.log(newData);
+    Axios.post(
+      `http://localhost:3001/updateFacultyPersonal/${employeeId}`,
+      newData
+    ).then((response) => {
+      console.log(response.data);
+      const faculty = response.data;
+      // console.log(dateFormater(faculty.birth_date));
+
+      setFname(faculty.first_name);
+      setMname(faculty.middle_name);
+      setLname(faculty.last_name);
+      setSname(faculty.name_extension);
+      setBday(dateFormater(faculty.birth_date));
+      setPBday(faculty.birth_place);
+      setSex(faculty.sex);
+      setAge(faculty.age);
+      setCivil(faculty.civil_status);
+      setBloodType(faculty.blood_type);
+      setHeight(faculty.height);
+      setWeight(faculty.weight);
+
+      console.log("updated");
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+    });
   };
 
   const dateFormater = (dateToBeFormat) => {
@@ -94,13 +137,39 @@ const UserHome = (props) => {
     return formatted_date;
   };
 
+  const handleSubmitImage = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", fileName);
+
+    try {
+      Axios.post(
+        `http://localhost:3001/updateProfile/${employeeId}`,
+        formData
+      ).then((response) => {
+        console.log(response);
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const [isNoImage, setIsNoImage] = useState(false);
+
+  const setImageFile = () => setIsNoImage(false);
+
   const imageComp = (
-    <ImageUpload
-      imageScrHandler={imageSrcHandler}
-      imageFileName="image"
-      isSetSrc="true"
-      setImgSrc={imageSrc}
-    />
+    <form onSubmit={handleSubmitImage} encType="multipart/form-data">
+      <ImageUpload
+        imageScrHandler={imageSrcHandler}
+        imageFileName="image"
+        isSetSrc="true"
+        setImgSrc={imageSrc}
+        isNoImage={isNoImage}
+        setImage={setImageFile}
+      />
+      <button className="btn btn-1 w-100"> Save</button>
+    </form>
   );
 
   return (

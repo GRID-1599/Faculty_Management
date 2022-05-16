@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import {
   faBars,
@@ -12,6 +15,15 @@ import {
 }
 
 function TopNav(params) {
+  const navigate = useNavigate();
+  const onClickLogout = () => {
+    sessionStorage.removeItem("user");
+    navigate("../../faculty/login");
+  };
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <nav className="sb-topnav navbar navbar-expand navbar-dark bg-maroon  ps-3  ">
       <div className="col-auto  p-0">
@@ -56,7 +68,9 @@ function TopNav(params) {
                     <hr className="dropdown-divider" />
                   </li> */}
                   <li>
-                    <a className="dropdown-item">Logout</a>
+                    <a className="dropdown-item" onClick={handleShow}>
+                      Logout
+                    </a>
                   </li>
                 </ul>
               </li>
@@ -64,6 +78,26 @@ function TopNav(params) {
           </div>
         </div>
       </div>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Log out</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to log-out?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button className="btn btn-1" onClick={onClickLogout}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </nav>
   );
 }

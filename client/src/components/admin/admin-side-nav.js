@@ -22,11 +22,11 @@ function SideNav(params) {
   const navigate = useNavigate();
 
   const onClickFaculties = () => {
-    navigate("../admin/faculties");
+    navigate("../admin/faculty-list/");
   };
 
   const onClicktoApproveFaculties = () => {
-    navigate("../admin/to-approve-faculties/");
+    navigate("../admin/pending-approval-list/");
   };
 
   // const onClickIssuedId = () => {
@@ -55,7 +55,7 @@ function SideNav(params) {
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faUsers} color="white" />
               </div>
-              Faculties
+              All Faculty
             </div>
             <div
               className="nav-link btn-link"
@@ -64,7 +64,7 @@ function SideNav(params) {
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faUserCheck} color="white" />
               </div>
-              To Approve Faculties
+              Pending for Approval
             </div>
           </div>
         </div>

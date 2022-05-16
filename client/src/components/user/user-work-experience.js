@@ -24,18 +24,32 @@ function UserWorkExperience(props) {
 
   const [workExpList, setWorkExpList] = useState([]);
   const employeeId = props.employeeId;
+  var [updatedPointer, setUpdatedPointer] = useState(true);
+
+  const makeUpdate = () => {
+    setUpdatedPointer(!updatedPointer);
+    console.log(updatedPointer);
+  };
 
   useEffect(() => {
+    setLoaderShow(true);
     Axios.get(`http://localhost:3001/work-experience/${employeeId}`).then(
       (response) => {
-        setWorkExpList(response.data);
-        setLoaderShow(false);
+        // console.log(response.data.length);
+        if (response.data.length !== 0) {
+          setWorkExpList(response.data);
+          setLoaderShow(false);
+          setNullShow(false);
+        } else {
+          setWorkExpList([]);
+          setNullShow(true);
+          setLoaderShow(false);
+        }
 
         // console.log(response.data);
       }
     );
-    console.log("x");
-  });
+  }, [updatedPointer]);
 
   const nullMessage = (
     <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
@@ -68,17 +82,16 @@ function UserWorkExperience(props) {
         </div>
         <div className="row gy-3">
           {loaderShow && loadingMessage}
-          {workExpList &&
-            workExpList.map((userWorkExpInfo) => {
-              return (
-                <WorkExperienceData
-                  workExpData={userWorkExpInfo}
-                  key={userWorkExpInfo._id}
-                />
-              );
-            })}
-
           {nullShow && nullMessage}
+          {workExpList.map((userWorkExpInfo) => {
+            return (
+              <WorkExperienceData
+                workExpData={userWorkExpInfo}
+                key={userWorkExpInfo._id}
+                makeUpdate={makeUpdate}
+              />
+            );
+          })}
         </div>
       </div>
       <Modal
@@ -96,6 +109,7 @@ function UserWorkExperience(props) {
           <WorkExperienceDataAdd
             handleModalClose={handleClose}
             employeeId={employeeId}
+            makeUpdate={makeUpdate}
           />
         </Modal.Body>
       </Modal>
@@ -127,18 +141,37 @@ const WorkExperienceData = (props) => {
 
   const [btnEditHide, setBtnEditHide] = useState(true);
   const [btnsaveHide, setBtnSaveHide] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const onEditInfo = () => {
     setDisable(false);
     setBtnEditHide(false);
     setBtnSaveHide(true);
+    setIsEditing(true);
   };
 
   const handleSubmit = (e) => {
+    const newData = {
+      position: position,
+      company_name: workFrom,
+      monthly_salary: monthlySalary,
+      pay_grade: salaryGrade,
+      appointment_status: statusOfAppointment,
+      period_from: dateFrom,
+      period_to: dateTo,
+      isGov_service: ifGovService,
+    };
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+    Axios.post(
+      `http://localhost:3001/work-experience/update/${props.workExpData._id}`,
+      newData
+    ).then((response) => {
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+      setIsEditing(false);
+      props.makeUpdate();
+    });
   };
 
   const [show, setShow] = useState(false);
@@ -152,6 +185,7 @@ const WorkExperienceData = (props) => {
     ).then((response) => {
       console.log("deleted");
       console.log(response);
+      props.makeUpdate();
     });
     setShow(false);
   };
@@ -188,9 +222,6 @@ const WorkExperienceData = (props) => {
                 </a>
               </li>
               <li>
-                <a className="dropdown-item btn-link">Print</a>
-              </li>
-              <li>
                 <a className="dropdown-item btn-link" onClick={handleShow}>
                   Delete
                 </a>
@@ -199,6 +230,7 @@ const WorkExperienceData = (props) => {
           </div>
         </div>
       </div>
+      {isEditing && <small>Write "none" or "n/a" if none</small>}
       <form className="row gy-2" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <label>Inclusive Dates</label>
@@ -212,6 +244,7 @@ const WorkExperienceData = (props) => {
               placeholder="Start From"
               value={dateFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateFrom(e.target.value);
               }}
@@ -228,6 +261,7 @@ const WorkExperienceData = (props) => {
               placeholder="End To"
               value={dateTo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateTo(e.target.value);
               }}
@@ -244,6 +278,7 @@ const WorkExperienceData = (props) => {
               placeholder="Position Title"
               value={position}
               disabled={disable}
+              required
               onChange={(e) => {
                 setPosition(e.target.value);
               }}
@@ -260,6 +295,7 @@ const WorkExperienceData = (props) => {
               placeholder="Department / Agency / Office / Company Name"
               value={workFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setWorkFrom(e.target.value);
               }}
@@ -279,6 +315,7 @@ const WorkExperienceData = (props) => {
               placeholder="Monthly Salary"
               value={monthlySalary}
               disabled={disable}
+              required
               onChange={(e) => {
                 setMonthlySalary(e.target.value);
               }}
@@ -295,6 +332,7 @@ const WorkExperienceData = (props) => {
               placeholder="Salary / Job / Pay Grade"
               value={salaryGrade}
               disabled={disable}
+              required
               onChange={(e) => {
                 setSalaryGrade(e.target.value);
               }}
@@ -314,6 +352,7 @@ const WorkExperienceData = (props) => {
               placeholder="Status of Appointment"
               value={statusOfAppointment}
               disabled={disable}
+              required
               onChange={(e) => {
                 setStatusOfAppointment(e.target.value);
               }}
@@ -332,6 +371,7 @@ const WorkExperienceData = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault1"
               disabled={disable}
+              required
               checked={ifGovService}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault1">
@@ -345,6 +385,7 @@ const WorkExperienceData = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault2"
               disabled={disable}
+              required
               checked={!ifGovService}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault2">
@@ -422,6 +463,7 @@ const WorkExperienceDataAdd = (props) => {
       ).then((response) => {
         props.handleModalClose();
         console.log("submited");
+        props.makeUpdate();
       });
     } catch (ex) {
       console.log(ex);
@@ -438,6 +480,7 @@ const WorkExperienceDataAdd = (props) => {
   };
   return (
     <>
+      <small>Write "none" or "n/a" if none</small>
       <form className="row gy-2" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <label>Inclusive Dates</label>
@@ -451,6 +494,7 @@ const WorkExperienceDataAdd = (props) => {
               placeholder="Start From"
               value={dateFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateFrom(e.target.value);
               }}
@@ -467,6 +511,7 @@ const WorkExperienceDataAdd = (props) => {
               placeholder="End To"
               value={dateTo}
               disabled={disable}
+              required
               onChange={(e) => {
                 setDateTo(e.target.value);
               }}
@@ -483,6 +528,7 @@ const WorkExperienceDataAdd = (props) => {
               placeholder="Position Title"
               value={position}
               disabled={disable}
+              required
               onChange={(e) => {
                 setPosition(e.target.value);
               }}
@@ -499,6 +545,7 @@ const WorkExperienceDataAdd = (props) => {
               placeholder="Department / Agency / Office / Company Name"
               value={workFrom}
               disabled={disable}
+              required
               onChange={(e) => {
                 setWorkFrom(e.target.value);
               }}
@@ -518,6 +565,7 @@ const WorkExperienceDataAdd = (props) => {
               placeholder="Monthly Salary"
               value={monthlySalary}
               disabled={disable}
+              required
               onChange={(e) => {
                 setMonthlySalary(e.target.value);
               }}
@@ -534,6 +582,7 @@ const WorkExperienceDataAdd = (props) => {
               placeholder="Salary / Job / Pay Grade"
               value={salaryGrade}
               disabled={disable}
+              required
               onChange={(e) => {
                 setSalaryGrade(e.target.value);
               }}
@@ -553,6 +602,7 @@ const WorkExperienceDataAdd = (props) => {
               placeholder="Status of Appointment"
               value={statusOfAppointment}
               disabled={disable}
+              required
               onChange={(e) => {
                 setStatusOfAppointment(e.target.value);
               }}
@@ -571,6 +621,7 @@ const WorkExperienceDataAdd = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault1"
               disabled={disable}
+              required
               onClick={setGovServiceTrue}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault1">
@@ -584,6 +635,7 @@ const WorkExperienceDataAdd = (props) => {
               name="flexRadioDefault"
               id="flexRadioDefault2"
               disabled={disable}
+              required
               onClick={setGovServiceFalse}
             />
             <label className="form-check-label" htmlFor="flexRadioDefault2">

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Axios from "axios";
 function AdminLogin() {
   const navigate = useNavigate();
 
@@ -9,9 +9,100 @@ function AdminLogin() {
     handleLogin();
   };
 
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [userError, setUserError] = useState(false);
+  const [pswdError, setPswdError] = useState(false);
+  const [toLoad, setToLoad] = useState(false);
+  const [trialShow, setTrialShow] = useState(false);
+
+  var [tries, setTries] = useState(3);
+
+  const pswdRef = useRef(null);
+  const userRef = useRef(null);
+
+  const [seconds, setSeconds] = useState(60);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+    if (isActive) {
+      interval = setInterval(() => {
+        setSeconds((seconds) => seconds - 1);
+      }, 1000);
+    }
+
+    if (seconds <= 0) {
+      setIsActive(false);
+      clearInterval(interval);
+      setSeconds(60);
+      setTries(3);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, seconds]);
+
   const handleLogin = (e) => {
-    navigate("../admin");
+    if (tries > 1) {
+      loginCheck();
+    } else {
+      setTrialShow(false);
+      setUserError(false);
+      setPswdError(false);
+      setUser("");
+      setPassword("");
+      setIsActive(true);
+    }
   };
+
+  const loginCheck = () => {
+    setToLoad(true);
+    const thedata = {
+      username: user,
+      email: user,
+      password: password,
+    };
+    console.log(thedata);
+    try {
+      Axios.post("http://localhost:3001/admin/login", thedata).then(
+        (response) => {
+          setToLoad(false);
+          console.log(response.data);
+
+          if (response.data === "CORRECT") {
+            sessionStorage.setItem("admin", user);
+            console.log(user);
+
+            navigate("../admin");
+          } else if (response.data === "INCORRECT") {
+            setPswdError(true);
+            setTrialShow(true);
+            setTries(tries - 1);
+          } else if (response.data === "NOUSER") {
+            setPassword("");
+            setUserError(true);
+            setPswdError(false);
+            setTrialShow(true);
+            setTries(tries - 1);
+          }
+        }
+      );
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const loader = (
+    <div className="wrapper">
+      <div
+        className="spinner-border spinner-border-sm text-danger me-1"
+        role="status"
+      >
+        <span className="visually-hidden">Checking...</span>
+      </div>
+      <span className="text-muted text-center  mt-5">Checking...</span>
+    </div>
+  );
 
   return (
     <div
@@ -54,17 +145,27 @@ function AdminLogin() {
             </p>
             <form onSubmit={handleSubmit} className="px-3 py-3">
               <div className="row mb-4 mt-0">
-                <label className="form-label m-0 p-1 fs-5">Username </label>
+                <label className="form-label m-0 p-1 fs-5">
+                  Username or Email{" "}
+                </label>
                 <input
                   type="text"
                   name=""
-                  className="form-control "
+                  value={user}
+                  className={
+                    userError ? "form-control is-invalid" : "form-control"
+                  }
                   id="txtUserName"
                   aria-describedby="invalidusername"
                   required
+                  ref={userRef}
+                  onChange={(e) => {
+                    setUserError(false);
+                    setUser(e.target.value);
+                  }}
                 />
                 <div className="invalid-feedback" id="invalidusername">
-                  Wrong username
+                  Wrong username or email
                 </div>
               </div>
               <div className="row my-4">
@@ -72,22 +173,57 @@ function AdminLogin() {
                 <input
                   type="password"
                   name=""
-                  className="form-control "
+                  value={password}
+                  className={
+                    pswdError ? "form-control is-invalid" : "form-control"
+                  }
                   id="txtPassword"
                   aria-describedby="invalidpswd"
                   required
+                  ref={pswdRef}
+                  onChange={(e) => {
+                    setPswdError(false);
+                    setPassword(e.target.value);
+                  }}
                 />
                 <div className="invalid-feedback" id="invalidpswd">
                   Wrong password
                 </div>
               </div>
               <div className="row mt-4">
-                <input
-                  type="submit"
-                  className="btn btn-1 mt-4 w-auto ltsp-5 px-5 fs-5"
-                  value="Log in"
-                />
+                <div className="col-md-6">
+                  {!isActive && (
+                    <input
+                      type="submit"
+                      className="btn btn-1 w-100"
+                      value="Log in"
+                    />
+                  )}
+                </div>
+                <div className="col-md-6"> {toLoad && loader}</div>
               </div>
+
+              {trialShow && (
+                <div className="row mt-2">
+                  <div className="col-md-12">
+                    <span className="text-muted">
+                      Remaining trials: {tries}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {isActive && (
+                <div className="row mt-2">
+                  <div className="col-md-12">
+                    <span className="text-muted">Log in disabled</span>
+                    <br />
+                    <span className="text-muted">
+                      Please wait for {seconds} seconds.
+                    </span>
+                  </div>
+                </div>
+              )}
             </form>
           </div>
         </div>

@@ -73,6 +73,10 @@ body {
   font-weight: 700;
 }
 
+.border-shadow {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
 .login-header {
   font-size: 2.5rem;
 }
@@ -86,6 +90,20 @@ body {
 }
 
 .form-control:focus {
+  box-shadow: 0 0 0 0.05rem maroon;
+  border: 1px solid maroon;
+
+}
+
+.form-select-lg:focus {
+  box-shadow: 0 0 0 0.05rem red;
+}
+
+.form-select {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.form-select:focus {
   box-shadow: 0 0 0 0.05rem maroon;
   border: 1px solid maroon;
 
@@ -185,7 +203,7 @@ body {
   border: 1px solid maroon;
 }
 
-/* scroll bar  */
+/* scroll bar 1 */
 .custom-scrollbar1::-webkit-scrollbar {
   width: 7px;
   background-color: maroon;
@@ -217,6 +235,101 @@ body {
   border: 1px solid maroon;
 }
 
+.custom-scrollbar1::-webkit-scrollbar {
+  width: 7px;
+  background-color: maroon;
+}
+
+.custom-scrollbar1::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+.custom-scrollbar1::-webkit-scrollbar-track {
+  border: 1px maroon solid;
+  /* border-radius: 10px; */
+  -webkit-box-shadow: 0 0 6px maroon inset;
+}
+
+.custom-scrollbar1::-webkit-scrollbar-thumb {
+  background-color: white;
+  border: 1px solid maroon;
+  /* border-radius: 16px; */
+}
+
+.custom-scrollbar1::-webkit-scrollbar-thumb:hover {
+  background-color: white;
+  border: 1px solid maroon;
+}
+
+.custom-scrollbar1::-webkit-scrollbar-thumb:active {
+  background-color: white;
+  border: 1px solid maroon;
+}
+
+
+/* scroll bar 2 */
+.custom-scrollbar2::-webkit-scrollbar {
+  width: 55px;
+  background-color: white;
+}
+
+.custom-scrollbar2::-webkit-scrollbar:horizontal {
+  height: 1px;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-track {
+  border: 1px white solid;
+  /* border-radius: 10px; */
+  -webkit-box-shadow: 0 0 6px rgba(255, 255, 255, 0) inset;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb {
+  background-color: white;
+  border: 1px solid rgba(255, 255, 255, 0);
+  /* border-radius: 16px; */
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb:hover {
+  background-color: white;
+  border: 1px solid rgba(255, 255, 255, 0);
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb:active {
+  background-color: white;
+  border: 1px solid white;
+}
+
+.custom-scrollbar2::-webkit-scrollbar {
+  width: 7px;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.custom-scrollbar2::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-track {
+  border: 1px white solid;
+  /* border-radius: 10px; */
+  -webkit-box-shadow: 0 0 6px white inset;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb {
+  background-color: white;
+  border: 1px solid white;
+  /* border-radius: 16px; */
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb:hover {
+  background-color: white;
+  border: 1px solid white;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb:active {
+  background-color: white;
+  border: 1px solid white;
+}
+
 .image {
   height: 15em;
   width: 15em;
@@ -227,7 +340,7 @@ body {
   width: inherit;
 }
 
-.image-input-holder input[type="file"]{
+.image-input-holder input[type="file"] {
   display: none;
 }
 
@@ -240,28 +353,30 @@ body {
 .txt-header-bold {
   font-weight: 600;
   color: white;
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
 .btn-homepage {
   font-weight: 600;
-  background-color: white;
+  background-color: whitesmoke;
   color: maroon;
   width: 18rem;
-  height: 4rem;
-  font-size: 2rem;
+  height: 3rem;
+  font-size: 1.25rem;
   border-radius: 5px;
   border: none;
   letter-spacing: .20rem;
+  margin: 1px 5px;
 }
 
 
 .bg_image {
   height: 100vh;
+  width: 100vw;
   content: '';
   /* /*  E:\xampp\htdocs\Dental Clinic\admin\resources\images\bg-image.png  */
   /* E:\react_app\faculty-manager-app\client\src\resources\users-profile\uni.jpg */
-  background-image: url("./resources/users-profile/uni.jpg");
+  background-image: linear-gradient(145deg, rgba(227, 227, 212, 0), rgb(216, 11, 18)), url("./resources/users-profile/bulsu.jpg");
   top: 0px;
   bottom: 0px;
   left: 0px;
@@ -269,7 +384,21 @@ body {
   background-position: 0px center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgba(128, 0, 0, 0.500);
+  /* background-color: rgba(131, 8, 8, 0.25); */
   /* background-blend-mode: soft-light; */
   z-index: 10;
+}
+
+.landing-wrapper {
+  height: 100vh;
+  width: 100vw;
+
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.landing-first {
+  width: 500px;
+  height: 500px;
+  background-color: white;
 }

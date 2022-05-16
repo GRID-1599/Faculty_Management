@@ -26,6 +26,58 @@ router.get("/:employee_id", async (req, res) => {
   );
 });
 
+router.post("/resident/update/:employee_id", async (req, res) => {
+  const newData = {
+    resident_address: {
+      lot_number: req.body.lot_number,
+      street: req.body.street,
+      subdivision: req.body.subdivision,
+      barangay: req.body.barangay,
+      city: req.body.city,
+      province: req.body.province,
+      zip_code: req.body.zip_code,
+    },
+  };
+  addressModel.findOneAndUpdate(
+    { employee_id: req.params.employee_id },
+    newData,
+    { new: true },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+router.post("/permanent/update/:employee_id", async (req, res) => {
+  const newData = {
+    permanent_address: {
+      lot_number: req.body.lot_number,
+      street: req.body.street,
+      subdivision: req.body.subdivision,
+      barangay: req.body.barangay,
+      city: req.body.city,
+      province: req.body.province,
+      zip_code: req.body.zip_code,
+    },
+  };
+  addressModel.findOneAndUpdate(
+    { employee_id: req.params.employee_id },
+    newData,
+    { new: true },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 router.post("/create", async (req, res) => {
   try {
     const address = {

@@ -50,6 +50,31 @@ router.delete("/delete/:ObjId", (req, res) => {
     .catch((err) => next(err));
 });
 
+// updated
+router.post("/update/:id", async (req, res) => {
+  const newData = {
+    school_name: req.body.school_name,
+    course: req.body.course,
+    period_from: req.body.period_from,
+    period_to: req.body.period_to,
+    units_earned: req.body.units_earned,
+    year_graduate: req.body.year_graduate,
+    honor_recieved: req.body.honor_recieved,
+  };
+  graduateStudiesModel.findByIdAndUpdate(
+    req.params.id,
+    newData,
+    { new: true },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 router.post("/create", async (req, res) => {
   try {
     const graduateStudies = {

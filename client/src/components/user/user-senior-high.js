@@ -4,7 +4,7 @@ import TopNav from "./user-top-nav";
 
 import Axios from "axios";
 
-function UserJuniorHigh(props) {
+function UserSeniorHigh(props) {
   const [name, setName] = useState("");
   const [education, setEducation] = useState("");
   const [periodFrom, setPeriodFrom] = useState("");
@@ -18,36 +18,121 @@ function UserJuniorHigh(props) {
   const [btnEditHide, setBtnEditHide] = useState(true);
   const [btnsaveHide, setBtnSaveHide] = useState(false);
 
+  const setSeniorData = (faculty) => {
+    setName(faculty.school_name);
+    setEducation(faculty.basic_education);
+    setPeriodFrom(faculty.period_from);
+    setPeriodTo(faculty.period_to);
+    setHighest(faculty.highest_level);
+    setYearGraduate(faculty.year_graduate);
+    setHonors(faculty.honor_recieved);
+    setHasData(true);
+    setIsToInput(false);
+    setToLoad(false);
+  };
+
+  const [hasData, setHasData] = useState(false);
+  const [isToInput, setIsToInput] = useState(false);
+  const [toLoad, setToLoad] = useState(false);
+
+  const employeeId = props.employeeId;
+
   const onEditInfo = () => {
     setDisable(false);
+    setIsToInput(true);
     setBtnEditHide(false);
     setBtnSaveHide(true);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+    setToLoad(true);
+    if (hasData) {
+      updateSenior();
+    } else {
+      addSenior();
+    }
   };
 
-  const employeeId = props.employeeId;
+  const addSenior = () => {
+    const newData = {
+      employee_id: employeeId,
+      school_name: name,
+      basic_education: education,
+      period_from: periodFrom,
+      period_to: periodTo,
+      highest_level: highest,
+      year_graduate: yearGraduate,
+      honor_recieved: honors,
+    };
+    Axios.post(
+      `http://localhost:3001/educ-senior-highschool/create`,
+      newData
+    ).then((response) => {
+      const faculty = response.data;
+      setSeniorData(faculty);
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+    });
+  };
+
+  const updateSenior = () => {
+    const newData = {
+      school_name: name,
+      basic_education: education,
+      period_from: periodFrom,
+      period_to: periodTo,
+      highest_level: highest,
+      year_graduate: yearGraduate,
+      honor_recieved: honors,
+    };
+    Axios.post(
+      `http://localhost:3001/educ-senior-highschool/update/${employeeId}`,
+      newData
+    ).then((response) => {
+      const faculty = response.data;
+      setSeniorData(faculty);
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+    });
+  };
 
   useEffect(() => {
+    setToLoad(true);
     Axios.get(
       `http://localhost:3001/educ-senior-highschool/${employeeId}`,
       {}
     ).then((response) => {
       const faculty = response.data;
-      setName(faculty.school_name);
-      setEducation(faculty.basic_education);
-      setPeriodFrom(faculty.period_from);
-      setPeriodTo(faculty.period_to);
-      setHighest(faculty.highest_level);
-      setYearGraduate(faculty.year_graduate);
-      setHonors(faculty.honor_recieved);
+      if (faculty !== null) {
+        setSeniorData(faculty);
+      } else {
+        setToLoad(false);
+      }
     });
   }, []);
+
+  const toThrow = () => {
+    if (!hasData && !isToInput && !toLoad) {
+      return <p className="lead">No Senior HighSchool Education Information</p>;
+    } else if (isToInput) {
+      return <p className="lead">Write "none" or "n/a" if none </p>;
+    }
+  };
+
+  const loadingMessage = (
+    <div className="">
+      <div
+        className="spinner-border  spinner-border-sm text-danger me-3"
+        role="status"
+      >
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
 
   return (
     <main>
@@ -57,7 +142,8 @@ function UserJuniorHigh(props) {
           <li className="breadcrumb-item ">Secondary</li>
           <li className="breadcrumb-item active">Senior High</li>
         </ol>
-
+        {toLoad && loadingMessage}
+        {toThrow()}
         <form className="row gy-2" onSubmit={handleSubmit}>
           <div className="col-md-10">
             <div className="form-floating">
@@ -68,6 +154,7 @@ function UserJuniorHigh(props) {
                 placeholder="Name of School"
                 value={name}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -84,6 +171,7 @@ function UserJuniorHigh(props) {
                 placeholder="Basic Education/Degree/Course"
                 value={education}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setEducation(e.target.value);
                 }}
@@ -105,6 +193,7 @@ function UserJuniorHigh(props) {
                 id="txtPeriodTo"
                 placeholder="From"
                 value={periodFrom}
+                required
                 disabled={disable}
                 onChange={(e) => {
                   setPeriodFrom(e.target.value);
@@ -124,6 +213,7 @@ function UserJuniorHigh(props) {
                 id="txtTo"
                 placeholder="To"
                 value={periodTo}
+                required
                 disabled={disable}
                 onChange={(e) => {
                   setPeriodTo(e.target.value);
@@ -140,6 +230,7 @@ function UserJuniorHigh(props) {
                 id="txthighest"
                 placeholder="Highest Level ( if not graduated)"
                 value={highest}
+                required
                 disabled={disable}
                 onChange={(e) => {
                   setHighest(e.target.value);
@@ -160,6 +251,7 @@ function UserJuniorHigh(props) {
                 className="form-control"
                 id="txtGraduateYear"
                 placeholder="Year Graduate"
+                required
                 value={yearGraduate}
                 disabled={disable}
                 onChange={(e) => {
@@ -177,6 +269,7 @@ function UserJuniorHigh(props) {
                 id="txtHonors"
                 placeholder="Scholarship/Academic Honors Recieved"
                 value={honors}
+                required
                 disabled={disable}
                 onChange={(e) => {
                   setHonors(e.target.value);
@@ -190,7 +283,7 @@ function UserJuniorHigh(props) {
           <div className="row mt-3 ">
             <div className="col-md-3 mb-3 offset-md-7 ">
               {btnsaveHide ? (
-                <button className="btn btn-1 btn-sm w-100">Save Changes</button>
+                <button className="btn btn-1 btn-sm w-100">Save</button>
               ) : null}
             </div>
           </div>
@@ -204,7 +297,9 @@ function UserJuniorHigh(props) {
                   onEditInfo();
                 }}
               >
-                Edit Senior High Education Information
+                {hasData
+                  ? "Edit Senior High Education Information"
+                  : "Input Senior High Education Information"}
               </button>
             ) : null}
           </div>
@@ -214,4 +309,4 @@ function UserJuniorHigh(props) {
   );
 }
 
-export default UserJuniorHigh;
+export default UserSeniorHigh;

@@ -28,17 +28,32 @@ function UserCertificates(props) {
   const [certificateList, setCertificateList] = useState([]);
   const employeeId = props.employeeId;
 
+  var [updatedPointer, setUpdatedPointer] = useState(true);
+
+  const makeUpdate = () => {
+    setUpdatedPointer(!updatedPointer);
+    console.log(updatedPointer);
+  };
+
   useEffect(() => {
+    setLoaderShow(true);
     Axios.get(`http://localhost:3001/certificate/${employeeId}`).then(
       (response) => {
-        setCertificateList(response.data);
-        setLoaderShow(false);
+        // console.log(response.data.length);
+        if (response.data.length !== 0) {
+          setCertificateList(response.data);
+          setLoaderShow(false);
+          setNullShow(false);
+        } else {
+          setCertificateList([]);
+          setNullShow(true);
+          setLoaderShow(false);
+        }
 
         // console.log(response.data);
       }
     );
-    console.log("x");
-  });
+  }, [updatedPointer]);
 
   const nullMessage = (
     <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
@@ -74,17 +89,16 @@ function UserCertificates(props) {
         </div>
         <div className="row gy-3">
           {loaderShow && loadingMessage}
-          {certificateList &&
-            certificateList.map((certificateInfo) => {
-              return (
-                <CertificateData
-                  certificateData={certificateInfo}
-                  key={certificateInfo._id}
-                />
-              );
-            })}
-
           {nullShow && nullMessage}
+          {certificateList.map((certificateInfo) => {
+            return (
+              <CertificateData
+                certificateData={certificateInfo}
+                key={certificateInfo._id}
+                makeUpdate={makeUpdate}
+              />
+            );
+          })}
           {/* <PDFViewer /> */}
         </div>
       </div>
@@ -103,6 +117,7 @@ function UserCertificates(props) {
           <CertificateDataAdd
             handleModalClose={handleClose}
             employeeId={employeeId}
+            makeUpdate={makeUpdate}
           />
         </Modal.Body>
       </Modal>
@@ -129,23 +144,72 @@ const CertificateData = (props) => {
     props.certificateData.certificate_src
   );
 
+  const [fileName, setFileName] = useState();
+
+  const certificateSrcHandler = (e) => {
+    setFileName(e.target.files[0]);
+    console.log(e.target.files[0]);
+  };
+
   const [disable, setDisable] = useState(true);
 
   const [btnEditHide, setBtnEditHide] = useState(true);
   const [btnsaveHide, setBtnSaveHide] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const onEditInfo = () => {
     setDisable(false);
     setBtnEditHide(false);
     setBtnSaveHide(true);
+    setIsEditing(true);
   };
 
   const handleSubmit = (e) => {
+    const formData = new FormData();
+
+    formData.append("certificate_name", title);
+    formData.append("type", type);
+    formData.append("period_from", dateFrom);
+    formData.append("period_to", dateTo);
+    formData.append("total_hours", hoursNo);
+    formData.append("conducted_by", conductedBy);
+    formData.append("certificate_src", fileName);
+
+    console.log(formData);
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+    Axios.post(
+      `http://localhost:3001/certificate/update/${props.certificateData._id}`,
+      formData
+    ).then((response) => {
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+      setIsEditing(false);
+      props.makeUpdate();
+    });
   };
+
+  const forUploading = (
+    <div className="col-md-12">
+      <div className="">
+        <input
+          type="file"
+          className="form-control visually-hidden"
+          id="inputFile"
+          filename="certificate_src"
+          placeholder="Certificate"
+          accept="image/jpeg, image/png, application/pdf "
+          disabled={disable}
+          required
+          onChange={certificateSrcHandler}
+        />
+        <label htmlFor="inputFile" className="btn btn-1">
+          Upload Certificate
+        </label>
+        {/* <span className="text-muted ms-5">File name : {fileName.name} </span> */}
+      </div>
+    </div>
+  );
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -158,6 +222,7 @@ const CertificateData = (props) => {
     ).then((response) => {
       console.log("deleted");
       console.log(response);
+      props.makeUpdate();
     });
     setShow(false);
   };
@@ -194,9 +259,6 @@ const CertificateData = (props) => {
                 </a>
               </li>
               <li>
-                <a className="dropdown-item btn-link">Print</a>
-              </li>
-              <li>
                 <a className="dropdown-item btn-link" onClick={handleShow}>
                   Delete
                 </a>
@@ -205,6 +267,7 @@ const CertificateData = (props) => {
           </div>
         </div>
       </div>
+      {isEditing && <small>Write "none" or "n/a" if none</small>}
       <form className="row gy-2" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <div className="form-floating">
@@ -338,24 +401,13 @@ const CertificateData = (props) => {
           </div>
         </div>
 
-        {/* <div className="col-md-12">
-                  <div className="form-floating">
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="txtsponsor"
-                      placeholder="Certificate"
-                      value={conductedBy}
-                      disabled={disable} required
-                      onChange={(e) => {
-                        setConductedBy(e.target.value);
-                      }}
-                    />
-                    <label htmlFor="txtsponsor">
-                      Certificate
-                    </label>
-                  </div> 
-                </div>*/}
+        {isEditing && forUploading}
+
+        {!isEditing && (
+          <div className="col-md-12">
+            <span>Filename : {certificateSrc}</span>
+          </div>
+        )}
 
         <div className="row mt-3 ">
           <div className="col-md-4 mb-3 offset-md-8 ">
@@ -430,6 +482,7 @@ const CertificateDataAdd = (props) => {
         (response) => {
           props.handleModalClose();
           console.log("submited");
+          props.makeUpdate();
         }
       );
     } catch (ex) {
@@ -447,6 +500,7 @@ const CertificateDataAdd = (props) => {
   };
   return (
     <>
+      <small>Write "none" or "n/a" if none</small>
       <form
         className="row gy-2"
         encType="multipart/form-data"

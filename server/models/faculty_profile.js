@@ -10,6 +10,18 @@ const faculty_profile_Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  college: {
+    type: String,
+    required: true,
+  },
+  rank: {
+    type: String,
+    required: true,
+  },
+  appointment_status: {
+    type: String,
+    required: true,
+  },
   mobile_number: {
     type: String,
     required: true,

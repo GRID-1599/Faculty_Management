@@ -18,6 +18,7 @@ const ImageUpload = (props) => {
     };
     reader.readAsDataURL(e.target.files[0]);
     props.imageScrHandler(e);
+    props.setImage();
   };
 
   useEffect(async () => {
@@ -44,7 +45,9 @@ const ImageUpload = (props) => {
         <input
           type="file"
           filename={props.imageFileName}
-          className="btn btn-1"
+          className={
+            props.isNoImage ? "form-control is-invalid" : "form-control"
+          }
           style={{ maxWidth: "15rem" }}
           id="imageInput"
           accept="image/*"
@@ -54,6 +57,7 @@ const ImageUpload = (props) => {
         <label htmlFor="imageInput" className="image-upload btn btn-1 border">
           Upload Image
         </label>
+        <div className="invalid-feedback">No Uploaded Image</div>
       </div>
     </div>
   );

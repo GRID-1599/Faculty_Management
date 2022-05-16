@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import SideNav from "./user-side-nav copy";
 import TopNav from "./user-top-nav";
 
@@ -20,105 +20,128 @@ import UserCertificates from "./user-certificates";
 import Axios from "axios";
 
 function UserMain(params) {
-  const [listFaculty, setListFaculty] = useState([]);
-  const [objFaculty, setObjFaculty] = useState();
-  const employeeId = "2018107987";
+  const navigate = useNavigate();
+
+  // const [listFaculty, setListFaculty] = useState([]);
+  // const [objFaculty, setObjFaculty] = useState();
+  // var employeeId = "123456";
+  const [employeeId, setEmployeeId] = useState("");
+  const [toRender, setToRender] = useState(false);
 
   useEffect(() => {
-    Axios.get(`http://localhost:3001/getFacultyById/${employeeId}`, {}).then(
-      (response) => {
-        setObjFaculty(response.data);
-      }
-    );
+    var theUser = sessionStorage.getItem("user");
+    // console.log(theUser);
+    if (theUser !== null) {
+      Axios.get(`http://localhost:3001/facultyFind/${theUser}`).then(
+        (response) => {
+          const id = response.data;
+          console.log(id);
+          if (id !== "NOUSER") {
+            setEmployeeId(id);
+            setToRender(true);
+          } else {
+            navigate("../../faculty/login");
+            sessionStorage.removeItem("user");
+          }
+        }
+      );
+    } else {
+      navigate("../../faculty/login");
+      sessionStorage.removeItem("user");
+    }
   }, []);
 
   return (
-    <div className="user-home-main sb-nav-fixed">
-      <TopNav />
-      <div id="layoutSidenav">
-        <SideNav employeeId={employeeId} />
-        {/* CONTAINer */}
-        <div id="layoutSidenav_content">
-          <Routes>
-            <Route
-              path=""
-              element={<UserHome employeeId={employeeId} />}
-              exact
-            />
-            <Route
-              path="profile"
-              element={<UserHome employeeId={employeeId} />}
-            />
-            <Route
-              path="contact"
-              element={<UserContact employeeId={employeeId} />}
-            />
-            <Route
-              path="address"
-              element={<UserAddress employeeId={employeeId} />}
-            />
-            <Route
-              path="issued-id"
-              element={<UserIssuedId employeeId={employeeId} />}
-            />
-            {/* <Route path="issued-id"></Route> */}
-            <Route
-              path="elementary"
-              element={<UserElementary employeeId={employeeId} />}
-            />
-            <Route
-              path="junior-high"
-              element={<UserJuniorHigh employeeId={employeeId} />}
-            />
-            <Route
-              path="senior-high"
-              element={<UserSeniorHigh employeeId={employeeId} />}
-            />
-            <Route
-              path="vocational"
-              element={<UserVocational employeeId={employeeId} />}
-            />
-            <Route
-              path="college"
-              element={<UserCollege employeeId={employeeId} />}
-            />
-            <Route
-              path="graduate-studies"
-              element={<UserGraduateStudies employeeId={employeeId} />}
-            />
+    <>
+      {toRender && (
+        <div className="user-home-main sb-nav-fixed">
+          <TopNav />
+          <div id="layoutSidenav">
+            <SideNav employeeId={employeeId} />
+            {/* CONTAINer */}
+            <div id="layoutSidenav_content">
+              <Routes>
+                <Route
+                  path=""
+                  element={<UserHome employeeId={employeeId} />}
+                  exact
+                />
+                <Route
+                  path="profile"
+                  element={<UserHome employeeId={employeeId} />}
+                />
+                <Route
+                  path="contact"
+                  element={<UserContact employeeId={employeeId} />}
+                />
+                <Route
+                  path="address"
+                  element={<UserAddress employeeId={employeeId} />}
+                />
+                <Route
+                  path="issued-id"
+                  element={<UserIssuedId employeeId={employeeId} />}
+                />
+                {/* <Route path="issued-id"></Route> */}
+                <Route
+                  path="elementary"
+                  element={<UserElementary employeeId={employeeId} />}
+                />
+                <Route
+                  path="junior-high"
+                  element={<UserJuniorHigh employeeId={employeeId} />}
+                />
+                <Route
+                  path="senior-high"
+                  element={<UserSeniorHigh employeeId={employeeId} />}
+                />
+                <Route
+                  path="vocational"
+                  element={<UserVocational employeeId={employeeId} />}
+                />
+                <Route
+                  path="college"
+                  element={<UserCollege employeeId={employeeId} />}
+                />
+                <Route
+                  path="graduate-studies"
+                  element={<UserGraduateStudies employeeId={employeeId} />}
+                />
 
-            <Route
-              path="graduate-studies"
-              element={<UserGraduateStudies employeeId={employeeId} />}
-            />
-            <Route
-              path="graduate-studies"
-              element={<UserGraduateStudies employeeId={employeeId} />}
-            />
+                <Route
+                  path="graduate-studies"
+                  element={<UserGraduateStudies employeeId={employeeId} />}
+                />
+                <Route
+                  path="graduate-studies"
+                  element={<UserGraduateStudies employeeId={employeeId} />}
+                />
 
-            <Route
-              path="civil-services"
-              element={<UserCivilServices employeeId={employeeId} />}
-            />
-            <Route
-              path="work-experiences"
-              element={<UserWorkExp employeeId={employeeId} />}
-            />
-            <Route
-              path="certificates"
-              element={<UserCertificates employeeId={employeeId} />}
-            />
-          </Routes>
-          <footer className="py-4 bg-light mt-auto">
-            <div className="container-fluid px-4">
-              <div className="d-flex align-items-center justify-content-between small">
-                <div className="text-muted">Sample Footer</div>
-              </div>
+                <Route
+                  path="civil-services"
+                  element={<UserCivilServices employeeId={employeeId} />}
+                />
+                <Route
+                  path="work-experiences"
+                  element={<UserWorkExp employeeId={employeeId} />}
+                />
+                <Route
+                  path="certificates"
+                  element={<UserCertificates employeeId={employeeId} />}
+                />
+              </Routes>
+              <footer className="py-4 bg-light mt-auto">
+                <div className="container-fluid px-4">
+                  <div className="d-flex align-items-center justify-content-between small">
+                    <div className="text-muted">Sample Footer</div>
+                  </div>
+                </div>
+              </footer>
             </div>
-          </footer>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

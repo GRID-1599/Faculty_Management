@@ -1,10 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const cookieParser = require("cookie-parser");
 const app = express();
 
 const cors = require("cors");
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -16,6 +17,8 @@ const IRL =
 mongoose.connect(IRL);
 
 // routes
+const adminRoutes = require("./routes/adminRoute");
+app.use("/admin", adminRoutes);
 
 const facultyRoutes = require("./routes/facultyRoutes");
 app.use("", facultyRoutes);
@@ -55,6 +58,9 @@ app.use("/certificate", certificateRoutes);
 
 const allFacultyRoutes = require("./routes/allFacultyDataRoute");
 app.use("/faculty", allFacultyRoutes);
+
+const findRoutes = require("./routes/findRoutes");
+app.use("/faculty/find", findRoutes);
 
 // const pdfRoutes = require("./routes/pdfPrintingRoute");
 // app.use("/pdf", pdfRoutes);

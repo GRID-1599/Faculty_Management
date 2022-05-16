@@ -11,7 +11,7 @@ function UserIsssuedId(props) {
   const [TIN, setTIN] = useState("");
   const [SSS, setSSS] = useState("");
 
-  const [btnEditName, setEditName] = useState(" Add / Edit IDs No.");
+  const [btnEditName, setEditName] = useState(" Add / Edit ID's Number");
 
   const [disable, setDisable] = useState(true);
 
@@ -26,12 +26,70 @@ function UserIsssuedId(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+    // console.log();
+    if (hasData) {
+      updateIDs();
+    } else {
+      addIDs();
+    }
   };
 
+  const [hasData, setHasData] = useState(false);
   const employeeId = props.employeeId;
+
+  const addIDs = () => {
+    const newData = {
+      employee_id: employeeId,
+      GSIS_num: GSIS,
+      PAGIBIG_num: PAGIBIG,
+      PHILHEALTH_num: PHILHEALTH,
+      SSS_num: SSS,
+      TIN_num: TIN,
+    };
+    Axios.post(`http://localhost:3001/issued-id/create`, newData).then(
+      (response) => {
+        const faculty = response.data;
+        setGSIS(faculty.GSIS_num);
+        setPAGIBIG(faculty.PAGIBIG_num);
+        setPHILHEALTH(faculty.PHILHEALTH_num);
+        setSSS(faculty.SSS_num);
+        setTIN(faculty.TIN_num);
+
+        setHasData(true);
+
+        setDisable(true);
+        setBtnEditHide(true);
+        setBtnSaveHide(false);
+      }
+    );
+  };
+
+  const updateIDs = () => {
+    const newData = {
+      GSIS_num: GSIS,
+      PAGIBIG_num: PAGIBIG,
+      PHILHEALTH_num: PHILHEALTH,
+      SSS_num: SSS,
+      TIN_num: TIN,
+    };
+    Axios.post(
+      `http://localhost:3001/issued-id/update/${employeeId}`,
+      newData
+    ).then((response) => {
+      const faculty = response.data;
+      setGSIS(faculty.GSIS_num);
+      setPAGIBIG(faculty.PAGIBIG_num);
+      setPHILHEALTH(faculty.PHILHEALTH_num);
+      setSSS(faculty.SSS_num);
+      setTIN(faculty.TIN_num);
+
+      setHasData(true);
+
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+    });
+  };
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/issued-id/${employeeId}`, {}).then(
@@ -40,11 +98,16 @@ function UserIsssuedId(props) {
         const faculty = response.data;
         // console.log(dateFormater(faculty.birth_date));
 
-        setGSIS(faculty.GSIS_num);
-        setPAGIBIG(faculty.PAGIBIG_num);
-        setPHILHEALTH(faculty.PHILHEALTH_num);
-        setSSS(faculty.SSS_num);
-        setTIN(faculty.TIN_num);
+        if (faculty !== null) {
+          setGSIS(faculty.GSIS_num);
+          setPAGIBIG(faculty.PAGIBIG_num);
+          setPHILHEALTH(faculty.PHILHEALTH_num);
+          setSSS(faculty.SSS_num);
+          setTIN(faculty.TIN_num);
+          setHasData(true);
+        } else {
+          setEditName("Add ID's Number");
+        }
       }
     );
   }, []);
@@ -80,6 +143,7 @@ function UserIsssuedId(props) {
                 placeholder="GSIS ID No."
                 value={GSIS}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setGSIS(e.target.value);
                 }}
@@ -96,6 +160,7 @@ function UserIsssuedId(props) {
                 placeholder="PAG-IBIG ID No."
                 value={PAGIBIG}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setPAGIBIG(e.target.value);
                 }}
@@ -112,6 +177,7 @@ function UserIsssuedId(props) {
                 placeholder="PHILHEALTH No."
                 value={PHILHEALTH}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setPHILHEALTH(e.target.value);
                 }}
@@ -128,6 +194,7 @@ function UserIsssuedId(props) {
                 placeholder="SSS No."
                 value={SSS}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setSSS(e.target.value);
                 }}
@@ -144,12 +211,16 @@ function UserIsssuedId(props) {
                 placeholder="TIN No."
                 value={TIN}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setTIN(e.target.value);
                 }}
               />
               <label htmlFor="txtTIN">TIN No.</label>
             </div>
+          </div>
+          <div className="row mt-3">
+            {btnsaveHide && <p>Please write "n/a" or "none" if none </p>}
           </div>
           <div className="row mt-3">
             <div className="col-md-3 mb-3 offset-md-6 ">

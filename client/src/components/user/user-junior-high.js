@@ -18,36 +18,121 @@ function UserJuniorHigh(props) {
   const [btnEditHide, setBtnEditHide] = useState(true);
   const [btnsaveHide, setBtnSaveHide] = useState(false);
 
+  const setJuniorData = (faculty) => {
+    setName(faculty.school_name);
+    setEducation(faculty.basic_education);
+    setPeriodFrom(faculty.period_from);
+    setPeriodTo(faculty.period_to);
+    setHighest(faculty.highest_level);
+    setYearGraduate(faculty.year_graduate);
+    setHonors(faculty.honor_recieved);
+    setHasData(true);
+    setIsToInput(false);
+    setToLoad(false);
+  };
+
+  const [hasData, setHasData] = useState(false);
+  const [isToInput, setIsToInput] = useState(false);
+  const [toLoad, setToLoad] = useState(false);
+
+  const employeeId = props.employeeId;
+
   const onEditInfo = () => {
     setDisable(false);
+    setIsToInput(true);
     setBtnEditHide(false);
     setBtnSaveHide(true);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+    setToLoad(true);
+    if (hasData) {
+      updateJunior();
+    } else {
+      addJunior();
+    }
   };
 
-  const employeeId = props.employeeId;
+  const addJunior = () => {
+    const newData = {
+      employee_id: employeeId,
+      school_name: name,
+      basic_education: education,
+      period_from: periodFrom,
+      period_to: periodTo,
+      highest_level: highest,
+      year_graduate: yearGraduate,
+      honor_recieved: honors,
+    };
+    Axios.post(
+      `http://localhost:3001/educ-junior-highschool/create`,
+      newData
+    ).then((response) => {
+      const faculty = response.data;
+      setJuniorData(faculty);
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+    });
+  };
+
+  const updateJunior = () => {
+    const newData = {
+      school_name: name,
+      basic_education: education,
+      period_from: periodFrom,
+      period_to: periodTo,
+      highest_level: highest,
+      year_graduate: yearGraduate,
+      honor_recieved: honors,
+    };
+    Axios.post(
+      `http://localhost:3001/educ-junior-highschool/update/${employeeId}`,
+      newData
+    ).then((response) => {
+      const faculty = response.data;
+      setJuniorData(faculty);
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+    });
+  };
 
   useEffect(() => {
+    setToLoad(true);
     Axios.get(
       `http://localhost:3001/educ-junior-highschool/${employeeId}`,
       {}
     ).then((response) => {
       const faculty = response.data;
-      setName(faculty.school_name);
-      setEducation(faculty.basic_education);
-      setPeriodFrom(faculty.period_from);
-      setPeriodTo(faculty.period_to);
-      setHighest(faculty.highest_level);
-      setYearGraduate(faculty.year_graduate);
-      setHonors(faculty.honor_recieved);
+      if (faculty !== null) {
+        setJuniorData(faculty);
+      } else {
+        setToLoad(false);
+      }
     });
   }, []);
+
+  const toThrow = () => {
+    if (!hasData && !isToInput && !toLoad) {
+      return <p className="lead">No Junior HighSchool Education Information</p>;
+    } else if (isToInput) {
+      return <p className="lead">Write "none" or "n/a" if none </p>;
+    }
+  };
+
+  const loadingMessage = (
+    <div className="">
+      <div
+        className="spinner-border  spinner-border-sm text-danger me-3"
+        role="status"
+      >
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
 
   return (
     <main>
@@ -57,7 +142,8 @@ function UserJuniorHigh(props) {
           <li className="breadcrumb-item ">Secondary</li>
           <li className="breadcrumb-item active">Junior High</li>
         </ol>
-
+        {toLoad && loadingMessage}
+        {toThrow()}
         <form className="row gy-2" onSubmit={handleSubmit}>
           <div className="col-md-10">
             <div className="form-floating">
@@ -68,6 +154,7 @@ function UserJuniorHigh(props) {
                 placeholder="Name of School"
                 value={name}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -84,6 +171,7 @@ function UserJuniorHigh(props) {
                 placeholder="Basic Education/Degree"
                 value={education}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setEducation(e.target.value);
                 }}
@@ -106,6 +194,7 @@ function UserJuniorHigh(props) {
                 placeholder="From"
                 value={periodFrom}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setPeriodFrom(e.target.value);
                 }}
@@ -125,6 +214,7 @@ function UserJuniorHigh(props) {
                 placeholder="To"
                 value={periodTo}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setPeriodTo(e.target.value);
                 }}
@@ -141,6 +231,7 @@ function UserJuniorHigh(props) {
                 placeholder="Highest Level ( if not graduated)"
                 value={highest}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setHighest(e.target.value);
                 }}
@@ -162,6 +253,7 @@ function UserJuniorHigh(props) {
                 placeholder="Year Graduate"
                 value={yearGraduate}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setYearGraduate(e.target.value);
                 }}
@@ -178,6 +270,7 @@ function UserJuniorHigh(props) {
                 placeholder="Scholarship/Academic Honors Recieved"
                 value={honors}
                 disabled={disable}
+                required
                 onChange={(e) => {
                   setHonors(e.target.value);
                 }}
@@ -190,7 +283,7 @@ function UserJuniorHigh(props) {
           <div className="row mt-3 ">
             <div className="col-md-3 mb-3 offset-md-7 ">
               {btnsaveHide ? (
-                <button className="btn btn-1 btn-sm w-100">Save Changes</button>
+                <button className="btn btn-1 btn-sm w-100">Save </button>
               ) : null}
             </div>
           </div>
@@ -204,7 +297,9 @@ function UserJuniorHigh(props) {
                   onEditInfo();
                 }}
               >
-                Edit Junior High Education Information
+                {hasData
+                  ? "Edit Junior High Education Information"
+                  : "Input Junior High Education Information"}
               </button>
             ) : null}
           </div>

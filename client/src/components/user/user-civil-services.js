@@ -25,17 +25,32 @@ function UserCivilServices(props) {
   const [civilList, setCivilList] = useState([]);
   const employeeId = props.employeeId;
 
+  var [updatedPointer, setUpdatedPointer] = useState(true);
+
+  const makeUpdate = () => {
+    setUpdatedPointer(!updatedPointer);
+    console.log(updatedPointer);
+  };
+
   useEffect(() => {
+    setLoaderShow(true);
     Axios.get(`http://localhost:3001/civil-service/${employeeId}`).then(
       (response) => {
-        setCivilList(response.data);
-        setLoaderShow(false);
+        // console.log(response.data.length);
+        if (response.data.length !== 0) {
+          setCivilList(response.data);
+          setLoaderShow(false);
+          setNullShow(false);
+        } else {
+          setCivilList([]);
+          setNullShow(true);
+          setLoaderShow(false);
+        }
 
         // console.log(response.data);
       }
     );
-    console.log("x");
-  });
+  }, [updatedPointer]);
 
   const nullMessage = (
     <span className="h3 text-muted text-center  mt-5">Nothing to display</span>
@@ -69,12 +84,16 @@ function UserCivilServices(props) {
 
         <div className="row gy-3">
           {loaderShow && loadingMessage}
-          {civilList &&
-            civilList.map((civilInfo) => {
-              return <CivilData civilData={civilInfo} key={civilInfo._id} />;
-            })}
-
           {nullShow && nullMessage}
+          {civilList.map((civilInfo) => {
+            return (
+              <CivilData
+                civilData={civilInfo}
+                key={civilInfo._id}
+                makeUpdate={makeUpdate}
+              />
+            );
+          })}
         </div>
       </div>
       <Modal
@@ -92,6 +111,7 @@ function UserCivilServices(props) {
           <CivilDataAdd
             handleModalClose={handleClose}
             employeeId={employeeId}
+            makeUpdate={makeUpdate}
           />
         </Modal.Body>
       </Modal>
@@ -118,18 +138,35 @@ const CivilData = (props) => {
 
   const [btnEditHide, setBtnEditHide] = useState(true);
   const [btnsaveHide, setBtnSaveHide] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const onEditInfo = () => {
     setDisable(false);
     setBtnEditHide(false);
     setBtnSaveHide(true);
+    setIsEditing(true);
   };
 
   const handleSubmit = (e) => {
+    const newData = {
+      license_name: license,
+      rating: rating,
+      exam_date: examDate,
+      exam_place: examPlace,
+      license_number: licenseNumber,
+      license_validity_date: licenseDateValidity,
+    };
     e.preventDefault();
-    setDisable(true);
-    setBtnEditHide(true);
-    setBtnSaveHide(false);
+    Axios.post(
+      `http://localhost:3001/civil-service/update/${props.civilData._id}`,
+      newData
+    ).then((response) => {
+      setDisable(true);
+      setBtnEditHide(true);
+      setBtnSaveHide(false);
+      setIsEditing(false);
+      props.makeUpdate();
+    });
   };
 
   const [show, setShow] = useState(false);
@@ -143,6 +180,7 @@ const CivilData = (props) => {
     ).then((response) => {
       console.log("deleted");
       console.log(response);
+      props.makeUpdate();
     });
     setShow(false);
   };
@@ -179,9 +217,6 @@ const CivilData = (props) => {
                 </a>
               </li>
               <li>
-                <a className="dropdown-item btn-link">Print</a>
-              </li>
-              <li>
                 <a className="dropdown-item btn-link" onClick={handleShow}>
                   Delete
                 </a>
@@ -190,6 +225,7 @@ const CivilData = (props) => {
           </div>
         </div>
       </div>
+      {isEditing && <small>Write "none" or "n/a" if none</small>}
       <form className="row gy-2" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <div className="form-floating">
@@ -200,6 +236,7 @@ const CivilData = (props) => {
               placeholder="License Name"
               value={license}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLicense(e.target.value);
               }}
@@ -219,6 +256,7 @@ const CivilData = (props) => {
               placeholder="Rating (if applicable)"
               value={rating}
               disabled={disable}
+              required
               onChange={(e) => {
                 setRating(e.target.value);
               }}
@@ -236,6 +274,7 @@ const CivilData = (props) => {
               placeholder="Date of Examination"
               value={examDate}
               disabled={disable}
+              required
               onChange={(e) => {
                 setExamDate(e.target.value);
               }}
@@ -254,6 +293,7 @@ const CivilData = (props) => {
               placeholder="Place of Examination / Conferment"
               value={examPlace}
               disabled={disable}
+              required
               onChange={(e) => {
                 setExamPlace(e.target.value);
               }}
@@ -276,6 +316,7 @@ const CivilData = (props) => {
               placeholder="Number"
               value={licenseNumber}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLicenseNumber(e.target.value);
               }}
@@ -292,6 +333,7 @@ const CivilData = (props) => {
               placeholder="Date of Validity"
               value={licenseDateValidity}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLicenseDateValidity(e.target.value);
               }}
@@ -364,6 +406,7 @@ const CivilDataAdd = (props) => {
       ).then((response) => {
         props.handleModalClose();
         console.log("submited");
+        props.makeUpdate();
       });
     } catch (ex) {
       console.log(ex);
@@ -381,6 +424,7 @@ const CivilDataAdd = (props) => {
 
   return (
     <>
+      <small>Write "none" or "n/a" if none</small>
       <form className="row gy-2" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <div className="form-floating">
@@ -391,6 +435,7 @@ const CivilDataAdd = (props) => {
               placeholder="License Name"
               value={license}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLicense(e.target.value);
               }}
@@ -410,6 +455,7 @@ const CivilDataAdd = (props) => {
               placeholder="Rating (if applicable)"
               value={rating}
               disabled={disable}
+              required
               onChange={(e) => {
                 setRating(e.target.value);
               }}
@@ -427,6 +473,7 @@ const CivilDataAdd = (props) => {
               placeholder="Date of Examination"
               value={examDate}
               disabled={disable}
+              required
               onChange={(e) => {
                 setExamDate(e.target.value);
               }}
@@ -445,6 +492,7 @@ const CivilDataAdd = (props) => {
               placeholder="Place of Examination / Conferment"
               value={examPlace}
               disabled={disable}
+              required
               onChange={(e) => {
                 setExamPlace(e.target.value);
               }}
@@ -467,6 +515,7 @@ const CivilDataAdd = (props) => {
               placeholder="Number"
               value={licenseNumber}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLicenseNumber(e.target.value);
               }}
@@ -483,6 +532,7 @@ const CivilDataAdd = (props) => {
               placeholder="Date of Validity"
               value={licenseDateValidity}
               disabled={disable}
+              required
               onChange={(e) => {
                 setLicenseDateValidity(e.target.value);
               }}

@@ -107,8 +107,8 @@ const FacultyCard = (props) => {
     try {
       Axios.post(`http://localhost:3001/createFaculty`, facultyDatas).then(
         (response) => {
-          // setVisible(true);
-          // mailer();
+          // setVisible(true); just don't
+          mailer();
           deleteApprovedFaculty(props.facultyData._id);
         }
       );

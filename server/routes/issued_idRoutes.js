@@ -26,6 +26,28 @@ router.get("/:employee_id", async (req, res) => {
   );
 });
 
+router.post("/update/:employee_id", async (req, res) => {
+  const newData = {
+    GSIS_num: req.body.GSIS_num,
+    PAGIBIG_num: req.body.PAGIBIG_num,
+    PHILHEALTH_num: req.body.PHILHEALTH_num,
+    SSS_num: req.body.SSS_num,
+    TIN_num: req.body.TIN_num,
+  };
+  issuedIdsModel.findOneAndUpdate(
+    { employee_id: req.params.employee_id },
+    newData,
+    { new: true },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 router.post("/create", async (req, res) => {
   try {
     const issued_id = {

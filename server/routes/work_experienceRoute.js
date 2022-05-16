@@ -50,6 +50,32 @@ router.delete("/delete/:ObjId", (req, res) => {
     .catch((err) => next(err));
 });
 
+// updated
+router.post("/update/:id", async (req, res) => {
+  const newData = {
+    position: req.body.position,
+    company_name: req.body.company_name,
+    monthly_salary: req.body.monthly_salary,
+    pay_grade: req.body.pay_grade,
+    appointment_status: req.body.appointment_status,
+    period_from: req.body.period_from,
+    period_to: req.body.period_to,
+    isGov_service: req.body.isGov_service,
+  };
+  workExperienceModel.findByIdAndUpdate(
+    req.params.id,
+    newData,
+    { new: true },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 router.post("/create", async (req, res) => {
   try {
     const workExperience = {
