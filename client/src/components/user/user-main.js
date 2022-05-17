@@ -16,6 +16,7 @@ import UserGraduateStudies from "./user-graduate-studies";
 import UserCivilServices from "./user-civil-services";
 import UserWorkExp from "./user-work-experience";
 import UserCertificates from "./user-certificates";
+import UserChangePassword from "./user-password_change";
 
 import Axios from "axios";
 
@@ -37,8 +38,16 @@ function UserMain(params) {
           const id = response.data;
           console.log(id);
           if (id !== "NOUSER") {
-            setEmployeeId(id);
-            setToRender(true);
+            Axios.get(`http://localhost:3001/facultyIsNewUser/${theUser}`).then(
+              (response) => {
+                if (!response.data) {
+                  setEmployeeId(id);
+                  setToRender(true);
+                } else {
+                  navigate("../../faculty/new-user/change-password");
+                }
+              }
+            );
           } else {
             navigate("../../faculty/login");
             sessionStorage.removeItem("user");
@@ -128,6 +137,10 @@ function UserMain(params) {
                 <Route
                   path="certificates"
                   element={<UserCertificates employeeId={employeeId} />}
+                />
+                <Route
+                  path="change-password"
+                  element={<UserChangePassword employeeId={employeeId} />}
                 />
               </Routes>
               <footer className="py-4 bg-light mt-auto">

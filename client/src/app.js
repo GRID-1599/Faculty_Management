@@ -18,6 +18,7 @@ import UserRegistration from "./components/user/user-register.js";
 
 // user
 import UserMain from "./components/user/user-main";
+import NewUserPasswordChange from "./components/user/new_user_change_password";
 
 // admin
 import AdminMain from "./components/admin/admin-main";
@@ -45,6 +46,10 @@ class App extends Component {
 
           {/* faculty pages */}
           <Route path="/faculty/*" element={<UserMain />} />
+          <Route
+            path="/faculty/new-user/change-password"
+            element={<NewUserPasswordChange />}
+          />
 
           {/* admin pages */}
           <Route path="/admin/*" element={<AdminMain />} />

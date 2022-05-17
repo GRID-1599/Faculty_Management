@@ -309,6 +309,33 @@ router.post("/facultyLogin", (req, res) => {
   );
 });
 
+router.get("/facultyIsNewUser/:xxx", (req, res) => {
+  // is_newUser
+  faculty_profile_Model.find({ employee_id: req.params.xxx }, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.send(result[0].is_newUser);
+    }
+  });
+});
+
+router.get("/facultySetIsNewUser/:xxx", (req, res) => {
+  // is_newUser
+  faculty_profile_Model.findOneAndUpdate(
+    { employee_id: req.params.xxx },
+    { is_newUser: false },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result.is_newUser);
+      }
+    }
+  );
+});
+
 router.get("/facultyFind/:xxx", (req, res) => {
   faculty_profile_Model.find(
     { $or: [{ employee_id: req.params.xxx }, { email: req.params.xxx }] },

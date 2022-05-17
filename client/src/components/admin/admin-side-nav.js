@@ -2,16 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import { faUserCheck } from "@fortawesome/free-solid-svg-icons";
-import { faIdCard } from "@fortawesome/free-solid-svg-icons";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
-import { faPeopleCarryBox } from "@fortawesome/free-solid-svg-icons";
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
-import { faCertificate } from "@fortawesome/free-solid-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserCheck,
+  faUsers,
+  faUserGroup,
+} from "@fortawesome/free-solid-svg-icons";
+
 // import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 
 {
@@ -27,6 +23,10 @@ function SideNav(params) {
 
   const onClicktoApproveFaculties = () => {
     navigate("../admin/pending-approval-list/");
+  };
+
+  const onClickAdmin = () => {
+    navigate("../admin/admin-list/");
   };
 
   // const onClickIssuedId = () => {
@@ -65,6 +65,13 @@ function SideNav(params) {
                 <FontAwesomeIcon icon={faUserCheck} color="white" />
               </div>
               Pending for Approval
+            </div>
+            <div className="sb-sidenav-menu-heading">Admin</div>
+            <div className="nav-link btn-link" onClick={onClickAdmin}>
+              <div className="sb-nav-link-icon">
+                <FontAwesomeIcon icon={faUserGroup} color="white" />
+              </div>
+              All Admin
             </div>
           </div>
         </div>

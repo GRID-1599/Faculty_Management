@@ -24,6 +24,36 @@ router.get("/:username", (req, res) => {
   });
 });
 
+router.get("/email/find/:email", (req, res) => {
+  adminModel.findOne({ email: req.params.email }, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      // res.json(result);
+      if (result === null) {
+        res.send(false);
+      } else {
+        res.send(true);
+      }
+    }
+  });
+});
+
+router.get("/username/find/:username", (req, res) => {
+  adminModel.findOne({ username: req.params.username }, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      // res.json(result);
+      if (result === null) {
+        res.send(false);
+      } else {
+        res.send(true);
+      }
+    }
+  });
+});
+
 router.post("/create", (req, res) => {
   try {
     const admin = {

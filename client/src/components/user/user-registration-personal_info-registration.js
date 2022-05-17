@@ -259,7 +259,7 @@ function RegistrationPersonalInfo(params) {
                   ref={numberRef}
                 />
                 <div className="invalid-feedback">
-                  Duplicate Employee Number found
+                  Existing Employee Number found
                 </div>
               </div>
 
@@ -346,7 +346,7 @@ function RegistrationPersonalInfo(params) {
               }}
               ref={emailRef}
             />
-            <div className="invalid-feedback">Duplicate Email found</div>
+            <div className="invalid-feedback">Existing Email found</div>
           </div>
 
           <div className="col-sm-5 mb-4">

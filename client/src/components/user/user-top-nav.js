@@ -30,6 +30,9 @@ function TopNav(params) {
         <button
           className="btn btn-link  btn-sm order-1 order-lg-0 me-4 me-lg-0  btn-hovered"
           id="sidebarToggle"
+          onClick={() => {
+            document.body.classList.toggle("sb-sidenav-toggled");
+          }}
         >
           <FontAwesomeIcon icon={faBars} color="white" />
         </button>

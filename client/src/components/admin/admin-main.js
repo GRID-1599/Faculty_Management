@@ -5,6 +5,7 @@ import TopNav from "./admin-top-nav";
 
 import AdminFaculties from "./admin-faculty_list-main";
 import AdminToApproveFaculties from "./admin-to_approve_faculty-main";
+import Admins from "./admin-admins-main";
 
 import Axios from "axios";
 
@@ -56,6 +57,7 @@ function AdminMain(params) {
                   path="pending-approval-list/*"
                   element={<AdminToApproveFaculties />}
                 />
+                <Route path="admin-list/*" element={<Admins />} />
               </Routes>
               {/* <footer className="py-4 bg-light mt-auto">
             <div className="container-fluid px-4">
