@@ -73,6 +73,36 @@ body {
   font-weight: 700;
 }
 
+.f-bold {
+  font-weight: 700;
+}
+
+.txt-sm {
+  font-size: .75rem;
+}
+
+
+.header-bg {
+  background-color: maroon;
+  padding: 5px 15px;
+  color: white;
+  font-weight: bold;
+
+}
+
+.border-left {
+  border-left: 1px solid maroon;
+}
+
+.print-wrapper {
+  position: sticky;
+  top: 500px;
+}
+
+.custom-wrapper {
+  font-size: .75rem;
+}
+
 .border-shadow {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
@@ -401,4 +431,15 @@ body {
   width: 500px;
   height: 500px;
   background-color: white;
+}
+
+.facultyToPrint {
+  margin: .5in .5in;
+}
+
+
+
+#pageFooter::after {
+  counter-increment: page;
+  content: counter(page);
 }

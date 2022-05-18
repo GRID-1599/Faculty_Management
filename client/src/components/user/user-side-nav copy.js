@@ -4,9 +4,6 @@ import Axios from "axios";
 import { saveAs } from "file-saver";
 import { useNavigate } from "react-router-dom";
 
-import { Modal, Button } from "react-bootstrap";
-import { dateTimeFormater } from "../functions/dateFunction";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -78,78 +75,9 @@ function SideNav(props) {
     navigate("../faculty/certificates");
   };
 
-  const [loadingPrinting, setLoadingPrinting] = useState(false);
-
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const [showPrintOpt, setShowPrintOpt] = useState(false);
-  const handleClosePrintOpt = () => setShowPrintOpt(false);
-  const handleShowPrintOpt = () => setShowPrintOpt(true);
-
-  const [isPrintPersonalInfo, setIsPrintPersonalInfo] = useState(false);
-  const [isPrintEducBG, setIsPrintEducBG] = useState(false);
-  const [isPrintCivil, setIsPrintCivil] = useState(false);
-  const [isPrintWorkExp, setIsPrintWorkExp] = useState(false);
-  const [isPrintCert, setIsPrintCert] = useState(false);
-
-  const employeeId = props.employeeId;
-  const handlePrint = () => {
-    handleClosePrintOpt();
-    console.log("printing..");
-    // console.log("isPrintPersonalInfo", isPrintPersonalInfo);
-    // console.log("isPrintEducBG", isPrintEducBG);
-    // console.log("isPrintCivil", isPrintCivil);
-    // console.log("isPrintWorkExp", isPrintWorkExp);
-    // console.log("isPrintCert", isPrintCert);
-
-    setIsPrintPersonalInfo(false);
-    setIsPrintEducBG(false);
-    setIsPrintCivil(false);
-    setIsPrintWorkExp(false);
-    setIsPrintCert(false);
-
-    handleShow();
-    Axios.get(`http://localhost:3001/faculty/get-all/${employeeId}`, {}).then(
-      (response) => {
-        const facultyData = response.data;
-        // console.log(facultyData);
-        facultyData.printData = {
-          isToPrintPersonal: isPrintPersonalInfo,
-          isToPrintEducBG: isPrintEducBG,
-          isToPrintCivil: isPrintCivil,
-          isToPrintWorkExp: isPrintWorkExp,
-          isToPrintCert: isPrintCert,
-        };
-
-        console.log(facultyData);
-
-        Axios.post("http://localhost:3001/pdf/create", facultyData)
-          .then(() =>
-            Axios.get("http://localhost:3001/pdf/fetch", {
-              responseType: "blob",
-            })
-          )
-          .then((res) => {
-            const pdfBlob = new Blob([res.data], { type: "application/pdf" });
-            saveAs(
-              pdfBlob,
-              `${employeeId} DATA [${dateTimeFormater(new Date())}].pdf`
-            );
-
-            console.log("printing done");
-            handleClose();
-          });
-      }
-    );
+  const onClickPrint = () => {
+    navigate("../faculty/user-pdf");
   };
-
-  const loader = (
-    <div className="spinner-border text-light mx-3" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </div>
-  );
 
   return (
     <div id="layoutSidenav_nav">
@@ -159,17 +87,13 @@ function SideNav(props) {
       >
         <div className="sb-sidenav-menu custom-scrollbar1">
           <div className="nav">
-            <div className="nav-link btn-link ">
-              <button className="btn btn-1" onClick={handleShowPrintOpt}>
-                <FontAwesomeIcon
-                  icon={faPrint}
-                  color="white"
-                  className="me-3"
-                />{" "}
-                Print Data
-              </button>
-              {loadingPrinting && loader}
+            <div className="nav-link btn-link" onClick={onClickPrint}>
+              <div className="sb-nav-link-icon">
+                <FontAwesomeIcon icon={faPrint} color="white" />
+              </div>
+              Print Data
             </div>
+
             <div className="sb-sidenav-menu-heading">Personal Info</div>
             <div className="nav-link btn-link" onClick={onClickProfile}>
               <div className="sb-nav-link-icon">
@@ -296,156 +220,6 @@ function SideNav(props) {
           </div>
         </div>
       </nav>
-
-      <Modal
-        size="lg"
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header>
-          <Modal.Title>Printing Faculty Data</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <div
-                    className="spinner-border text-danger mx-3"
-                    role="status"
-                  >
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                </td>
-                <td>
-                  <span>Fetching Faculty Data. Please Wait....</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Modal.Body>
-      </Modal>
-
-      <Modal
-        size="lg"
-        show={showPrintOpt}
-        onHide={handleClosePrintOpt}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Print</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Please select the following to be print.</p>
-          <div className="row">
-            <div className="col">
-              <button
-                className="btn btn-1  w-25 mb-3"
-                type="checkbox"
-                onClick={() => {
-                  setIsPrintPersonalInfo(true);
-                  setIsPrintEducBG(true);
-                  setIsPrintCivil(true);
-                  setIsPrintWorkExp(true);
-                  setIsPrintCert(true);
-                }}
-              >
-                Select All
-              </button>
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="personalInfoPrint"
-                  checked={isPrintPersonalInfo}
-                  onChange={() => {
-                    setIsPrintPersonalInfo(!isPrintPersonalInfo);
-                  }}
-                />
-                <label className="form-check-label" htmlFor="personalInfoPrint">
-                  Personal Information
-                </label>
-              </div>
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="educInfoPrint"
-                  checked={isPrintEducBG}
-                  onChange={() => {
-                    setIsPrintEducBG(!isPrintEducBG);
-                  }}
-                />
-                <label className="form-check-label" htmlFor="educInfoPrint">
-                  Educational Background
-                </label>
-              </div>
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="civilInfoPrint"
-                  checked={isPrintCivil}
-                  onChange={() => {
-                    setIsPrintCivil(!isPrintCivil);
-                  }}
-                />
-                <label className="form-check-label" htmlFor="civilInfoPrint">
-                  Civil Service Eligibility
-                </label>
-              </div>
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="workInfoPrint"
-                  checked={isPrintWorkExp}
-                  onChange={() => {
-                    setIsPrintWorkExp(!isPrintWorkExp);
-                  }}
-                />
-                <label className="form-check-label" htmlFor="workInfoPrint">
-                  Work Experience
-                </label>
-              </div>
-
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="certInfoPrint"
-                  checked={isPrintCert}
-                  onChange={() => {
-                    setIsPrintCert(!isPrintCert);
-                  }}
-                />
-                <label className="form-check-label" htmlFor="certInfoPrint">
-                  Certificates
-                </label>
-              </div>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClosePrintOpt}>
-            Cancel
-          </Button>
-          {(isPrintPersonalInfo ||
-            isPrintEducBG ||
-            isPrintCivil ||
-            isPrintWorkExp ||
-            isPrintCert) && (
-            <Button className="btn btn-1" onClick={handlePrint}>
-              Print
-            </Button>
-          )}
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 }

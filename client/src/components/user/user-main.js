@@ -18,6 +18,7 @@ import UserWorkExp from "./user-work-experience";
 import UserCertificates from "./user-certificates";
 import UserChangePassword from "./user-password_change";
 
+import UserInfo from "./user-info_pdf";
 import Axios from "axios";
 
 function UserMain(params) {
@@ -141,6 +142,11 @@ function UserMain(params) {
                 <Route
                   path="change-password"
                   element={<UserChangePassword employeeId={employeeId} />}
+                />
+
+                <Route
+                  path="user-pdf"
+                  element={<UserInfo employeeId={employeeId} />}
                 />
               </Routes>
               <footer className="py-4 bg-light mt-auto">
