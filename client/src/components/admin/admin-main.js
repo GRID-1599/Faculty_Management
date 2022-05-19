@@ -6,6 +6,7 @@ import TopNav from "./admin-top-nav";
 import AdminFaculties from "./admin-faculty_list-main";
 import AdminToApproveFaculties from "./admin-to_approve_faculty-main";
 import Admins from "./admin-admins-main";
+import Content from "./admin-content-main";
 
 import Axios from "axios";
 
@@ -66,6 +67,10 @@ function AdminMain(params) {
                 <Route
                   path="admin-list/*"
                   element={<Admins admin={adminUsername} />}
+                />
+                <Route
+                  path="content/*"
+                  element={<Content admin={adminUsername} />}
                 />
               </Routes>
               {/* <footer className="py-4 bg-light mt-auto">

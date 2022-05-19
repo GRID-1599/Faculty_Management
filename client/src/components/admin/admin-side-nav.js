@@ -6,6 +6,7 @@ import {
   faUserCheck,
   faUsers,
   faUserGroup,
+  faFileLines,
 } from "@fortawesome/free-solid-svg-icons";
 
 // import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
@@ -27,6 +28,10 @@ function SideNav(params) {
 
   const onClickAdmin = () => {
     navigate("../admin/admin-list/");
+  };
+
+  const onClickContent = () => {
+    navigate("../admin/content/");
   };
 
   // const onClickIssuedId = () => {
@@ -65,6 +70,13 @@ function SideNav(params) {
                 <FontAwesomeIcon icon={faUserCheck} color="white" />
               </div>
               Pending for Approval
+            </div>
+            <div className="sb-sidenav-menu-heading">Management</div>
+            <div className="nav-link btn-link" onClick={onClickContent}>
+              <div className="sb-nav-link-icon">
+                <FontAwesomeIcon icon={faFileLines} color="white" />
+              </div>
+              Content
             </div>
             <div className="sb-sidenav-menu-heading">Admin</div>
             <div className="nav-link btn-link" onClick={onClickAdmin}>

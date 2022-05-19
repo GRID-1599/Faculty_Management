@@ -62,6 +62,9 @@ app.use("/faculty", allFacultyRoutes);
 const findRoutes = require("./routes/findRoutes");
 app.use("/faculty/find", findRoutes);
 
+const contentroutes = require("./routes/contentRoute");
+app.use("/content", contentroutes);
+
 // const pdfRoutes = require("./routes/pdfPrintingRoute");
 // app.use("/pdf", pdfRoutes);
 const pdf = require("html-pdf");

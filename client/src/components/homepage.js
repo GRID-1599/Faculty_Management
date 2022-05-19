@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
 
 function Homepage() {
   const navigate = useNavigate();
@@ -11,15 +12,6 @@ function Homepage() {
   const onClickUserRegister = () => {
     navigate("./faculty/registration");
   };
-
-  const mt =
-    "Bulacan State University is a progressive knowledge-generating globally recognized for excellent instruction, pioneering research, and responsive community engagements";
-
-  const vt =
-    "Bulacan State University exists to produce highly competent, ethical and service-oriented professionals that contribute to the sustainable socio-economic growth and development of the nation";
-
-  const [missionTxt, setMissionTxt] = useState(mt);
-  const [vissionTxt, setVissionTxt] = useState(vt);
 
   const registerBtn = (
     <button
@@ -40,6 +32,14 @@ function Homepage() {
       Log in
     </button>
   );
+
+  const [contentList, setContentList] = useState([]);
+
+  useEffect(() => {
+    Axios.get("http://localhost:3001/content/").then((response) => {
+      setContentList(response.data);
+    });
+  }, []);
   return (
     <>
       <div className="container-fluid landing-wrapper bg_image pt-5 ">
@@ -80,15 +80,16 @@ function Homepage() {
           </div>
         </div>
         <div className="container mt-5">
-          <div className="row text-white">
-            <div className="col-md-6">
-              <p className="display-4 ">Vission</p>
-              <p className="lead ">{vissionTxt}</p>
-            </div>
-            <div className="col-md-6">
-              <p className="display-4 ">Mission</p>
-              <p className="lead ">{missionTxt}</p>
-            </div>
+          <div className="row gy-3 text-white">
+            {contentList.length !== 0 &&
+              contentList.map((content) => {
+                return (
+                  <div className="col-md-6">
+                    <p className="display-4 ">{content.title}</p>
+                    <p className="lead ">{content.body}</p>
+                  </div>
+                );
+              })}
           </div>
         </div>
 
