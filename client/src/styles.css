@@ -103,6 +103,10 @@ body {
   font-size: .75rem;
 }
 
+.font-rem-55 {
+  font-size: .55rem;
+}
+
 .border-shadow {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }

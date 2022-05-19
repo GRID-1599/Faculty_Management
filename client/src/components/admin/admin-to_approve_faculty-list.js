@@ -27,6 +27,8 @@ const ToApproveFacultyList = (props) => {
   const [rank, setRank] = useState("All");
   const [appoinmentStatus, setAppoinmentStatus] = useState("All");
 
+  const [toLoad, setToLoad] = useState(false);
+
   const rankList = [
     "Intructor I",
     "Intructor II",
@@ -59,7 +61,7 @@ const ToApproveFacultyList = (props) => {
     "College of Industrial Technology (CIT)",
     "College of Law (CLaw)",
     "College of Nursing (CN)",
-    "College of Engineering (COE",
+    "College of Engineering (COE)",
     "College of Education (COED)",
     "College of Science (CS)",
     "College of Sports, Exercise and Recreation (CSER)",
@@ -76,6 +78,7 @@ const ToApproveFacultyList = (props) => {
     "Provisional",
   ];
   useEffect(() => {
+    setToLoad(true);
     // setListFaculty([]);
     Axios.get("http://localhost:3001/getToApproveFaculties").then(
       (response) => {
@@ -85,6 +88,7 @@ const ToApproveFacultyList = (props) => {
         setListGet(response.data);
 
         setTotal(Object.keys(response.data).length);
+        setToLoad(false);
       }
     );
   }, []);
@@ -189,6 +193,20 @@ const ToApproveFacultyList = (props) => {
   //     setToShowListFaculty(listFaculty);
   //     console.log(toShowListFaculty);
   //   }, [listFaculty, college, rank, appoinmentStatus]);
+
+  const loader = (
+    <div className="wrapper  justify-content-center">
+      <div
+        className="spinner-border spinner-border-sm text-danger me-1"
+        role="status"
+      >
+        <span className="visually-hidden">Checking...</span>
+      </div>
+      <span className="text-muted text-center ms-2  mt-5">
+        Fetching Data. Please wait...
+      </span>
+    </div>
+  );
 
   return (
     <>
@@ -316,6 +334,7 @@ const ToApproveFacultyList = (props) => {
 
       {!toTable && <CardList listFaculty={listFaculty} />}
       {toTable && <TableList listFaculty={listFaculty} />}
+      {toLoad && loader}
     </>
   );
 };

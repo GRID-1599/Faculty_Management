@@ -11,17 +11,21 @@ import {
 
 import emailjs from "emailjs-com";
 
+import PrintTable from "./admin-print_facultyTable";
+
 import { dateFormatStringSet } from "../functions/dateFunction";
 
 import Axios from "axios";
 
 const FacultyList = (props) => {
+  const adminUsername = props.admin;
   const [total, setTotal] = useState(0);
   var [showing, setShowing] = useState(0);
   const [listFaculty, setListFaculty] = useState([]);
   const [listGet, setListGet] = useState([]);
   const [toShowListFaculty, setToShowListFaculty] = useState([]);
   const [toTable, setToTable] = useState(true);
+  const [toLoad, setToLoad] = useState(false);
 
   const [college, setCollege] = useState("All");
   const [rank, setRank] = useState("All");
@@ -76,6 +80,7 @@ const FacultyList = (props) => {
     "Provisional",
   ];
   useEffect(() => {
+    setToLoad(true);
     // setListFaculty([]);
     Axios.get("http://localhost:3001/getFaculty").then((response) => {
       // theAllList = ;
@@ -84,6 +89,7 @@ const FacultyList = (props) => {
       setListGet(response.data);
 
       setTotal(Object.keys(response.data).length);
+      setToLoad(false);
     });
   }, []);
 
@@ -186,13 +192,47 @@ const FacultyList = (props) => {
   //     console.log(college, rank, appoinmentStatus);
   //     setToShowListFaculty(listFaculty);
   //     console.log(toShowListFaculty);
-  //   }, [listFaculty, college, rank, appoinmentStatus]);
+  //   }, [listFaculty, college, rank, appoinmentStatus]);.
+
+  const loader = (
+    <div className="wrapper  justify-content-center">
+      <div
+        className="spinner-border spinner-border-sm text-danger me-1"
+        role="status"
+      >
+        <span className="visually-hidden">Checking...</span>
+      </div>
+      <span className="text-muted text-center ms-2  mt-5">
+        Fetching Data. Please wait...
+      </span>
+    </div>
+  );
 
   return (
     <>
       <ol className="breadcrumb mb-4">
         <li className="breadcrumb-item active">Faculty List</li>
       </ol>
+      <div className="row justify-content-end  mb-3">
+        <div className="col-md-2 ">
+          {listFaculty.length !== 0 && (
+            <PrintTable
+              listFaculty={listFaculty}
+              admin={adminUsername}
+              showing={showing}
+              totalShowing={total}
+              filtered={{
+                college: college,
+                rank: rank,
+                appoinmentStatus: appoinmentStatus,
+              }}
+            />
+          )}
+        </div>
+        {/* <div className="col-md-2">
+          <button className="btn btn-outline-danger w-100">Refresh</button>
+        </div> */}
+      </div>
       <div className="row">
         <div className="col-sm-3 mb-2">
           <label className="form-label text-muted">
@@ -268,6 +308,7 @@ const FacultyList = (props) => {
           </select>
         </div>
       </div>
+
       <div className="row justify-content-between ">
         <div className="col-auto">
           <p>
@@ -303,17 +344,10 @@ const FacultyList = (props) => {
           </button>
         </div>
       </div>
-      <div className="row justify-content-between  mb-3">
-        <div className="col-md-2">
-          <button className="btn btn-1 w-100">Print</button>
-        </div>
-        <div className="col-md-2">
-          <button className="btn btn-outline-danger w-100">Refresh</button>
-        </div>
-      </div>
 
       {!toTable && <CardList listFaculty={listFaculty} />}
       {toTable && <TableList listFaculty={listFaculty} />}
+      {toLoad && loader}
     </>
   );
 };

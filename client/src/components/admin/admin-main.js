@@ -15,7 +15,7 @@ function AdminMain(params) {
   // const [listFaculty, setListFaculty] = useState([]);
   // const [objFaculty, setObjFaculty] = useState();
   // var employeeId = "123456";
-  const [employeeId, setEmployeeId] = useState("");
+  const [adminUsername, setAdminUsername] = useState("");
   const [toRender, setToRender] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function AdminMain(params) {
           const id = response.data;
           console.log(id);
           if (id !== "NOUSER") {
-            setEmployeeId(id);
+            setAdminUsername(id);
             setToRender(true);
           } else {
             navigate("../../admin/login");
@@ -51,13 +51,22 @@ function AdminMain(params) {
             {/* CONTAINer */}
             <div id="layoutSidenav_content">
               <Routes>
-                <Route path="" element={<AdminFaculties />} />
-                <Route path="faculty-list/*" element={<AdminFaculties />} />
+                <Route
+                  path=""
+                  element={<AdminFaculties admin={adminUsername} />}
+                />
+                <Route
+                  path="faculty-list/*"
+                  element={<AdminFaculties admin={adminUsername} />}
+                />
                 <Route
                   path="pending-approval-list/*"
-                  element={<AdminToApproveFaculties />}
+                  element={<AdminToApproveFaculties admin={adminUsername} />}
                 />
-                <Route path="admin-list/*" element={<Admins />} />
+                <Route
+                  path="admin-list/*"
+                  element={<Admins admin={adminUsername} />}
+                />
               </Routes>
               {/* <footer className="py-4 bg-light mt-auto">
             <div className="container-fluid px-4">

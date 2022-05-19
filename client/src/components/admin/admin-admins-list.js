@@ -7,12 +7,29 @@ const AdminList = (props) => {
   const [total, setTotal] = useState(0);
   var [showing, setShowing] = useState(0);
   const [listAdmin, setListAdmin] = useState([]);
+  const [toLoad, setToLoad] = useState(false);
+
+  const loader = (
+    <div className="wrapper  justify-content-center">
+      <div
+        className="spinner-border spinner-border-sm text-danger me-1"
+        role="status"
+      >
+        <span className="visually-hidden">Checking...</span>
+      </div>
+      <span className="text-muted text-center ms-2  mt-5">
+        Fetching Data. Please wait...
+      </span>
+    </div>
+  );
 
   useEffect(() => {
+    setToLoad(true);
     Axios.get("http://localhost:3001/admin/").then((response) => {
       setListAdmin(response.data);
 
       setTotal(Object.keys(response.data).length);
+      setToLoad(false);
     });
   }, []);
   const noData = (
@@ -69,6 +86,7 @@ const AdminList = (props) => {
           </tbody>
         </table>
       </div>
+      {toLoad && loader}
     </>
   );
 };

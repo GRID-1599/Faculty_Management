@@ -5,14 +5,18 @@ import FacultyView from "./admin-faculty_list-view";
 import FacultyList from "./admin-faculty_list-list";
 
 const FacultyMain = (props) => {
+  const adminUsername = props.admin;
   return (
     <main>
       <div className="container-xxl px-4 float-start ">
         <h1 className="mt-4">Faculty</h1>
 
         <Routes>
-          <Route path="" element={<FacultyList />} />
-          <Route path="/:employeeId" element={<FacultyView />} />
+          <Route path="" element={<FacultyList admin={adminUsername} />} />
+          <Route
+            path="/:employeeId"
+            element={<FacultyView admin={adminUsername} />}
+          />
         </Routes>
       </div>
     </main>
