@@ -18,11 +18,26 @@ body {
 .btn-link {
   cursor: pointer;
   box-shadow: none;
+  color: maroon;
 }
 
 .btn-link:focus {
   box-shadow: none;
+  color: maroon;
 
+
+}
+
+
+.btn-link:hover {
+  box-shadow: none;
+  color: maroon;
+
+}
+
+.txt-wide {
+  letter-spacing: .15em;
+  text-decoration: none;
 }
 
 .ltsp-0 {
@@ -112,7 +127,7 @@ body {
 }
 
 .login-header {
-  font-size: 2.5rem;
+  font-size: 2.3rem;
 }
 
 .form-control-lg:focus {
@@ -415,6 +430,22 @@ body {
   bottom: 0px;
   left: 0px;
   right: 0px;
+  background-position: 0px center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* background-color: rgba(131, 8, 8, 0.25); */
+  /* background-blend-mode: soft-light; */
+  z-index: 10;
+}
+
+.bg_image-sm {
+  content: '';
+  /* /*  E:\xampp\htdocs\Dental Clinic\admin\resources\images\bg-image.png  */
+  /* E:\react_app\faculty-manager-app\client\src\resources\users-profile\uni.jpg */
+  background-image: linear-gradient(145deg, rgba(227, 227, 212, 0), rgb(216, 11, 18)), url("./resources/users-profile/bulsu 2.jpg");
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
   background-position: 0px center;
   background-size: cover;
   background-repeat: no-repeat;

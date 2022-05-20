@@ -48,8 +48,8 @@ function Homepage() {
           <div className="row  align-items-bottom">
             <div className="col-md-7 display-4 txt-header-bold pe-5 ">
               <p className="m-0">Faculty Information</p>
-              <p className="m-0">Management</p>
-              <p className="m-0">System</p>
+              <p className="m-0">Management System</p>
+              <p className="m-0"></p>
             </div>
           </div>
           <div className="row mt-5">
@@ -84,7 +84,7 @@ function Homepage() {
             {contentList.length !== 0 &&
               contentList.map((content) => {
                 return (
-                  <div className="col-md-6">
+                  <div className="col-md-6" key={content._id}>
                     <p className="display-4 ">{content.title}</p>
                     <p className="lead ">{content.body}</p>
                   </div>

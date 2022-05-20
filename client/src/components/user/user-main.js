@@ -17,6 +17,7 @@ import UserCivilServices from "./user-civil-services";
 import UserWorkExp from "./user-work-experience";
 import UserCertificates from "./user-certificates";
 import UserChangePassword from "./user-password_change";
+import UserDashboard from "./user-dashboard";
 
 import UserInfo from "./user-info_pdf";
 import Axios from "axios";
@@ -73,9 +74,14 @@ function UserMain(params) {
               <Routes>
                 <Route
                   path=""
-                  element={<UserHome employeeId={employeeId} />}
+                  element={<UserDashboard employeeId={employeeId} />}
                   exact
                 />
+                {/* UserDashboard */}
+                {/* <Route
+                  path="profile"
+                  element={<UserHome employeeId={employeeId} />}
+                /> */}
                 <Route
                   path="profile"
                   element={<UserHome employeeId={employeeId} />}

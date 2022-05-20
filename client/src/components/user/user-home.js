@@ -180,9 +180,9 @@ const UserHome = (props) => {
           <li className="breadcrumb-item active">Personal Information</li>
         </ol>
         <div className="row pe-4">
-          <div className="col-xl-3 mb-4 order-xl-1 border-styled py-4">
+          {/* <div className="col-xl-3 mb-4 order-xl-1 py-4">
             {imageSrc !== "" && imageComp}
-          </div>
+          </div> */}
           <div className="col-xl-9 ">
             <div className="row">
               <div className="col-md-3 mb-3 ">

@@ -114,22 +114,26 @@ function UserLogin() {
 
   return (
     <div
-      className="user-login-main d-flex align-items-center  grd-bg-maroon"
+      className="user-login-main d-flex align-items-center  grd-bg-maroon "
       style={{ height: "100vh" }}
     >
-      <div className="container ">
+      <div className="container  ">
         <div className=" row justify-content-center ">
-          <div className="col-lg-4  bg-red py-5 ">
+          <div className="col-lg-4  bg-red py-5 bg_image-sm">
             <div className="container mt-lg-3">
-              <div className="row ">
-                <p className="text-white h1 m-0 f-b ltsp-5 login-header">
-                  FACULTY
-                </p>
-              </div>
               <div className="row">
-                <p className="text-white h1 m-0 f-b ltsp-5 login-header">
-                  MANAGEMENT
-                </p>
+                <div className="col-md-6">
+                  <div className="row ">
+                    <p className="text-white h1 m-0 f-b ltsp-5 login-header">
+                      Faculty Information
+                    </p>
+                  </div>
+                  <div className="row">
+                    <p className="text-white h1 m-0 f-b ltsp-5 login-header">
+                      Management System
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="container mt-5 ms-2">

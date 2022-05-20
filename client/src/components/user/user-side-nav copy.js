@@ -23,8 +23,13 @@ import { faPrint } from "@fortawesome/free-solid-svg-icons";
 
 function SideNav(props) {
   const navigate = useNavigate();
-  const onClickProfile = () => {
+
+  const onClickDashboard = () => {
     navigate("../faculty/");
+  };
+
+  const onClickProfile = () => {
+    navigate("../faculty/profile");
   };
 
   const onClickAddress = () => {
@@ -87,19 +92,26 @@ function SideNav(props) {
       >
         <div className="sb-sidenav-menu custom-scrollbar1">
           <div className="nav">
+            <div className="nav-link btn-link" onClick={onClickDashboard}>
+              <div className="sb-nav-link-icon">
+                <FontAwesomeIcon icon={faUser} color="white" />
+              </div>
+              Dashboard
+            </div>
+            {/* 
             <div className="nav-link btn-link" onClick={onClickPrint}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faPrint} color="white" />
               </div>
               Print Data
-            </div>
+            </div> */}
 
             <div className="sb-sidenav-menu-heading">Personal Info</div>
             <div className="nav-link btn-link" onClick={onClickProfile}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faUser} color="white" />
               </div>
-              Profile
+              Personal
             </div>
             <div className="nav-link btn-link" onClick={onClickContact}>
               <div className="sb-nav-link-icon">

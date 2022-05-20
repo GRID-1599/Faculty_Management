@@ -39,6 +39,11 @@ function TopNav(params) {
       </div>
       <div className="col-auto ">
         <a className="navbar-brand ps-3" href="index.html">
+          <img
+            src={`/resources/logo-dark.png`}
+            alt=""
+            style={{ width: "1.75rem", height: "1.75rem" }}
+          />{" "}
           Faculty Management
         </a>
       </div>
