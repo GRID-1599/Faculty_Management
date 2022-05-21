@@ -65,29 +65,30 @@ const UserDashboard = (props) => {
         const allFaculty = response.data;
 
         setFacultyAll(response.data);
-
-        if (allFaculty.address !== null) {
+        console.log(allFaculty.address);
+        console.log(allFaculty.hasOwnProperty("address"));
+        if (allFaculty.hasOwnProperty("address")) {
           setHasAddress(true);
           setPercent((percent) => percent + 8);
         }
 
-        if (allFaculty.issuedIds !== null) {
+        if (allFaculty.issuedIds !== "") {
           setHasIds(true);
           setPercent((percent) => percent + 3);
         }
         // ------------------------
 
-        if (allFaculty.educ_elementary !== null) {
+        if (allFaculty.educ_elementary !== "") {
           setHasElem(true);
           setPercent((percent) => percent + 5);
         }
 
-        if (allFaculty.educ_juniorHigh !== null) {
+        if (allFaculty.educ_juniorHigh !== "") {
           setHasJunior(true);
           setPercent((percent) => percent + 5);
         }
 
-        if (allFaculty.educ_seniorHigh !== null) {
+        if (allFaculty.educ_seniorHigh !== "") {
           setHasSenior(true);
           setPercent((percent) => percent + 5);
         }

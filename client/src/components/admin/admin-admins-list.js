@@ -32,6 +32,7 @@ const AdminList = (props) => {
       setToLoad(false);
     });
   }, []);
+
   const noData = (
     <tr>
       <td colSpan={7} className="text-center">

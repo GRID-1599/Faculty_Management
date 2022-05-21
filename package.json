@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "install": "^0.13.0",
+    "npm": "^8.10.0"
+  }
+}
