@@ -47,8 +47,8 @@ function Homepage() {
         <div className="container mt-5  ">
           <div className="row  align-items-bottom">
             <div className="col-md-7 display-4 txt-header-bold pe-5 ">
-              <p className="m-0">Faculty Information</p>
-              <p className="m-0">Management System</p>
+              <p className="m-0">Faculty Management</p>
+              <p className="m-0">Information System</p>
               <p className="m-0"></p>
             </div>
           </div>

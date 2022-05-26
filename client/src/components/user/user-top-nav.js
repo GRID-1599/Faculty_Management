@@ -44,7 +44,7 @@ function TopNav(params) {
             alt=""
             style={{ width: "1.75rem", height: "1.75rem" }}
           />{" "}
-          Faculty Management
+          FMIS
         </a>
       </div>
 

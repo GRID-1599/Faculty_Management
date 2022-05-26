@@ -135,12 +135,12 @@ function UserLogin() {
                 <div className="col-md-6">
                   <div className="row ">
                     <p className="text-white h1 m-0 f-b ltsp-5 login-header">
-                      Faculty Information
+                      Faculty Management
                     </p>
                   </div>
                   <div className="row">
                     <p className="text-white h1 m-0 f-b ltsp-5 login-header">
-                      Management System
+                      Information System
                     </p>
                   </div>
                 </div>
@@ -149,7 +149,7 @@ function UserLogin() {
             <div className="container mt-5 ms-2">
               <div className="row">
                 <p className="text-white fs-7 ms-0 ps-0">
-                  Wants to be part of the faculties?
+                  Wants to be part of our faculty?
                 </p>
               </div>
               <div className="row ">
@@ -166,18 +166,16 @@ function UserLogin() {
 
           <div className="col-lg-5 p-5 bg-white login-wrapper">
             <p
-              className="h2 text-uppercase fw-bolder mt-lg-3"
+              className="h1 f-b text-uppercase fw-bolder mt-lg-3"
               style={{
                 letterSpacing: ".25rem",
+                fontWeight: 900,
               }}
               onClick={handleAdmin}
             >
               Login
             </p>
-            <p className="fw-lighter fs-8 fc-g">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam,
-              ratione!
-            </p>
+            <p className="fw-lighter fs-8 fc-g"></p>
             <form onSubmit={handleSubmit} className="px-3 py-3">
               <div className="row mb-4 mt-0">
                 <label className="form-label m-0 p-1 fs-5">

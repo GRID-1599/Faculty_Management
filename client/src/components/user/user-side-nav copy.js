@@ -106,7 +106,7 @@ function SideNav(props) {
               Print Data
             </div> */}
 
-            <div className="sb-sidenav-menu-heading">Personal Info</div>
+            <div className="sb-sidenav-menu-heading">Core</div>
             <div className="nav-link btn-link" onClick={onClickProfile}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faUser} color="white" />
@@ -131,7 +131,6 @@ function SideNav(props) {
               </div>
               Issued IDs
             </div>
-            <div className="sb-sidenav-menu-heading">Education</div>
 
             <a
               className="nav-link collapsed"
@@ -208,7 +207,6 @@ function SideNav(props) {
               </nav>
             </div>
 
-            <div className="sb-sidenav-menu-heading">Sample Title</div>
             <div className="nav-link btn-link" onClick={onClickCivilServices}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faPeopleCarryBox} color="white" />
@@ -222,7 +220,6 @@ function SideNav(props) {
               Work Experience
             </div>
 
-            <div className="sb-sidenav-menu-heading">Sample Title</div>
             <div className="nav-link btn-link" onClick={onClickCertificates}>
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faCertificate} color="white" />
