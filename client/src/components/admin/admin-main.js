@@ -7,6 +7,7 @@ import AdminFaculties from "./admin-faculty_list-main";
 import AdminToApproveFaculties from "./admin-to_approve_faculty-main";
 import Admins from "./admin-admins-main";
 import Content from "./admin-content-main";
+import DashBoard from "./admin-dashboard";
 
 import Axios from "axios";
 
@@ -52,10 +53,7 @@ function AdminMain(params) {
             {/* CONTAINer */}
             <div id="layoutSidenav_content">
               <Routes>
-                <Route
-                  path=""
-                  element={<AdminFaculties admin={adminUsername} />}
-                />
+                <Route path="" element={<DashBoard admin={adminUsername} />} />
                 <Route
                   path="faculty-list/*"
                   element={<AdminFaculties admin={adminUsername} />}

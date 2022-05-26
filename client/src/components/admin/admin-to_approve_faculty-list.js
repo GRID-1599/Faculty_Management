@@ -323,14 +323,14 @@ const ToApproveFacultyList = (props) => {
           </button>
         </div>
       </div>
-      <div className="row justify-content-between  mb-3">
+      {/* <div className="row justify-content-between  mb-3">
         <div className="col-md-2">
           <button className="btn btn-1 w-100">Print</button>
         </div>
         <div className="col-md-2">
           <button className="btn btn-outline-danger w-100">Refresh</button>
         </div>
-      </div>
+      </div> */}
 
       {!toTable && <CardList listFaculty={listFaculty} />}
       {toTable && <TableList listFaculty={listFaculty} />}

@@ -68,9 +68,9 @@ const PrintFaculty = (props) => {
               />
             </div>
             <div className="col">
-              <span className="h3 f-bold">Faculty Information</span>
+              <span className="h3 f-bold">Faculty Management</span>
               <br />
-              <span className="h3 f-bold">Management System</span>
+              <span className="h3 f-bold">Information System</span>
             </div>
           </div>
           <div className="row mb-2 row font-rem-55">

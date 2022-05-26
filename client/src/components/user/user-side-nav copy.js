@@ -14,7 +14,7 @@ import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 import { faPeopleCarryBox } from "@fortawesome/free-solid-svg-icons";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { faCertificate } from "@fortawesome/free-solid-svg-icons";
-import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import { faTableColumns } from "@fortawesome/free-solid-svg-icons";
 // import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 
 {

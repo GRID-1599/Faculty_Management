@@ -240,14 +240,14 @@ const UserHome = (props) => {
                         type="text"
                         className="form-control"
                         id="txtMiddleName"
-                        placeholder="Middle Initial"
+                        placeholder="Middle Name"
                         value={mname}
                         disabled={disable}
                         onChange={(e) => {
                           setMname(e.target.value);
                         }}
                       />
-                      <label htmlFor="txtMiddleName">Middle Initial</label>
+                      <label htmlFor="txtMiddleName">Middle Name</label>
                     </div>
                   </div>
 

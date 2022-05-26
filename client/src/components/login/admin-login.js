@@ -117,12 +117,12 @@ function AdminLogin() {
                 <div className="col-md-6">
                   <div className="row ">
                     <p className="text-white h1 m-0 f-b ltsp-5 login-header">
-                      Faculty Information
+                      Faculty Management
                     </p>
                   </div>
                   <div className="row">
                     <p className="text-white h1 m-0 f-b ltsp-5 login-header">
-                      Management System
+                      Information System
                     </p>
                   </div>
                 </div>

@@ -7,6 +7,7 @@ import {
   faUsers,
   faUserGroup,
   faFileLines,
+  faTableColumns,
 } from "@fortawesome/free-solid-svg-icons";
 
 // import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +21,10 @@ function SideNav(params) {
 
   const onClickFaculties = () => {
     navigate("../admin/faculty-list/");
+  };
+
+  const onClickDashboard = () => {
+    navigate("../admin/");
   };
 
   const onClicktoApproveFaculties = () => {
@@ -55,6 +60,12 @@ function SideNav(params) {
                 />
               </form>
             </div> */}
+            <div className="nav-link btn-link" onClick={onClickDashboard}>
+              <div className="sb-nav-link-icon">
+                <FontAwesomeIcon icon={faTableColumns} color="white" />
+              </div>
+              Dashboard
+            </div>
             <div className="sb-sidenav-menu-heading">Faculty</div>
             <div className="nav-link btn-link" onClick={onClickFaculties}>
               <div className="sb-nav-link-icon">

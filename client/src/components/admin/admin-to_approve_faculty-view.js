@@ -181,7 +181,7 @@ const ToApproveFacultyView = (props) => {
                     <span className="f-b">First name : </span>
                     <span className="lead">{faculty.first_name} </span>
                     <br />
-                    <span className="f-b">Middle initial : </span>
+                    <span className="f-b">Middle name : </span>
                     <span className="lead">{faculty.middle_name} </span>
                     <br />
                     <span className="f-b">Last name: </span>

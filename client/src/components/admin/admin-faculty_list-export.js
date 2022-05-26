@@ -120,9 +120,9 @@ const FacultyDataExport = (props) => {
                         />
                       </div>
                       <div className="col">
-                        <span className="h3 f-bold">Faculty Information</span>
+                        <span className="h3 f-bold">Faculty Management</span>
                         <br />
-                        <span className="h3 f-bold">Management System</span>
+                        <span className="h3 f-bold">Information System</span>
                       </div>
                     </div>
                     {/* print details */}
@@ -156,9 +156,9 @@ const FacultyDataExport = (props) => {
                         <br />
                         <span className="f-b txt-sm">Name : </span>
                         <span className="txt-sm">
-                          {facultyData.personal_info.first_name}
-                          {facultyData.personal_info.middle_name}
-                          {facultyData.personal_info.last_name}
+                          {facultyData.personal_info.first_name}{" "}
+                          {facultyData.personal_info.middle_name}{" "}
+                          {facultyData.personal_info.last_name}{" "}
                           {facultyData.personal_info.name_extension}
                         </span>
                         <br />
@@ -391,7 +391,7 @@ const PersonalData = (props) => {
           <span>First Name : </span>
           <span>{facultyData.personal_info.first_name}</span>
           <br />
-          <span>Middle Initial : </span>
+          <span>Middle Name : </span>
           <span>{facultyData.personal_info.middle_name}</span>
           <br />
           <span>Last Name : </span>

@@ -315,7 +315,7 @@ const FacultyView = (props) => {
                             <span>First Name : </span>
                             <span>{facultyAll.personal_info.first_name}</span>
                             <br />
-                            <span>Middle Initial : </span>
+                            <span>Middle Name : </span>
                             <span>{facultyAll.personal_info.middle_name}</span>
                             <br />
                             <span>Last Name : </span>

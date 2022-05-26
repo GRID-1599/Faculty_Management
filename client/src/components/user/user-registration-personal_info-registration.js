@@ -378,7 +378,7 @@ function RegistrationPersonalInfo(params) {
             />
           </div>
           <div className="col-sm-5 ">
-            <label className="form-label">Middle Initial </label>
+            <label className="form-label">Middle Name </label>
             <input
               type="text"
               name=""

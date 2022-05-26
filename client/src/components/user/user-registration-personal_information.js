@@ -59,7 +59,7 @@ function RegistrationPersonalInfo(params) {
             />
           </div>
           <div className="col-sm-3 ">
-            <label className="form-label">Middle Initial </label>
+            <label className="form-label">Middle Name </label>
             <input type="text" name="" className="form-control" id="" />
           </div>
           <div className="col-sm-4 ">

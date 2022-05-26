@@ -86,7 +86,9 @@ function Homepage() {
                 return (
                   <div className="col-md-6" key={content._id}>
                     <p className="display-4 ">{content.title}</p>
-                    <p className="lead ">{content.body}</p>
+                    <p className="lead text-justify text-indent">
+                      {content.body}
+                    </p>
                   </div>
                 );
               })}
