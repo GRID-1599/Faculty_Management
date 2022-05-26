@@ -21,6 +21,10 @@ function TopNav(params) {
     navigate("../../faculty/login");
   };
 
+  const onClickDashboard = () => {
+    navigate("../../faculty/");
+  };
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -38,7 +42,7 @@ function TopNav(params) {
         </button>
       </div>
       <div className="col-auto ">
-        <a className="navbar-brand ps-3" href="index.html">
+        <a className="navbar-brand ps-3" onClick={onClickDashboard}>
           <img
             src={`/resources/logo-dark.png`}
             alt=""
