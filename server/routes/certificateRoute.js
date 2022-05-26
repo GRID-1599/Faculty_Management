@@ -77,7 +77,7 @@ router.post(
       conducted_by: req.body.conducted_by,
       certificate_src: req.file.originalname,
     };
-    graduateStudiesModel.findByIdAndUpdate(
+    certificateModel.findByIdAndUpdate(
       req.params.id,
       newData,
       { new: true },

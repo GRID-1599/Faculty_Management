@@ -9,12 +9,25 @@ function UserAddress(props) {
   const employeeId = props.employeeId;
   const [facultyData, setFacultyData] = useState(null);
 
+  const [toLoad, setToLoad] = useState(false);
+
+  const loadingMessage = (
+    <div className="mb-3">
+      <div className="spinner-border  text-danger me-3" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="h4 text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
   useEffect(() => {
+    setToLoad(true);
+
     Axios.get(`http://localhost:3001/address/${employeeId}`, {}).then(
       (response) => {
         // console.log(response.data);
         const faculty = response.data;
         setFacultyData(faculty);
+        setToLoad(false);
       }
     );
   }, []);
@@ -26,11 +39,20 @@ function UserAddress(props) {
         <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item active">Address</li>
         </ol>
-        {facultyData !== null && (
-          <AddressWrapper AddressData={facultyData} employeeId={employeeId} />
-        )}
+        {toLoad ? (
+          loadingMessage
+        ) : (
+          <div className="container">
+            {facultyData !== null && (
+              <AddressWrapper
+                AddressData={facultyData}
+                employeeId={employeeId}
+              />
+            )}
 
-        {facultyData === null && <AddAddress employeeId={employeeId} />}
+            {facultyData === null && <AddAddress employeeId={employeeId} />}
+          </div>
+        )}
       </div>
     </main>
   );

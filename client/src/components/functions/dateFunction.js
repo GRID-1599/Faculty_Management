@@ -36,6 +36,22 @@ export function dateTimeFormater(dateToBeFormat) {
   return formatted_date;
 }
 
+export function dateTimeFormaterSlash(dateToBeFormat) {
+  let theDate = new Date(dateToBeFormat);
+  // console.log("x " + theDate.getDate().toString().length);
+  let formatted_date =
+    ((theDate.getMonth() + 1).toString().length <= 1
+      ? "0" + (theDate.getMonth() + 1)
+      : theDate.getMonth() + 1) +
+    "/" +
+    (theDate.getDate().toString().length <= 1
+      ? "0" + theDate.getDate()
+      : theDate.getDate()) +
+    "/" +
+    theDate.getFullYear();
+  return formatted_date;
+}
+
 export function dateTimeFormater2(dateToBeFormat) {
   let theDate = new Date(dateToBeFormat);
   // console.log("x " + theDate.getDate().toString().length);

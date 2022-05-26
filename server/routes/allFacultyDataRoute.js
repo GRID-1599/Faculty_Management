@@ -133,4 +133,93 @@ router.get("/get-all/:employee_id", (req, res) => {
   //   console.log(JSON.stringify(faculty_data));
 });
 
+router.delete("/delete/:employee_id", (req, res) => {
+  //   console.log("getting all");
+
+  faculty_profile_Model.findOneAndDelete(
+    { employee_id: req.params.employee_id },
+    (err, result) => {
+      //   for address
+      addressModel.findOneAndDelete(
+        { employee_id: req.params.employee_id },
+        (err, result) => {
+          // issued ids
+          issuedIdModel.findOneAndDelete(
+            { employee_id: req.params.employee_id },
+            (err, result) => {
+              // elementary
+              elementaryModel.findOneAndDelete(
+                { employee_id: req.params.employee_id },
+                (err, result) => {
+                  // junior
+                  jhighschoolModel.findOneAndDelete(
+                    { employee_id: req.params.employee_id },
+                    (err, result) => {
+                      // senior
+                      shighschoolModel.deleteMany(
+                        { employee_id: req.params.employee_id },
+                        (err, result) => {
+                          // vocational
+                          vocationalModel.deleteMany(
+                            { employee_id: req.params.employee_id },
+                            (err, result) => {
+                              // college
+                              collegeModel.deleteMany(
+                                { employee_id: req.params.employee_id },
+                                (err, result) => {
+                                  // graduate studies
+                                  graduateModel.deleteMany(
+                                    { employee_id: req.params.employee_id },
+                                    (err, result) => {
+                                      // civil
+                                      civilModel.deleteMany(
+                                        { employee_id: req.params.employee_id },
+                                        (err, result) => {
+                                          // work exp
+                                          workExpModel.deleteMany(
+                                            {
+                                              employee_id:
+                                                req.params.employee_id,
+                                            },
+                                            (err, result) => {
+                                              // certificates
+                                              certificateModel.deleteMany(
+                                                {
+                                                  employee_id:
+                                                    req.params.employee_id,
+                                                },
+                                                (err, result) => {
+                                                  res.json(result);
+                                                  //   console.log(faculty_data);
+                                                }
+                                              );
+                                            }
+                                          );
+                                        }
+                                      );
+                                    }
+                                  );
+                                }
+                              );
+                            }
+                          );
+                        }
+                      );
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }
+      );
+
+      //   console.log(JSON.stringify(faculty_data));
+      //   res.json(faculty_data);
+    }
+  );
+
+  //   console.log(JSON.stringify(faculty_data));
+});
+
 module.exports = router;

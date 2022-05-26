@@ -71,7 +71,7 @@ function UserCertificates(props) {
   return (
     <main>
       <div className="container-xl px-4 float-start">
-        <h1 className="mt-4">Certificates </h1>
+        <h1 className="mt-4">Trainings, Seminars, and Programs </h1>
         <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item active">
             Learning and Development (LD) Intervention / Training Programs
@@ -134,7 +134,7 @@ const CertificateData = (props) => {
     dateFormater(props.certificateData.period_to)
   );
   const [title, setTitle] = useState(props.certificateData.certificate_name);
-  const [type, setType] = useState(props.certificateData.type);
+  const [type, setType] = useState("");
   const [hoursNo, setHoursNo] = useState(props.certificateData.total_hours);
   const [LD_type, setLD_type] = useState(props.certificateData.type);
   const [conductedBy, setConductedBy] = useState(
@@ -162,6 +162,34 @@ const CertificateData = (props) => {
     setBtnEditHide(false);
     setBtnSaveHide(true);
     setIsEditing(true);
+  };
+
+  const certificateShower = () => {
+    if (certificateSrc.substr(-3) === "pdf") {
+      return (
+        <iframe
+          src={`/certificates/${certificateSrc}`}
+          id="pdfFrame"
+          width="100%"
+          scrolling="no"
+          frameBorder="0"
+          style={{
+            maxWidth: 640,
+            width: "100%",
+            height: "4in",
+            overflow: "auto",
+          }}
+        />
+      );
+    } else {
+      return (
+        <img
+          src={`/certificates/${certificateSrc}`}
+          alt=""
+          style={{ width: "3in" }}
+        />
+      );
+    }
   };
 
   const handleSubmit = (e) => {
@@ -289,23 +317,6 @@ const CertificateData = (props) => {
             </label>
           </div>
         </div>
-        <div className="col-md-12">
-          <div className="form-floating">
-            <input
-              type="text"
-              className="form-control"
-              id="txtType"
-              placeholder="Type"
-              value={type}
-              disabled={disable}
-              required
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-            />
-            <label htmlFor="txtType">Type</label>
-          </div>
-        </div>
 
         <div className="col-md-12">
           <label>Inclusive Dates</label>
@@ -404,18 +415,34 @@ const CertificateData = (props) => {
         {isEditing && forUploading}
 
         {!isEditing && (
-          <div className="col-md-12">
-            <span>Filename : {certificateSrc}</span>
+          <div className="row">
+            <div className="col-md-12">
+              <span>Filename : {certificateSrc}</span>
+            </div>
+            <div className="col-md-12">{certificateShower()}</div>
           </div>
         )}
 
-        <div className="row mt-3 ">
-          <div className="col-md-4 mb-3 offset-md-8 ">
-            {btnsaveHide ? (
+        {isEditing && (
+          <div className="row mt-3 ">
+            <div className="col-md-4 mb-3 offset-md-4">
+              <span
+                className="btn btn-1 btn-sm w-100"
+                onClick={() => {
+                  setDisable(true);
+                  setBtnEditHide(true);
+                  setBtnSaveHide(false);
+                  setIsEditing(false);
+                }}
+              >
+                Cancel
+              </span>
+            </div>
+            <div className="col-md-4 mb-3 ">
               <button className="btn btn-1 btn-sm w-100">Save Changes</button>
-            ) : null}
+            </div>
           </div>
-        </div>
+        )}
       </form>
       <Modal
         show={show}
@@ -468,7 +495,7 @@ const CertificateDataAdd = (props) => {
 
     formData.append("employee_id", props.employeeId);
     formData.append("certificate_name", title);
-    formData.append("type", type);
+    formData.append("type", LD_type);
     formData.append("period_from", dateFrom);
     formData.append("period_to", dateTo);
     formData.append("total_hours", hoursNo);
@@ -522,25 +549,8 @@ const CertificateDataAdd = (props) => {
             />
             <label htmlFor="txtTitle">
               Title of Learning and Development Interventions / Training
-              Programs
+              Programs <small>(Write in full)</small>
             </label>
-          </div>
-        </div>
-        <div className="col-md-12">
-          <div className="form-floating">
-            <input
-              type="text"
-              className="form-control"
-              id="txtType"
-              placeholder="Type"
-              value={type}
-              disabled={disable}
-              required
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-            />
-            <label htmlFor="txtType">Type</label>
           </div>
         </div>
 
@@ -634,7 +644,9 @@ const CertificateDataAdd = (props) => {
                 setConductedBy(e.target.value);
               }}
             />
-            <label htmlFor="txtsponsor">Conducted / Sponsored by</label>
+            <label htmlFor="txtsponsor">
+              Conducted / Sponsored by <small>(Write in full)</small>
+            </label>
           </div>
         </div>
 
@@ -662,9 +674,7 @@ const CertificateDataAdd = (props) => {
 
         <div className="row mt-3 ">
           <div className="col-md-4 mb-3 offset-md-8 ">
-            {btnsaveHide ? (
-              <button className="btn btn-1 btn-sm w-100">Save Changes</button>
-            ) : null}
+            <button className="btn btn-1 btn-sm w-100">Save Changes</button>
           </div>
         </div>
       </form>

@@ -1,17 +1,21 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useReactToPrint } from "react-to-print";
 import { Modal, Button } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 
-import UserPDS from "./user-pds";
+import FacultyPDS from "./faculty-pds";
 import {
   dateTimeFormater,
   dateTimeFormater2,
   dateFormatStringSet,
 } from "../functions/dateFunction";
-const Example = (props) => {
+const FacultyDataExport = (props) => {
+  const navigate = useNavigate();
   const componentRef = useRef();
-  const employeeId = props.employeeId;
+  const { employeeId } = useParams();
+
+  const adminUsername = props.admin;
   // const employeeId = props;
 
   const [facultyData, setFacultyData] = useState({});
@@ -37,8 +41,6 @@ const Example = (props) => {
     return `
     @page {  
         margin: .5in;
-        counter-increment: page;
-        content: counter(page);
         size:8.5in 14in;
     } 
     @media all {
@@ -47,8 +49,6 @@ const Example = (props) => {
     @media print {
         .pagebreak{
             page-break-before:always;
-            counter-increment: page;
-  content: counter(page);
         }
     }
     `;
@@ -95,9 +95,10 @@ const Example = (props) => {
   return (
     <main>
       <div className="container-xxl px-4 float-start ">
-        <h1 className="mt-4">Faculty </h1>
-        <ol className="breadcrumb mb-4">
-          <li className="breadcrumb-item active">To Print</li>
+        <ol className="breadcrumb mb-6">
+          <li className="breadcrumb-item ">Faculty List</li>
+          <li className="breadcrumb-item ">Faculty View</li>
+          <li className="breadcrumb-item active">Export</li>
         </ol>
         <div className="row">
           <div className="col-md-8 order-1">
@@ -127,8 +128,8 @@ const Example = (props) => {
                     {/* print details */}
                     <div className="row mb-3 ">
                       <div className="col">
-                        <span className="txt-sm">Printed by : </span>
-                        <span className=" txt-sm">Faculty itself</span>
+                        <span className="txt-sm">Printed by admin: </span>
+                        <span className=" txt-sm"> {adminUsername}</span>
                         <br />
                         <span className="txt-sm">Date and time printed : </span>
                         <span className=" txt-sm">{today}</span>
@@ -315,7 +316,7 @@ const Example = (props) => {
                     <p className="text-center txt-unat my-0">OR</p>
                   </div>
                   <div className="row">
-                    <UserPDS className="w-100 " facultyData={facultyData} />
+                    <FacultyPDS className="w-100 " facultyData={facultyData} />
                   </div>
                 </div>
               )}
@@ -1074,4 +1075,4 @@ const Certificates = (props) => {
   );
 };
 
-export default Example;
+export default FacultyDataExport;

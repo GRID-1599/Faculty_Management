@@ -72,9 +72,19 @@ function TopNav(params) {
                   className="dropdown-menu dropdown-menu-end"
                   aria-labelledby="navbarDropdown"
                 >
-                  {/* <li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        navigate("./change-password");
+                      }}
+                    >
+                      Change Password
+                    </a>
+                  </li>
+                  <li>
                     <hr className="dropdown-divider" />
-                  </li> */}
+                  </li>
                   <li>
                     <a className="dropdown-item" onClick={handleShow}>
                       Logout

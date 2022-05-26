@@ -18,6 +18,7 @@ import UserWorkExp from "./user-work-experience";
 import UserCertificates from "./user-certificates";
 import UserChangePassword from "./user-password_change";
 import UserDashboard from "./user-dashboard";
+import UserPDS from "./user-pds";
 
 import UserInfo from "./user-info_pdf";
 import Axios from "axios";
@@ -153,6 +154,11 @@ function UserMain(params) {
                 <Route
                   path="user-pdf"
                   element={<UserInfo employeeId={employeeId} />}
+                />
+
+                <Route
+                  path="user-pds"
+                  element={<UserPDS employeeId={employeeId} />}
                 />
               </Routes>
               <footer className="py-4 bg-light mt-auto">

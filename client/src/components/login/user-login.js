@@ -73,15 +73,14 @@ function UserLogin() {
           console.log(response.data);
 
           if (response.data === "CORRECT") {
-            sessionStorage.setItem("user", user);
-            console.log(user);
-            // Axios.get(`http://localhost:3001/setFacultyCooky/${user}`).then(
-            //   (response) => {
-            //     console.log(response.data);
-            //   }
-            // );
-
-            navigate("../faculty");
+            Axios.get(`http://localhost:3001/facultyUserToId/${user}`).then(
+              (response) => {
+                const userID = response.data;
+                sessionStorage.setItem("user", userID);
+                console.log(response.data);
+                navigate("../faculty");
+              }
+            );
           } else if (response.data === "INCORRECT") {
             setPswdError(true);
             setTrialShow(true);
@@ -111,6 +110,17 @@ function UserLogin() {
       <span className="text-muted text-center  mt-5">Checking...</span>
     </div>
   );
+
+  let click = 0;
+
+  const handleAdmin = () => {
+    click++;
+    console.log("To admin login : ", click);
+
+    if (click === 5) {
+      navigate("../admin/login");
+    }
+  };
 
   return (
     <div
@@ -160,6 +170,7 @@ function UserLogin() {
               style={{
                 letterSpacing: ".25rem",
               }}
+              onClick={handleAdmin}
             >
               Login
             </p>

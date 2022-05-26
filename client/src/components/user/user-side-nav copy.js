@@ -227,7 +227,7 @@ function SideNav(props) {
               <div className="sb-nav-link-icon">
                 <FontAwesomeIcon icon={faCertificate} color="white" />
               </div>
-              Certificates
+              Trainings, Seminars and Programs
             </div>
           </div>
         </div>

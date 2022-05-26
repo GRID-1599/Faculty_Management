@@ -449,7 +449,7 @@ const WorkExperienceDataAdd = (props) => {
       employee_id: props.employeeId,
       position: position,
       company_name: workFrom,
-      monthly_salary: monthlySalary,
+      monthly_salary: "P " + monthlySalary,
       pay_grade: salaryGrade,
       appointment_status: statusOfAppointment,
       period_from: dateFrom,
@@ -533,7 +533,9 @@ const WorkExperienceDataAdd = (props) => {
                 setPosition(e.target.value);
               }}
             />
-            <label htmlFor="txtPosition">Position Title</label>
+            <label htmlFor="txtPosition">
+              Position Title <small>(Write in full / Do not abbreviate)</small>
+            </label>
           </div>
         </div>
         <div className="col-md-12">
@@ -551,7 +553,8 @@ const WorkExperienceDataAdd = (props) => {
               }}
             />
             <label htmlFor="txtWorkFrom">
-              Department / Agency / Office / Company Name
+              Department / Agency / Office / Company Name (Write in full / Do
+              not abbreviate)
             </label>
           </div>
         </div>
@@ -559,7 +562,7 @@ const WorkExperienceDataAdd = (props) => {
         <div className="col-md-7">
           <div className="form-floating">
             <input
-              type="txt"
+              type="number"
               className="form-control"
               id="txtMonthlySalry"
               placeholder="Monthly Salary"
@@ -570,7 +573,7 @@ const WorkExperienceDataAdd = (props) => {
                 setMonthlySalary(e.target.value);
               }}
             />
-            <label htmlFor="txtMonthlySalry">Monthly Salary</label>
+            <label htmlFor="txtMonthlySalry">Monthly Salary (PHP)</label>
           </div>
         </div>
         <div className="col-md-12">
@@ -588,7 +591,8 @@ const WorkExperienceDataAdd = (props) => {
               }}
             />
             <label htmlFor="txtSalaryGrade">
-              Salary / Job / Pay Grade & STEP / Increment
+              Salary / Job / Pay Grade <small>(if applicable)</small> & STEP
+              <small>(Format "00-0")</small> / Increment
             </label>
           </div>
         </div>

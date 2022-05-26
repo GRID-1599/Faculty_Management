@@ -96,6 +96,104 @@ body {
   font-size: .75rem;
 }
 
+.txt-xsm {
+  font-size: .5rem;
+}
+
+.txt-xsm {
+  font-size: .5rem;
+}
+
+.txt-italic {
+  font-style: italic;
+}
+
+.txt-color-red {
+  color: red;
+}
+
+.txt-ipit {
+  letter-spacing: -0.000rem;
+}
+
+.txt-ipit-1 {
+  letter-spacing: -0.03rem;
+}
+
+.pds-header {
+  font-weight: 700;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: x-large;
+
+
+}
+
+.bg-grey {
+  background-color: grey;
+}
+
+.border-l {
+  border-right: 1px solid darkslategray;
+}
+
+.border-l-b {
+  border-bottom: 1px solid darkslategray;
+  ;
+}
+
+.txt-uppercase {
+  text-transform: uppercase;
+}
+
+.txt-unat {
+  letter-spacing: .12rem;
+}
+
+.txt-sm-lbl {
+  font-size: smaller;
+}
+
+.no-decor {
+  text-decoration: none;
+  list-style: none;
+}
+
+#PDS_table,
+tr,
+td {
+  border: .5px solid black;
+}
+
+#PDS_table tbody td {
+  max-width: 1rem;
+}
+
+#PDS_table thead th {
+  width: 1rem;
+  border: none;
+
+}
+
+/* #pdfFrame {
+  width: 100%;
+  height: 4in;
+  overflow-x: hidden;
+  overflow-y: scroll;
+} */
+
+/* className='txt-uppercase f-b' */
+
+.no-border-r {
+  border-right: none;
+}
+
+.no-border-b {
+  border-bottom: none;
+}
+
+.no-border {
+  border: none;
+}
 
 .header-bg {
   background-color: maroon;

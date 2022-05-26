@@ -35,6 +35,17 @@ const UserDashboard = (props) => {
   const [hasCertificates, setHasCertificates] = useState(false);
   const [totalCerti, settotalCerti] = useState(0);
 
+  const [toLoad, setToLoad] = useState(false);
+
+  const loadingMessage = (
+    <div className="mb-3">
+      <div className="spinner-border  text-danger me-3" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <span className="h4 text-muted text-center  mt-5">Loading...</span>
+    </div>
+  );
+
   const makeUpdate = () => {
     setUpdatedPointer(!updatedPointer);
     console.log(updatedPointer);
@@ -47,6 +58,8 @@ const UserDashboard = (props) => {
 
   useEffect(() => {
     setProgressLoad(true);
+    setToLoad(true);
+
     Axios.get(`http://localhost:3001/getFacultyById/${employeeId}`, {}).then(
       (response) => {
         // console.log(response.data);
@@ -60,6 +73,7 @@ const UserDashboard = (props) => {
       (response) => {
         setProgressLoad(false);
         setPercent(20);
+        setToLoad(false);
 
         console.log(JSON.stringify(response.data));
         const allFaculty = response.data;
@@ -72,23 +86,23 @@ const UserDashboard = (props) => {
           setPercent((percent) => percent + 8);
         }
 
-        if (allFaculty.issuedIds !== "") {
+        if (allFaculty.hasOwnProperty("issuedIds")) {
           setHasIds(true);
           setPercent((percent) => percent + 3);
         }
         // ------------------------
 
-        if (allFaculty.educ_elementary !== "") {
+        if (allFaculty.hasOwnProperty("educ_elementary")) {
           setHasElem(true);
           setPercent((percent) => percent + 5);
         }
 
-        if (allFaculty.educ_juniorHigh !== "") {
+        if (allFaculty.hasOwnProperty("educ_juniorHigh")) {
           setHasJunior(true);
           setPercent((percent) => percent + 5);
         }
 
-        if (allFaculty.educ_seniorHigh !== "") {
+        if (allFaculty.hasOwnProperty("educ_seniorHigh")) {
           setHasSenior(true);
           setPercent((percent) => percent + 5);
         }
@@ -189,524 +203,541 @@ const UserDashboard = (props) => {
         <ol className="breadcrumb mb-6">
           {/* <li className="breadcrumb-item active">Personal Information</li> */}
         </ol>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-3 ">
-              <div
-                className="container p-0 px-2 "
-                style={{ position: "sticky", top: "100px" }}
-              >
-                <div className="row">
-                  <img
-                    src={`/facultyImages/${imageSrc}`}
-                    className="  border"
-                    alt={faculty.image}
-                    style={{ width: "100%", height: "auto" }}
+        {toLoad ? (
+          loadingMessage
+        ) : (
+          <div className="container">
+            <div className="row">
+              <div className="col-md-3 ">
+                <div
+                  className="container p-0 px-2 "
+                  style={{ position: "sticky", top: "100px" }}
+                >
+                  <div className="row">
+                    <div className="col-12 align-self-center">
+                      <img
+                        src={`/facultyImages/${imageSrc}`}
+                        className=" mx-auto ms-3  border"
+                        style={{
+                          width: "auto",
+                          maxWidth: "2in",
+                          height: "2in",
+                        }}
+                      />
+                    </div>
+                    <button
+                      className="btn btn-1 btn-sm w-100 px-2 my-2"
+                      onClick={handleShow}
+                    >
+                      Edit Profile Photo
+                    </button>
+                  </div>
+                  <div className="row mt-3 px-2">
+                    <button
+                      className="btn btn-1"
+                      onClick={() => {
+                        navigate("./user-pdf");
+                      }}
+                    >
+                      {" "}
+                      Export Data
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-9">
+                <dl className="row border-top pt-2 gy-2">
+                  <dt className="col-sm-4">Employee Number</dt>
+                  <dd className="col-sm-8 lead">{faculty.employee_id}</dd>
+                  <dt className="col-sm-4">Name</dt>
+                  <dd className="col-sm-8 lead">
+                    {faculty.last_name}, {faculty.first_name}
+                    {faculty.middle_name}
+                    {faculty.name_extension}
+                  </dd>
+                  <dt className="col-sm-4">College</dt>
+                  <dd className="col-sm-8 lead">{faculty.college}</dd>
+                  <dt className="col-sm-4">Rank</dt>
+                  <dd className="col-sm-8 lead">{faculty.rank}</dd>
+                  <dt className="col-sm-4">Appointment Status</dt>
+                  <dd className="col-sm-8 lead">
+                    {faculty.appointment_status}
+                  </dd>
+                </dl>
+
+                <div
+                  className="row border-top pt-2 mb-5"
+                  style={{ height: "2.5rem" }}
+                >
+                  <p className="m-2 h5">Faculty Informations</p>
+                  <ProgressBar
+                    className="p-0 bg-white border border-danger h-100"
+                    variant="danger"
+                    animated={progressLoad}
+                    now={percent}
+                    label={label}
                   />
-                  <button
-                    className="btn btn-1 btn-sm w-100 px-2 my-2"
-                    onClick={handleShow}
-                  >
-                    Edit Profile Photo
-                  </button>
                 </div>
-                <div className="row mt-3 px-2">
-                  <button
-                    className="btn btn-1"
-                    onClick={() => {
-                      navigate("./user-pdf");
-                    }}
-                  >
-                    {" "}
-                    Print Data
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-9">
-              <dl className="row border-top pt-2 gy-2">
-                <dt className="col-sm-4">Employee Number</dt>
-                <dd className="col-sm-8 lead">{faculty.employee_id}</dd>
-                <dt className="col-sm-4">College</dt>
-                <dd className="col-sm-8 lead">{faculty.college}</dd>
-                <dt className="col-sm-4">Rank</dt>
-                <dd className="col-sm-8 lead">{faculty.rank}</dd>
-                <dt className="col-sm-4">Appointment Status</dt>
-                <dd className="col-sm-8 lead">{faculty.appointment_status}</dd>
-              </dl>
 
-              <div
-                className="row border-top pt-2 mb-5"
-                style={{ height: "2.5rem" }}
-              >
-                <p className="m-2 h5">Faculty Informations</p>
-                <ProgressBar
-                  className="p-0 bg-white border border-danger h-100"
-                  variant="danger"
-                  animated={progressLoad}
-                  now={percent}
-                  label={label}
-                />
-              </div>
-
-              <div className="row gy-2  pt-2 mt-5">
-                {/* profile */}
-                <div className="card col-md-12">
-                  <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                    <div className="col-10">
-                      <button
-                        className="btn btn-link w-100 text-start f-b txt-wide"
-                        onClick={() => {
-                          navigate("./profile");
-                        }}
-                      >
-                        Personal Information
-                      </button>
-                    </div>
-                    <div className="col-2">
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        size="2x"
-                        color="yellowgreen"
-                        className="ms-2 float-end"
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* contact */}
-                <div className="card col-md-12">
-                  <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                    <div className="col-10">
-                      <button
-                        className="btn btn-link w-100 text-start f-b txt-wide"
-                        onClick={() => {
-                          navigate("./contact");
-                        }}
-                      >
-                        Contact
-                      </button>
-                    </div>
-                    <div className="col-2">
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        size="2x"
-                        color="yellowgreen"
-                        className="ms-2 float-end"
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* address */}
-                <div className="card col-md-12">
-                  <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                    <div className="col-10">
-                      <button
-                        className="btn btn-link w-100 text-start f-b txt-wide"
-                        onClick={() => {
-                          navigate("./address");
-                        }}
-                      >
-                        Address
-                      </button>
-                    </div>
-                    <div className="col-2">
-                      {hasAddress ? (
+                <div className="row gy-2  pt-2 mt-5">
+                  {/* profile */}
+                  <div className="card col-md-12">
+                    <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                      <div className="col-10">
+                        <button
+                          className="btn btn-link w-100 text-start f-b txt-wide"
+                          onClick={() => {
+                            navigate("./profile");
+                          }}
+                        >
+                          Personal Information
+                        </button>
+                      </div>
+                      <div className="col-2">
                         <FontAwesomeIcon
                           icon={faCheck}
                           size="2x"
                           color="yellowgreen"
                           className="ms-2 float-end"
                         />
-                      ) : (
+                      </div>
+                    </div>
+                  </div>
+                  {/* contact */}
+                  <div className="card col-md-12">
+                    <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                      <div className="col-10">
                         <button
-                          className="btn btn-1 btn-sm w-100"
+                          className="btn btn-link w-100 text-start f-b txt-wide"
+                          onClick={() => {
+                            navigate("./contact");
+                          }}
+                        >
+                          Contact
+                        </button>
+                      </div>
+                      <div className="col-2">
+                        <FontAwesomeIcon
+                          icon={faCheck}
+                          size="2x"
+                          color="yellowgreen"
+                          className="ms-2 float-end"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* address */}
+                  <div className="card col-md-12">
+                    <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                      <div className="col-10">
+                        <button
+                          className="btn btn-link w-100 text-start f-b txt-wide"
                           onClick={() => {
                             navigate("./address");
                           }}
                         >
-                          No data
+                          Address
                         </button>
-                      )}
+                      </div>
+                      <div className="col-2">
+                        {hasAddress ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            size="2x"
+                            color="yellowgreen"
+                            className="ms-2 float-end"
+                          />
+                        ) : (
+                          <button
+                            className="btn btn-1 btn-sm w-100"
+                            onClick={() => {
+                              navigate("./address");
+                            }}
+                          >
+                            No data
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-                {/* ids */}
-                <div className="card col-md-12">
-                  <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                    <div className="col-10">
-                      <button
-                        className="btn btn-link w-100 text-start f-b txt-wide"
-                        onClick={() => {
-                          navigate("./issued-id");
-                        }}
-                      >
-                        Issued IDs
-                      </button>
-                    </div>
-                    <div className="col-2">
-                      {hasIds ? (
-                        <FontAwesomeIcon
-                          icon={faCheck}
-                          size="2x"
-                          color="yellowgreen"
-                          className="ms-2 float-end"
-                        />
-                      ) : (
+                  {/* ids */}
+                  <div className="card col-md-12">
+                    <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                      <div className="col-10">
                         <button
-                          className="btn btn-1 btn-sm w-100"
+                          className="btn btn-link w-100 text-start f-b txt-wide"
                           onClick={() => {
                             navigate("./issued-id");
                           }}
                         >
-                          No data
+                          Issued IDs
                         </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* civil */}
-                <div className="card col-md-12 border-0">
-                  <p className="f-b m-3 mb-0">Educational Background</p>
-                  <div className="card-body row  ps-5 pe-0 gy-2 ">
-                    {/* elem */}
-                    <div className="card col-md-12">
-                      <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                        <div className="col-10">
+                      </div>
+                      <div className="col-2">
+                        {hasIds ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            size="2x"
+                            color="yellowgreen"
+                            className="ms-2 float-end"
+                          />
+                        ) : (
                           <button
-                            className="btn btn-link w-100 text-start f-b txt-wide"
+                            className="btn btn-1 btn-sm w-100"
                             onClick={() => {
-                              navigate("./elementary");
+                              navigate("./issued-id");
                             }}
                           >
-                            Elementary
+                            No data
                           </button>
-                        </div>
-                        <div className="col-2">
-                          {hasElem ? (
-                            <FontAwesomeIcon
-                              icon={faCheck}
-                              size="2x"
-                              color="yellowgreen"
-                              className="ms-2 float-end"
-                            />
-                          ) : (
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* civil */}
+                  <div className="card col-md-12 border-0">
+                    <p className="f-b m-3 mb-0">Educational Background</p>
+                    <div className="card-body row  ps-5 pe-0 gy-2 ">
+                      {/* elem */}
+                      <div className="card col-md-12">
+                        <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                          <div className="col-10">
                             <button
-                              className="btn btn-1 btn-sm w-100"
+                              className="btn btn-link w-100 text-start f-b txt-wide"
                               onClick={() => {
                                 navigate("./elementary");
                               }}
                             >
-                              No data
+                              Elementary
                             </button>
-                          )}
+                          </div>
+                          <div className="col-2">
+                            {hasElem ? (
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                size="2x"
+                                color="yellowgreen"
+                                className="ms-2 float-end"
+                              />
+                            ) : (
+                              <button
+                                className="btn btn-1 btn-sm w-100"
+                                onClick={() => {
+                                  navigate("./elementary");
+                                }}
+                              >
+                                No data
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Junior HighSchool */}
-                    <div className="card col-md-12">
-                      <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                        <div className="col-10">
-                          <button
-                            className="btn btn-link w-100 text-start f-b txt-wide"
-                            onClick={() => {
-                              navigate("./junior-high/");
-                            }}
-                          >
-                            Junior HighSchool
-                          </button>
-                        </div>
-                        <div className="col-2">
-                          {hasJunior ? (
-                            <FontAwesomeIcon
-                              icon={faCheck}
-                              size="2x"
-                              color="yellowgreen"
-                              className="ms-2 float-end"
-                            />
-                          ) : (
+                      {/* Junior HighSchool */}
+                      <div className="card col-md-12">
+                        <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                          <div className="col-10">
                             <button
-                              className="btn btn-1 btn-sm w-100"
+                              className="btn btn-link w-100 text-start f-b txt-wide"
                               onClick={() => {
                                 navigate("./junior-high/");
                               }}
                             >
-                              No data
+                              Junior HighSchool
                             </button>
-                          )}
+                          </div>
+                          <div className="col-2">
+                            {hasJunior ? (
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                size="2x"
+                                color="yellowgreen"
+                                className="ms-2 float-end"
+                              />
+                            ) : (
+                              <button
+                                className="btn btn-1 btn-sm w-100"
+                                onClick={() => {
+                                  navigate("./junior-high/");
+                                }}
+                              >
+                                No data
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Senior HighSchool */}
-                    <div className="card col-md-12">
-                      <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                        <div className="col-10">
-                          <button
-                            className="btn btn-link w-100 text-start f-b txt-wide"
-                            onClick={() => {
-                              navigate("./senior-high");
-                            }}
-                          >
-                            Senior HighSchool
-                          </button>
-                        </div>
-                        <div className="col-2">
-                          {hasSenior ? (
-                            <FontAwesomeIcon
-                              icon={faCheck}
-                              size="2x"
-                              color="yellowgreen"
-                              className="ms-2 float-end"
-                            />
-                          ) : (
+                      {/* Senior HighSchool */}
+                      <div className="card col-md-12">
+                        <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                          <div className="col-10">
                             <button
-                              className="btn btn-1 btn-sm w-100"
+                              className="btn btn-link w-100 text-start f-b txt-wide"
                               onClick={() => {
                                 navigate("./senior-high");
                               }}
                             >
-                              No data
+                              Senior HighSchool
                             </button>
-                          )}
+                          </div>
+                          <div className="col-2">
+                            {hasSenior ? (
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                size="2x"
+                                color="yellowgreen"
+                                className="ms-2 float-end"
+                              />
+                            ) : (
+                              <button
+                                className="btn btn-1 btn-sm w-100"
+                                onClick={() => {
+                                  navigate("./senior-high");
+                                }}
+                              >
+                                No data
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Vocational / Trade Course */}
-                    <div className="card col-md-12">
-                      <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                        <div className="col-10">
-                          <button
-                            className="btn btn-link w-100 text-start f-b txt-wide"
-                            onClick={() => {
-                              navigate("./vocational");
-                            }}
-                          >
-                            Vocational / Trade Course{" "}
-                            <span className="badge bg-secondary ms-2 p-2 ps-3 rounded-pill">
-                              {totalVoc}
-                            </span>
-                          </button>
-                        </div>
-                        <div className="col-2">
-                          {hasVocational ? (
-                            <FontAwesomeIcon
-                              icon={faCheck}
-                              size="2x"
-                              color="yellowgreen"
-                              className="ms-2 float-end"
-                            />
-                          ) : (
+                      {/* Vocational / Trade Course */}
+                      <div className="card col-md-12">
+                        <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                          <div className="col-10">
                             <button
-                              className="btn btn-1 btn-sm w-100"
+                              className="btn btn-link w-100 text-start f-b txt-wide"
                               onClick={() => {
                                 navigate("./vocational");
                               }}
                             >
-                              No data
+                              Vocational / Trade Course{" "}
+                              <span className="badge bg-secondary ms-2 p-2 ps-3 rounded-pill">
+                                {totalVoc}
+                              </span>
                             </button>
-                          )}
+                          </div>
+                          <div className="col-2">
+                            {hasVocational ? (
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                size="2x"
+                                color="yellowgreen"
+                                className="ms-2 float-end"
+                              />
+                            ) : (
+                              <button
+                                className="btn btn-1 btn-sm w-100"
+                                onClick={() => {
+                                  navigate("./vocational");
+                                }}
+                              >
+                                No data
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* College */}
-                    <div className="card col-md-12">
-                      <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                        <div className="col-10">
-                          <button
-                            className="btn btn-link w-100 text-start f-b txt-wide"
-                            onClick={() => {
-                              navigate("./college");
-                            }}
-                          >
-                            College
-                            <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
-                              {totalCol}
-                            </span>
-                          </button>
-                        </div>
-                        <div className="col-2">
-                          {hasCollege ? (
-                            <FontAwesomeIcon
-                              icon={faCheck}
-                              size="2x"
-                              color="yellowgreen"
-                              className="ms-2 float-end"
-                            />
-                          ) : (
+                      {/* College */}
+                      <div className="card col-md-12">
+                        <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                          <div className="col-10">
                             <button
-                              className="btn btn-1 btn-sm w-100"
+                              className="btn btn-link w-100 text-start f-b txt-wide"
                               onClick={() => {
                                 navigate("./college");
                               }}
                             >
-                              No data
+                              College
+                              <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
+                                {totalCol}
+                              </span>
                             </button>
-                          )}
+                          </div>
+                          <div className="col-2">
+                            {hasCollege ? (
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                size="2x"
+                                color="yellowgreen"
+                                className="ms-2 float-end"
+                              />
+                            ) : (
+                              <button
+                                className="btn btn-1 btn-sm w-100"
+                                onClick={() => {
+                                  navigate("./college");
+                                }}
+                              >
+                                No data
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Graduate Studies */}
-                    <div className="card col-md-12">
-                      <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                        <div className="col-10">
-                          <button
-                            className="btn btn-link w-100 text-start f-b txt-wide"
-                            onClick={() => {
-                              navigate("./graduate-studies");
-                            }}
-                          >
-                            Graduate Studies
-                            <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
-                              {totalGrad}
-                            </span>
-                          </button>
-                        </div>
-                        <div className="col-2">
-                          {hasGraduate ? (
-                            <FontAwesomeIcon
-                              icon={faCheck}
-                              size="2x"
-                              color="yellowgreen"
-                              className="ms-2 float-end"
-                            />
-                          ) : (
+                      {/* Graduate Studies */}
+                      <div className="card col-md-12">
+                        <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                          <div className="col-10">
                             <button
-                              className="btn btn-1 btn-sm w-100"
+                              className="btn btn-link w-100 text-start f-b txt-wide"
                               onClick={() => {
                                 navigate("./graduate-studies");
                               }}
                             >
-                              No data
+                              Graduate Studies
+                              <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
+                                {totalGrad}
+                              </span>
                             </button>
-                          )}
+                          </div>
+                          <div className="col-2">
+                            {hasGraduate ? (
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                size="2x"
+                                color="yellowgreen"
+                                className="ms-2 float-end"
+                              />
+                            ) : (
+                              <button
+                                className="btn btn-1 btn-sm w-100"
+                                onClick={() => {
+                                  navigate("./graduate-studies");
+                                }}
+                              >
+                                No data
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* civil */}
-                <div className="card col-md-12">
-                  <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                    <div className="col-10">
-                      <button
-                        className="btn btn-link w-100 text-start f-b txt-wide"
-                        onClick={() => {
-                          navigate("./civil-services");
-                        }}
-                      >
-                        Civil Service Eligibility
-                        <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
-                          {totalCivil}
-                        </span>
-                      </button>
-                    </div>
-                    <div className="col-2">
-                      {hasCivil ? (
-                        <FontAwesomeIcon
-                          icon={faCheck}
-                          size="2x"
-                          color="yellowgreen"
-                          className="ms-2 float-end"
-                        />
-                      ) : (
+                  {/* civil */}
+                  <div className="card col-md-12">
+                    <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                      <div className="col-10">
                         <button
-                          className="btn btn-1 btn-sm w-100"
+                          className="btn btn-link w-100 text-start f-b txt-wide"
                           onClick={() => {
                             navigate("./civil-services");
                           }}
                         >
-                          No data
+                          Civil Service Eligibility
+                          <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
+                            {totalCivil}
+                          </span>
                         </button>
-                      )}
+                      </div>
+                      <div className="col-2">
+                        {hasCivil ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            size="2x"
+                            color="yellowgreen"
+                            className="ms-2 float-end"
+                          />
+                        ) : (
+                          <button
+                            className="btn btn-1 btn-sm w-100"
+                            onClick={() => {
+                              navigate("./civil-services");
+                            }}
+                          >
+                            No data
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* work */}
-                <div className="card col-md-12">
-                  <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                    <div className="col-10">
-                      <button
-                        className="btn btn-link w-100 text-start f-b txt-wide"
-                        onClick={() => {
-                          navigate("./work-experiences");
-                        }}
-                      >
-                        Work Experience
-                        <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
-                          {totalWork}
-                        </span>
-                      </button>
-                    </div>
-                    <div className="col-2">
-                      {hasWork ? (
-                        <FontAwesomeIcon
-                          icon={faCheck}
-                          size="2x"
-                          color="yellowgreen"
-                          className="ms-2 float-end"
-                        />
-                      ) : (
+                  {/* work */}
+                  <div className="card col-md-12">
+                    <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                      <div className="col-10">
                         <button
-                          className="btn btn-1 btn-sm w-100"
+                          className="btn btn-link w-100 text-start f-b txt-wide"
                           onClick={() => {
                             navigate("./work-experiences");
                           }}
                         >
-                          No data
+                          Work Experience
+                          <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
+                            {totalWork}
+                          </span>
                         </button>
-                      )}
+                      </div>
+                      <div className="col-2">
+                        {hasWork ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            size="2x"
+                            color="yellowgreen"
+                            className="ms-2 float-end"
+                          />
+                        ) : (
+                          <button
+                            className="btn btn-1 btn-sm w-100"
+                            onClick={() => {
+                              navigate("./work-experiences");
+                            }}
+                          >
+                            No data
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* certificates */}
-                <div className="card col-md-12">
-                  <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
-                    <div className="col-10">
-                      <button
-                        className="btn btn-link w-100 text-start f-b txt-wide"
-                        onClick={() => {
-                          navigate("./certificates");
-                        }}
-                      >
-                        Certificates{" "}
-                        <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
-                          {totalCerti}
-                        </span>
-                      </button>
-                    </div>
-                    <div className="col-2">
-                      {hasCertificates ? (
-                        <FontAwesomeIcon
-                          icon={faCheck}
-                          size="2x"
-                          color="yellowgreen"
-                          className="ms-2 float-end"
-                        />
-                      ) : (
+                  {/* certificates */}
+                  <div className="card col-md-12">
+                    <div className="card-body mt-2 row justify-content-between border-bottom border-danger">
+                      <div className="col-10">
                         <button
-                          className="btn btn-1 btn-sm w-100"
+                          className="btn btn-link w-100 text-start f-b txt-wide"
                           onClick={() => {
                             navigate("./certificates");
                           }}
                         >
-                          No data
+                          Certificates{" "}
+                          <span className="badge bg-secondary  ms-2 p-2 ps-3 rounded-pill">
+                            {totalCerti}
+                          </span>
                         </button>
-                      )}
+                      </div>
+                      <div className="col-2">
+                        {hasCertificates ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            size="2x"
+                            color="yellowgreen"
+                            className="ms-2 float-end"
+                          />
+                        ) : (
+                          <button
+                            className="btn btn-1 btn-sm w-100"
+                            onClick={() => {
+                              navigate("./certificates");
+                            }}
+                          >
+                            No data
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
       .
       <Modal

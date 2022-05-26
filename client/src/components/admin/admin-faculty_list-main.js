@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import FacultyView from "./admin-faculty_list-view";
 import FacultyList from "./admin-faculty_list-list";
+import FacultyExport from "./admin-faculty_list-export";
 
 const FacultyMain = (props) => {
   const adminUsername = props.admin;
@@ -13,6 +14,10 @@ const FacultyMain = (props) => {
 
         <Routes>
           <Route path="" element={<FacultyList admin={adminUsername} />} />
+          <Route
+            path="/export-data/:employeeId"
+            element={<FacultyExport admin={adminUsername} />}
+          />
           <Route
             path="/:employeeId"
             element={<FacultyView admin={adminUsername} />}

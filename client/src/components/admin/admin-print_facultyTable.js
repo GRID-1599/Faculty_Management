@@ -74,7 +74,7 @@ const PrintFaculty = (props) => {
             </div>
           </div>
           <div className="row mb-2 row font-rem-55">
-            <p className="mb-1">Printed by : {adminUsername}</p>
+            <p className="mb-1">Printed by admin: {adminUsername}</p>
             <p className="mb-1">Date and time printed : {today}</p>
           </div>
           <div className="row mb-2 border-top py-2  font-rem-55">

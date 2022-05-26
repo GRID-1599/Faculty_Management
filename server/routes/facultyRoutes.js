@@ -311,13 +311,30 @@ router.post("/facultyLogin", (req, res) => {
 
 router.get("/facultyIsNewUser/:xxx", (req, res) => {
   // is_newUser
-  faculty_profile_Model.find({ employee_id: req.params.xxx }, (err, result) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.send(result[0].is_newUser);
+  faculty_profile_Model.find(
+    { $or: [{ employee_id: req.params.xxx }, { email: req.params.xxx }] },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.send(result[0].is_newUser);
+      }
     }
-  });
+  );
+});
+
+router.get("/facultyUserToId/:xxx", (req, res) => {
+  // is_newUser
+  faculty_profile_Model.find(
+    { $or: [{ employee_id: req.params.xxx }, { email: req.params.xxx }] },
+    (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.send(result[0].employee_id);
+      }
+    }
+  );
 });
 
 router.get("/facultySetIsNewUser/:xxx", (req, res) => {
