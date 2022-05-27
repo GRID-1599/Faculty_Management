@@ -144,8 +144,8 @@ function AdminLogin() {
               Admin Login
             </p>
             <p className="fw-lighter fs-8 fc-g">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam,
-              ratione!
+              {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam,
+              ratione! */}
             </p>
             <form onSubmit={handleSubmit} className="px-3 py-3">
               <div className="row mb-4 mt-0">
