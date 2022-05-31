@@ -587,30 +587,30 @@ td {
 }
 
 .admin-box {
-  width: 12rem;
-  height: 12rem;
-  border: 3px solid maroon;
-  border-radius: 5%;
+  height: fit-content;
+  border: 2px solid maroon;
+  border-radius: 18px;
   transition: all 200ms;
   color: maroon;
 }
 
 .admin-box:hover {
   cursor: pointer;
-  border: 3.5px solid maroon;
-  transform: scale(1.05);
+  border: 2.5px solid maroon;
+  transform: scale(1.0025);
+  animation: ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }
 
 .admin-box .label {
   font-family: Arial, sans-serif;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 2rem;
 }
 
-.admin-box .loader {}
 
 .admin-box .label-number {
   font-family: Arial, sans-serif;
-  font-weight: 700;
-  font-size: 4.5rem;
+  font-weight: 600;
+  font-size: 4rem;
 }
